@@ -1,8 +1,8 @@
 import PageBreadcrumb from "../components/common/PageBreadCrumb";
 import PageMeta from "../components/common/PageMeta";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaTimes, FaPlus, FaEdit } from "react-icons/fa";
-
+import {useAuth} from "../../lib/useAuth.js"
 const sectors = [
   "Technology",
   "Healthcare",
@@ -43,6 +43,9 @@ const skillOptions = [
 ];
 
 export default function UserProfiles() {
+
+  const {user} = useAuth()
+
   const [profile] = useState({
     firstName: "Musharof",
     lastName: "Chowdhury",
@@ -81,6 +84,11 @@ export default function UserProfiles() {
         : [...prev, sector]
     );
   };
+
+
+  useEffect(()=>{
+    console.log(user)
+  },[user])
 
   return (
     <>

@@ -68,6 +68,7 @@ const handleLogin = async (e: React.FormEvent<HTMLButtonElement>) => {
 
       // Prepare user object
       const da = {
+        user_id:data.user.user_id,
         first_name: data.user.first_name,
         last_name: data.user.last_name,
         email: data.user.email,
