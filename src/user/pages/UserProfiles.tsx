@@ -89,7 +89,7 @@ fetchProfile();
         body: JSON.stringify(updatedData),
       });
 
-      if (!res.ok) throw new Error("Failed to update profile");
+      if (!res.ok) throw new Error("Failed to update Profile");
 
       console.log("Updated profile:", updatedData); // ✅ Log updated data
       alert("Profile updated successfully!");
