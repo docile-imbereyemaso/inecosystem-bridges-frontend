@@ -1,171 +1,232 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-interface Opportunity {
-  opportunity_id?: number;
-  created_by: number;
-  title: string;
-  type: "scholarship" | "grant" | "competition" | "workshop" | "training";
-  description: string;
-  eligibility?: string;
-  benefits?: string;
-  application_deadline: string;
-  application_link?: string;
-  value?: number;
-  duration?: string;
-  location?: string;
-  requirements?: string[];
-  tags?: string[];
-  is_active?: boolean;
-}
+const Opportunities = () => {
+  const token = localStorage.getItem("token_ineco");
 
-export default function Opportunities() {
-  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
-  const [formData, setFormData] = useState<Opportunity>({
-    created_by: 1, // default or logged-in user ID
+  const [opportunities, setOpportunities] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [formData, setFormData] = useState({
     title: "",
     type: "scholarship",
     description: "",
+    eligibility: "",
+    benefits: "",
     application_deadline: "",
+    application_link: "",
+    value: "",
+    duration: "",
+    location: "",
     requirements: [],
     tags: [],
+    is_active: true,
   });
 
-  // Fetch opportunities from backend
-  const fetchOpportunities = async () => {
-    try {
-      const res = await fetch("http://localhost:5000/api/opportunities");
-      const data = await res.json();
-      setOpportunities(data);
-    } catch (err) {
-      console.error("Error fetching opportunities:", err);
-    }
-  };
-
+  // Fetch all opportunities
   useEffect(() => {
+    const fetchOpportunities = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/admin/getopportunities",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        if (data.success) {
+          setOpportunities(data.opportunities);
+        }
+      } catch (error) {
+        console.error("Error fetching opportunities:", error);
+      }
+    };
+
     fetchOpportunities();
   }, []);
 
-  // Handle form submit
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/opportunities", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      if (res.ok) {
-        fetchOpportunities(); // Refresh list
+      const response = await fetch(
+        "http://localhost:3000/api/admin/addopportunity",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+      if (data.success) {
+        alert("Opportunity added successfully!");
+        setOpportunities((prev) => [...prev, data.opportunity]);
+        setShowModal(false);
         setFormData({
-          created_by: 1,
           title: "",
           type: "scholarship",
           description: "",
+          eligibility: "",
+          benefits: "",
           application_deadline: "",
+          application_link: "",
+          value: "",
+          duration: "",
+          location: "",
           requirements: [],
           tags: [],
+          is_active: true,
         });
+      } else {
+        alert("Failed to add opportunity: " + data.message);
       }
-    } catch (err) {
-      console.error("Error adding opportunity:", err);
+    } catch (error) {
+      console.error("Error adding opportunity:", error);
     }
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Opportunities</h2>
-
-      {/* Opportunity List */}
-      <ul className="mb-8 space-y-4">
-        {opportunities.map((opp) => (
-          <li key={opp.opportunity_id} className="p-4 border rounded shadow">
-            <h3 className="text-xl font-semibold">{opp.title}</h3>
-            <p>Type: {opp.type}</p>
-            <p>Description: {opp.description}</p>
-            <p>Deadline: {new Date(opp.application_deadline).toLocaleDateString()}</p>
-            {opp.location && <p>Location: {opp.location}</p>}
-            {opp.value && <p>Value: ${opp.value}</p>}
-            {opp.requirements && opp.requirements.length > 0 && (
-              <p>Requirements: {opp.requirements.join(", ")}</p>
-            )}
-            {opp.tags && opp.tags.length > 0 && <p>Tags: {opp.tags.join(", ")}</p>}
-          </li>
-        ))}
-      </ul>
-
-      {/* Add Opportunity Form */}
-      <form onSubmit={handleSubmit} className="space-y-3 max-w-lg">
-        <input
-          type="text"
-          placeholder="Title"
-          value={formData.title}
-          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-          className="w-full border p-2 rounded"
-          required
-        />
-        <select
-          value={formData.type}
-          onChange={(e) =>
-            setFormData({ ...formData, type: e.target.value as Opportunity["type"] })
-          }
-          className="w-full border p-2 rounded"
+    <div className="p-4 space-y-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl text-white font-bold">Opportunities</h2>
+        <button
+          onClick={() => setShowModal(true)}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
         >
-          <option value="scholarship">Scholarship</option>
-          <option value="grant">Grant</option>
-          <option value="competition">Competition</option>
-          <option value="workshop">Workshop</option>
-          <option value="training">Training</option>
-        </select>
-        <textarea
-          placeholder="Description"
-          value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          className="w-full border p-2 rounded"
-          required
-        />
-        <input
-          type="date"
-          value={formData.application_deadline}
-          onChange={(e) => setFormData({ ...formData, application_deadline: e.target.value })}
-          className="w-full border p-2 rounded"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Location"
-          value={formData.location || ""}
-          onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-          className="w-full border p-2 rounded"
-        />
-        <input
-          type="text"
-          placeholder="Value"
-          value={formData.value || ""}
-          onChange={(e) => setFormData({ ...formData, value: Number(e.target.value) })}
-          className="w-full border p-2 rounded"
-        />
-        <input
-          type="text"
-          placeholder="Requirements (comma separated)"
-          value={formData.requirements?.join(",") || ""}
-          onChange={(e) =>
-            setFormData({ ...formData, requirements: e.target.value.split(",") })
-          }
-          className="w-full border p-2 rounded"
-        />
-        <input
-          type="text"
-          placeholder="Tags (comma separated)"
-          value={formData.tags?.join(",") || ""}
-          onChange={(e) => setFormData({ ...formData, tags: e.target.value.split(",") })}
-          className="w-full border p-2 rounded"
-        />
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
           Add Opportunity
         </button>
-      </form>
+      </div>
+
+      {/* Opportunities Table */}
+      <table className="w-full bg-slate-800 text-white rounded overflow-hidden">
+        <thead className="bg-slate-700">
+          <tr>
+            <th className="p-2">Title</th>
+            <th className="p-2">Type</th>
+            <th className="p-2">Deadline</th>
+            <th className="p-2">Location</th>
+            <th className="p-2">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {opportunities.map((opp) => (
+            <tr key={opp.opportunity_id} className="border-b border-slate-700">
+              <td className="p-2">{opp.title}</td>
+              <td className="p-2">{opp.type}</td>
+              <td className="p-2">
+                {new Date(opp.application_deadline).toLocaleDateString()}
+              </td>
+              <td className="p-2">{opp.location}</td>
+              <td className="p-2">
+                {opp.application_link ? (
+                  <a
+                    href={opp.application_link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded"
+                  >
+                    Apply
+                  </a>
+                ) : (
+                  <span className="text-slate-400">N/A</span>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Add Opportunity Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-slate-800 p-6 rounded w-2/3 max-w-2xl space-y-4">
+            <h3 className="text-xl text-white font-bold">Add New Opportunity</h3>
+            <form onSubmit={handleSubmit} className="space-y-2">
+              <input
+                type="text"
+                placeholder="Title"
+                value={formData.title}
+                onChange={(e) =>
+                  setFormData({ ...formData, title: e.target.value })
+                }
+                className="w-full p-2 rounded bg-slate-700 text-white"
+                required
+              />
+              <select
+                value={formData.type}
+                onChange={(e) =>
+                  setFormData({ ...formData, type: e.target.value })
+                }
+                className="w-full p-2 rounded bg-slate-700 text-white"
+              >
+                <option value="scholarship">Scholarship</option>
+                <option value="grant">Grant</option>
+                <option value="competition">Competition</option>
+                <option value="workshop">Workshop</option>
+                <option value="training">Training</option>
+              </select>
+              <textarea
+                placeholder="Description"
+                value={formData.description}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+                className="w-full p-2 rounded bg-slate-700 text-white"
+                required
+              ></textarea>
+              <input
+                type="date"
+                placeholder="Application Deadline"
+                value={formData.application_deadline}
+                onChange={(e) =>
+                  setFormData({ ...formData, application_deadline: e.target.value })
+                }
+                className="w-full p-2 rounded bg-slate-700 text-white"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Location"
+                value={formData.location}
+                onChange={(e) =>
+                  setFormData({ ...formData, location: e.target.value })
+                }
+                className="w-full p-2 rounded bg-slate-700 text-white"
+              />
+              <input
+                type="text"
+                placeholder="Application Link"
+                value={formData.application_link}
+                onChange={(e) =>
+                  setFormData({ ...formData, application_link: e.target.value })
+                }
+                className="w-full p-2 rounded bg-slate-700 text-white"
+              />
+              <div className="flex justify-end space-x-2 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(false)}
+                  className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded"
+                >
+                  Add
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default Opportunities;
