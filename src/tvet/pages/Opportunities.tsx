@@ -1,138 +1,171 @@
-import { useState } from 'react';
-import { FaSearch, FaEye, FaEdit, FaTrash } from 'react-icons/fa';
+import { useEffect, useState } from "react";
 
 interface Opportunity {
-  id: string;
-  name: string;
-  company: string;
-  sector: string;
-  level: string;
-  location: string;
-  salary: string;
-  positions: number;
+  opportunity_id?: number;
+  created_by: number;
+  title: string;
+  type: "scholarship" | "grant" | "competition" | "workshop" | "training";
   description: string;
-  requirements: string[];
-  period: {
-    startDate: string;
-    endDate: string;
-    duration: string;
-  };
-  status: string;
-  applicants: number;
+  eligibility?: string;
+  benefits?: string;
+  application_deadline: string;
+  application_link?: string;
+  value?: number;
+  duration?: string;
+  location?: string;
+  requirements?: string[];
+  tags?: string[];
+  is_active?: boolean;
 }
 
-const mockOpportunities: Opportunity[] = [
-  {
-    id: '1',
-    name: 'React Developer',
-    company: 'TechCorp Solutions',
-    sector: 'Technology',
-    level: 'Mid',
-    location: 'Remote',
-    salary: '$60,000 - $80,000',
-    positions: 3,
-    description: 'We are looking for a skilled React developer.',
-    requirements: ['React', 'JavaScript', 'TypeScript', 'Node.js'],
-    period: {
-      startDate: '2024-03-01',
-      endDate: '2024-04-30',
-      duration: '60 days',
-    },
-    status: 'Active',
-    applicants: 24,
-  },
-  {
-    id: '2',
-    name: 'Construction Manager',
-    company: 'BuildRight Construction',
-    sector: 'Construction',
-    level: 'Senior',
-    location: 'New York, NY',
-    salary: '$75,000 - $95,000',
-    positions: 1,
-    description: 'Experienced construction manager needed.',
-    requirements: ['Project Management', 'Team Leadership'],
-    period: {
-      startDate: '2024-02-15',
-      endDate: '2024-05-15',
-      duration: '90 days',
-    },
-    status: 'Active',
-    applicants: 18,
-  },
-];
+export default function Opportunities() {
+  const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
+  const [formData, setFormData] = useState<Opportunity>({
+    created_by: 1, // default or logged-in user ID
+    title: "",
+    type: "scholarship",
+    description: "",
+    application_deadline: "",
+    requirements: [],
+    tags: [],
+  });
 
-const Opportunities = () => {
-  const [opportunities] = useState<Opportunity[]>(mockOpportunities);
-  const [searchTerm, setSearchTerm] = useState('');
+  // Fetch opportunities from backend
+  const fetchOpportunities = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/api/opportunities");
+      const data = await res.json();
+      setOpportunities(data);
+    } catch (err) {
+      console.error("Error fetching opportunities:", err);
+    }
+  };
 
-  const filteredOpportunities = opportunities.filter(
-    (opp) =>
-      opp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      opp.company.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-  
-  
+  useEffect(() => {
+    fetchOpportunities();
+  }, []);
 
+  // Handle form submit
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("http://localhost:5000/api/opportunities", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        fetchOpportunities(); // Refresh list
+        setFormData({
+          created_by: 1,
+          title: "",
+          type: "scholarship",
+          description: "",
+          application_deadline: "",
+          requirements: [],
+          tags: [],
+        });
+      }
+    } catch (err) {
+      console.error("Error adding opportunity:", err);
+    }
+  };
 
   return (
-  <div className="space-y-6 p-4 bg-white dark:bg-slate-900">
-      <div>
-  <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">Opportunities</h2>
-  <p className="text-gray-600 dark:text-slate-400">Explore various opportunities available for you.</p>
-      </div>
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4">Opportunities</h2>
 
-      {/* Search */}
-      <div className="relative w-full max-w-md">
-        <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-slate-400" />
+      {/* Opportunity List */}
+      <ul className="mb-8 space-y-4">
+        {opportunities.map((opp) => (
+          <li key={opp.opportunity_id} className="p-4 border rounded shadow">
+            <h3 className="text-xl font-semibold">{opp.title}</h3>
+            <p>Type: {opp.type}</p>
+            <p>Description: {opp.description}</p>
+            <p>Deadline: {new Date(opp.application_deadline).toLocaleDateString()}</p>
+            {opp.location && <p>Location: {opp.location}</p>}
+            {opp.value && <p>Value: ${opp.value}</p>}
+            {opp.requirements && opp.requirements.length > 0 && (
+              <p>Requirements: {opp.requirements.join(", ")}</p>
+            )}
+            {opp.tags && opp.tags.length > 0 && <p>Tags: {opp.tags.join(", ")}</p>}
+          </li>
+        ))}
+      </ul>
+
+      {/* Add Opportunity Form */}
+      <form onSubmit={handleSubmit} className="space-y-3 max-w-lg">
         <input
           type="text"
-          placeholder="Search opportunities..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 pr-4 py-2 rounded bg-gray-100 dark:bg-slate-700 text-gray-900 dark:text-white w-full border border-gray-300 dark:border-slate-600"
+          placeholder="Title"
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          className="w-full border p-2 rounded"
+          required
         />
-      </div>
-
-      {/* Opportunities List */}
-      <div className="space-y-4">
-        {filteredOpportunities.map((opp) => (
-          <div key={opp.id} className="bg-gray-50 dark:bg-slate-800 p-4 rounded border border-gray-200 dark:border-slate-700">
-            <div className="flex justify-between items-center mb-2">
-              <div>
-                <p className="text-gray-900 dark:text-white font-semibold">{opp.name}</p>
-                <p className="text-gray-600 dark:text-slate-400 text-sm">{opp.company}</p>
-              </div>
-              <div className="flex space-x-2">
-                <button className="text-blue-500 dark:text-blue-400 hover:text-blue-400"><FaEye /></button>
-                <button className="text-yellow-500 dark:text-yellow-400 hover:text-yellow-400"><FaEdit /></button>
-                <button className="text-red-500 dark:text-red-400 hover:text-red-400"><FaTrash /></button>
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-4 text-gray-700 dark:text-slate-300 text-sm">
-              <span>Sector: {opp.sector}</span>
-              <span>Level: {opp.level}</span>
-              <span>Positions: {opp.positions}</span>
-              <span>Location: {opp.location}</span>
-              <span>Salary: {opp.salary}</span>
-              <span>Duration: {opp.period.duration}</span>
-              <span>Status: {opp.status}</span>
-              <span>Applicants: {opp.applicants}</span>
-            </div>
-            <p className="text-gray-700 dark:text-slate-300 mt-2">{opp.description}</p>
-            <div className="flex flex-wrap gap-2 mt-2">
-              {opp.requirements.map((req, idx) => (
-                <span key={idx} className="text-gray-700 dark:text-slate-300 bg-gray-100 dark:bg-slate-700 px-2 py-1 rounded border border-gray-300 dark:border-slate-600 text-xs">
-                  {req}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
+        <select
+          value={formData.type}
+          onChange={(e) =>
+            setFormData({ ...formData, type: e.target.value as Opportunity["type"] })
+          }
+          className="w-full border p-2 rounded"
+        >
+          <option value="scholarship">Scholarship</option>
+          <option value="grant">Grant</option>
+          <option value="competition">Competition</option>
+          <option value="workshop">Workshop</option>
+          <option value="training">Training</option>
+        </select>
+        <textarea
+          placeholder="Description"
+          value={formData.description}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          className="w-full border p-2 rounded"
+          required
+        />
+        <input
+          type="date"
+          value={formData.application_deadline}
+          onChange={(e) => setFormData({ ...formData, application_deadline: e.target.value })}
+          className="w-full border p-2 rounded"
+          required
+        />
+        <input
+          type="text"
+          placeholder="Location"
+          value={formData.location || ""}
+          onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+          className="w-full border p-2 rounded"
+        />
+        <input
+          type="text"
+          placeholder="Value"
+          value={formData.value || ""}
+          onChange={(e) => setFormData({ ...formData, value: Number(e.target.value) })}
+          className="w-full border p-2 rounded"
+        />
+        <input
+          type="text"
+          placeholder="Requirements (comma separated)"
+          value={formData.requirements?.join(",") || ""}
+          onChange={(e) =>
+            setFormData({ ...formData, requirements: e.target.value.split(",") })
+          }
+          className="w-full border p-2 rounded"
+        />
+        <input
+          type="text"
+          placeholder="Tags (comma separated)"
+          value={formData.tags?.join(",") || ""}
+          onChange={(e) => setFormData({ ...formData, tags: e.target.value.split(",") })}
+          className="w-full border p-2 rounded"
+        />
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+          Add Opportunity
+        </button>
+      </form>
     </div>
   );
-};
-
-export default Opportunities;
-
+}
