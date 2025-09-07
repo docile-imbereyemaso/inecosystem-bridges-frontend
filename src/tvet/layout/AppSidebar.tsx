@@ -23,7 +23,7 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Tvet user Dashboard",
-    path: "/tvet/profile",
+    path: "/tvet-dashboard",
   },
   {
     icon: <UserCircleIcon />,

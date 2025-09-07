@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FiChevronRight, FiUsers, FiClock, FiDollarSign, FiAward, FiPlay, FiCheckCircle, FiArrowRight, FiBookOpen, FiBriefcase, FiTrendingUp } from 'react-icons/fi';
 import TVETSuccessStories from './TVETSuccessStories';
 import TvetSocialCTA from './TvetSocialCTA';
+import TVETSectors from '../tvet/pages/Tvetsectors.jsx'
 
 const Tvetmattersection = () => {
   const [activeTab, setActiveTab] = useState('digital');
@@ -248,6 +249,8 @@ const Tvetmattersection = () => {
             </div>
           </div>
         </div>
+
+        <TVETSectors/>
       </div>
 
       {/* Comparison Section */}
