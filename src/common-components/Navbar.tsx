@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { NavLink } from "react-router";
 import ThemeToggle from "./ThemeToggle";
-import {useAuth} from "../lib/useAuth.js"
+import logo from '../../public/images/logo.png';
+
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const {isAuthenticated,logout} = useAuth()
+
   
   // Close menu if overlay is clicked
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -24,7 +25,13 @@ function Navbar() {
     <nav className={`mx-auto max-w-6xl bg-gray-100 dark:bg-gray-800 px-4 py-3 shadow-md rounded-full transition-colors duration-300 relative ring-1 ring-gray-400/30 `}>
   <div className="max-w-7xl mx-auto flex items-center justify-between gap-x-6 font-semibold w-full">
         {/* Logo */}
-  <NavLink to="/" className="text-lg md:text-base font-bold text-gray-900 dark:text-white">INECOSYSTEM LOGO</NavLink>
+  <NavLink to="/" className="text-lg md:text-base font-bold text-gray-900 dark:text-white">
+  <div className="relative group">
+      <img src={logo} alt="inecosyste-logo" className="size-12 group-hover:scale-75 transform transition-transform duration-700 ease-in-out"/>
+   <div className="absolute inset-0 bg-blend-multiply group-hover:bg-black/80 rounded-full transition duration-500 ease-in-out"></div>
+  </div>
+   
+  </NavLink>
 
         {/* Desktop Menu */}
   <ul className="hidden md:flex gap-x-4 items-center flex-1 justify-center text-sm md:text-base lg:text-lg">
@@ -43,19 +50,14 @@ function Navbar() {
               <div className="absolute w-0 bg-green-400  left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
             </NavLink>
           </li>
-          {/* Navigation by Caleb to company */}
+          
           
          
-          {
-            isAuthenticated ? <li className="ml-auto bg-red-400 px-4 md:px-5 lg:px-6 py-2 md:py-1.5 lg:py-2 
-            rounded-full font-semibold hover:bg-red-400/80 transition duration-300 ease-in-out transform hover:scale-105 text-base md:text-sm lg:text-base">
-            <button onClick={logout} className="text-gray-600 dark:text-gray-900 cursor-pointer">Logout</button>
-          </li>
-          : 
+         
           <li className="ml-auto bg-green-400 px-4 md:px-5 lg:px-6 py-2 md:py-1.5 lg:py-2 rounded-full font-semibold hover:bg-green-400/80 transition duration-300 ease-in-out transform hover:scale-105 text-base md:text-sm lg:text-base">
             <NavLink to="/login" className="text-gray-600 dark:text-gray-900">Get In</NavLink>
           </li>
-          }
+          
         </ul>
 
         {/* Theme Toggle always visible */}

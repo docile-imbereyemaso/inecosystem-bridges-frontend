@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { FiUser, FiHome, FiBook, FiEye, FiEyeOff, FiMail, FiLock, FiChevronDown } from 'react-icons/fi';
-import {API_URL} from "../lib/API.js"
+import {API_URL} from "../lib/API.js";
+import logo from '../../public/images/logo.png';
 import axios from "axios"
 const LoginComponent = () => {
   const [userType, setUserType] = useState('student');
@@ -139,15 +140,15 @@ const handleLogin = async (e: React.FormEvent<HTMLButtonElement>) => {
 
         {/* Logo and Header */}
         <div className="text-center mb-4">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-600 to-green-500 rounded-2xl mb-2 shadow-lg">
-            <span className="text-white font-bold text-xl">I</span>
+          <div className="inline-flex items-center justify-center w-12 h-12  rounded-2xl mb-2 shadow-lg">
+            <span className="text-white font-bold text-xl">
+              <img src={logo} alt="inecosystem-bridge" />
+            </span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-            INECOSYSTEM
+            INECOSYSTEM-BRIDGE
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 text-xs">
-            Community Platform
-          </p>
+         
         </div>
 
         {/* Login Card */}
