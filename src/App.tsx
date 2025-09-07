@@ -37,6 +37,7 @@ import Statistics from "./tvet/pages/Statistics";
 import Opportunities from "./tvet/pages/Opportunities";
 import CompanyRegistration from "./pages/CompanyRegistration";
 import ProtectedRoute from "./lib/ProtectedRoute.jsx"
+import TvetDashboard from "./tvet/pages/Tvetdashboard.jsx";
 
 
 export default function App() {
@@ -83,6 +84,8 @@ export default function App() {
             <Route path="/tvet/statistics" element={<Statistics />} />
             <Route path="/tvet/opportunities" element={<Opportunities />} />
             <Route path="/tvet/*" element={<TvetNotFound />} />
+            <Route path="/tvet-dashboard" element={<TvetDashboard />} />
+            
           </Route>
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />

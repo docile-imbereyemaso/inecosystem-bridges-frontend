@@ -27,25 +27,39 @@ const Statistics = () => {
     fetchUsers();
   }, [token]);
 
-  useEffect(() => {
-    const fetchCompanies = async () => {
-      try {
-        const res = await fetch("http://localhost:3000/api/admin/status", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-        if (data.success && Array.isArray(data.users)) {
-          const statusCounts = ["Registered", "Pending"].map((status) => ({
-            name: status,
-            value: data.users.filter((c) => c.is_approved === (status === "Registered")).length,
-            color: status === "Registered" ? "#10b981" : "#f59e0b",
-          }));
-          setCompanyStatusData(statusCounts);
-        }
-      } catch (err) { console.error(err); }
-    };
-    fetchCompanies();
-  }, [token]);
+useEffect(() => {
+  const fetchCompanies = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/api/admin/status", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await res.json();
+
+      if (data.success && Array.isArray(data.users)) {
+        // Map true -> Registered, false -> Pending
+        const statusCounts = [
+          {
+            name: "Registered",
+            value: data.users.filter((c) => c.is_approved === true).length,
+            color: "#10b981", // green
+          },
+          {
+            name: "Pending",
+            value: data.users.filter((c) => c.is_approved === false).length,
+            color: "#f59e0b", // yellow
+          },
+        ];
+
+        setCompanyStatusData(statusCounts);
+      }
+    } catch (err) {
+      console.error("Error fetching company status:", err);
+    }
+  };
+
+  fetchCompanies();
+}, [token]);
+
 
   useEffect(() => {
     const fetchOpportunities = async () => {
@@ -94,7 +108,7 @@ const Statistics = () => {
             <option value="overview">Overview Report</option>
             <option value="skills">Skills Analysis</option>
             <option value="companies">Company Report</option>
-            <option value="training">Training Report</option>
+            
             <option value="opportunities">Opportunities Report</option>
           </select>
           <button onClick={generateReport} className="flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
@@ -104,7 +118,7 @@ const Statistics = () => {
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
         <div className="bg-slate-800 border border-slate-700 p-4 rounded">
           <p className="text-sm text-slate-400">Total Users</p>
           <p className="text-2xl font-semibold text-white">{totalUsers}</p>
@@ -115,27 +129,19 @@ const Statistics = () => {
           <p className="text-2xl font-semibold text-white">{opportunitiesStats.total}</p>
           <FaGraduationCap className="h-8 w-8 text-green-500 mt-2" />
         </div>
-        <div className="bg-slate-800 border border-slate-700 p-4 rounded">
-          <p className="text-sm text-slate-400">Job Placements</p>
-          <p className="text-2xl font-semibold text-white">342</p>
-          <FaArrowTrendUp className="h-8 w-8 text-yellow-500 mt-2" />
-        </div>
-        <div className="bg-slate-800 border border-slate-700 p-4 rounded">
-          <p className="text-sm text-slate-400">Avg. Satisfaction</p>
-          <p className="text-2xl font-semibold text-white">4.5</p>
-          <FaChartBar className="h-8 w-8 text-purple-500 mt-2" />
-        </div>
+       
+        
       </div>
 
       {/* Tabs */}
       <div>
         <div className="flex bg-slate-800 border border-slate-700 rounded overflow-hidden">
-          {["skills", "companies", "training", "opportunities"].map(tab => (
+          {["skills", "companies", "opportunities"].map(tab => (
             <button key={tab} onClick={() => setActiveTab(tab)}
               className={`flex-1 py-2 text-white ${activeTab === tab ? "bg-blue-600" : ""}`}>
               {tab === "skills" && "Skills Analysis"}
               {tab === "companies" && "Company Status"}
-              {tab === "training" && "Training Progress"}
+              
               {tab === "opportunities" && "Opportunities"}
             </button>
           ))}

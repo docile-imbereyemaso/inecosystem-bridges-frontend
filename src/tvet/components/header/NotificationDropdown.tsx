@@ -206,7 +206,7 @@ export default function NotificationDropdown() {
               <span className="block">
                 <span className="mb-1.5 space-x-1 block text-theme-sm text-gray-500 dark:text-gray-400">
                   <span className="font-medium text-gray-800 dark:text-white/90">
-                    Brandon Philips
+                    
                   </span>
                   <span>requests permission to change</span>
                   <span className="font-medium text-gray-800 dark:text-white/90">
