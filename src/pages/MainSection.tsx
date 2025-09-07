@@ -104,7 +104,7 @@ const MainSection = () => {
                                 and a future you can build with your own hands.
                             </p>
                             <Link 
-                                to="/" 
+                                to="/tvetmatters" 
                                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300"
                             >
                                 Explore more about TVET
@@ -144,7 +144,7 @@ const MainSection = () => {
                                 discover job opportunities, internships, and career pathways that match their skills.
                             </p>
                             <Link 
-                                to="/" 
+                                to="/jobBoard" 
                                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-emerald-300"
                             >
                                 Work, Learn and Grow with us
@@ -184,7 +184,7 @@ const MainSection = () => {
                                 opportunities, and connect your skills to real jobs—all in one place.
                             </p>
                             <Link 
-                                to="/" 
+                                to="/ai-chatbot" 
                                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-300"
                             >
                                 Start Here
@@ -223,7 +223,7 @@ const MainSection = () => {
 
                             <div className="pt-4">
                                 <Link 
-                                    to="/" 
+                                    to="/login" 
                                     className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-600"
                                 >
                                     Let's Get Started

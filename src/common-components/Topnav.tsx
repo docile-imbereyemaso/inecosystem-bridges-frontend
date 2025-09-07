@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router";
 import ThemeToggle from "./ThemeToggle";
+import logo from '../../public/images/logo.png';
 
 
 
@@ -20,7 +21,13 @@ export default function Topnav(){
       <nav className={`mx-auto max-w- backdrop-blur-md top-[-50px] dark:backdrop-blur-md px-4 py-3 shadow-md transition-colors duration-300 relative ring-1 ring-gray-400/30 `}>
   <div className="max-w-7xl mx-auto flex items-center justify-between gap-x-6 font-semibold w-full">
         {/* Logo */}
-  <NavLink to="/" className="text-lg md:text-base font-bold text-gray-900 dark:text-white">INECOSYSTEM LOGO</NavLink>
+  <NavLink to="/" className="text-lg md:text-base font-bold text-gray-900 dark:text-white">
+      <div className="relative group">
+      <img src={logo} alt="inecosyste-logo" className="size-12 group-hover:scale-75 transform transition-transform duration-700 ease-in-out"/>
+   <div className="absolute inset-0 bg-blend-multiply group-hover:bg-black/80 rounded-full transition duration-500 ease-in-out"></div>
+  </div>
+  
+  </NavLink>
 
         {/* Desktop Menu */}
   <ul className="hidden md:flex gap-x-4 items-center flex-1 justify-center text-sm md:text-base lg:text-lg">
