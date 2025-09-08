@@ -4,6 +4,8 @@ import PageMeta from "../components/common/PageMeta";
 import {useAuth} from '../../lib/useAuth'
 import {API_URL} from '../../lib/API.js'
 
+
+
 interface UserProfile {
   first_name: string;
   last_name: string;
@@ -100,6 +102,8 @@ console.log(res)
         <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
           TVET Profile
         </h3>
+
+        
 
         <div className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import {useAuth} from '../../lib/useAuth'
+import {API_URL} from '../../lib/API.js'
 import {
   FaBuilding,
   FaSearch,
@@ -30,7 +32,7 @@ const Partnerships = () => {
     try {
       const token = localStorage.getItem("token_ineco"); // 👈 adjust if you save differently
 
-      const res = await fetch("http://localhost:3000/api/admin/list", {
+      const res = await fetch(`${API_URL}admin/list`, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${token}`, // 👈 send token
@@ -88,15 +90,37 @@ const Partnerships = () => {
   };
 
   const handleStatusChange = (companyId: number, newStatus: CompanyStatus) => {
-    setCompanies((prev) =>
+    
+  };
+ const handleApprove = async(company:any)=>{
+      try {
+
+        console.log(company)
+
+        const token = localStorage.getItem("token_ineco");
+        const response =  await fetch(`${API_URL}admin/approve-user/${company.id}`,{
+          headers:{
+            "Content-Type":"application/json",
+            "authorization":`Bearer ${token}`
+          },
+          method:"post"
+        });
+
+        const data = await response.json()
+        if(data.success){
+          alert(data.message)
+          setCompanies((prev) =>
       prev.map((company) =>
-        company.id === companyId
-          ? { ...company, status: newStatus }
+        company.id === company.id
+          ? { ...company, status: "registered" }
           : company
       )
     );
-  };
-
+        }
+      } catch (error:any) {
+        console.log(error?.message)
+      }
+ }
   const registeredCount = companies.filter(
     (c) => c.status === "registered"
   ).length;
@@ -111,7 +135,7 @@ const Partnerships = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-semibold text-white mb-2">
+        <h2 className="text-2xl font-semibold mb-2 dark:text-blue-800 text-blue-900">
           Company Management
         </h2>
         <p className="text-slate-400">
@@ -171,10 +195,7 @@ const Partnerships = () => {
               View and manage all registered companies
             </p>
           </div>
-          <button className="flex items-center bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded">
-            <FaPlus className="mr-2" />
-            Add Company
-          </button>
+          
         </div>
 
         {/* Filters */}
@@ -242,19 +263,9 @@ const Partnerships = () => {
                       </span>
                     </td>
                     <td className="px-4 py-2">
-                      <select
-                        value={company.status}
-                        onChange={(e) =>
-                          handleStatusChange(
-                            company.id,
-                            e.target.value as CompanyStatus
-                          )
-                        }
-                        className="bg-slate-700 border border-slate-600 text-white text-xs rounded px-2 py-1"
-                      >
-                        <option value="registered">Registered</option>
-                        <option value="pending">Pending</option>
-                      </select>
+                    {
+                      company.status == "pending"&& <button onClick={()=>handleApprove(company)}>Approve</button> 
+                    }
                     </td>
                   </tr>
                 ))

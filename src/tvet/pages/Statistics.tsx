@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { FaUsers, FaGraduationCap, FaChartBar, FaDownload, FaPlus } from "react-icons/fa";
 import { FaArrowTrendUp } from "react-icons/fa6";
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {useAuth} from '../../lib/useAuth'
+import {API_URL} from '../../lib/API.js'
+
 
 const Statistics = () => {
   const token = localStorage.getItem("token_ineco");
@@ -17,7 +20,7 @@ const Statistics = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/admin/allusers", {
+        const res = await fetch(`${API_URL}admin/allusers`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -30,7 +33,7 @@ const Statistics = () => {
 useEffect(() => {
   const fetchCompanies = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/admin/status", {
+      const res = await fetch(`${API_URL}admin/status`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
@@ -64,7 +67,7 @@ useEffect(() => {
   useEffect(() => {
     const fetchOpportunities = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/admin/getopportunities", {
+        const res = await fetch(`${API_URL}admin/getopportunities`  , {
           headers: { Authorization: `Bearer ${token}` },
         });
         const data = await res.json();
@@ -92,7 +95,7 @@ useEffect(() => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-semibold text-white mb-2">Statistics Analysis</h2>
+          <h2 className="text-2xl font-semibold text-blue-500 mb-2">Statistics Analysis</h2>
           <p className="text-slate-400">Comprehensive analytics and reporting dashboard</p>
         </div>
         <div className="flex items-center space-x-4">

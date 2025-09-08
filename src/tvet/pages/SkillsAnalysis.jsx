@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Bar, Pie } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement } from "chart.js";
 import { FaChartPie, FaUsers, FaBuilding } from "react-icons/fa";
+import {useAuth} from '../../lib/useAuth'
+import {API_URL} from '../../lib/API.js'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
@@ -16,15 +18,15 @@ const SkillsOpportunityAnalysis = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const resUsers = await fetch("http://localhost:3000/api/admin/allusers", { headers: { Authorization: `Bearer ${token}` } });
+        const resUsers = await fetch(`${API_URL}admin/allusers`, { headers: { Authorization: `Bearer ${token}` } });
         const dataUsers = await resUsers.json();
         if (dataUsers.success) setUsers(dataUsers.users);
 
-        const resCompanies = await fetch("http://localhost:3000/api/admin/list", { headers: { Authorization: `Bearer ${token}` } });
+        const resCompanies = await fetch(`${API_URL}admin/list`, { headers: { Authorization: `Bearer ${token}` } });
         const dataCompanies = await resCompanies.json();
         if (dataCompanies.success) setCompanies(dataCompanies.users);
 
-        const resOpportunities = await fetch("http://localhost:3000/api/admin/getopportunities", { headers: { Authorization: `Bearer ${token}` } });
+        const resOpportunities = await fetch(`${API_URL}admin/getopportunities`, { headers: { Authorization: `Bearer ${token}` } });
         const dataOpportunities = await resOpportunities.json();
         if (dataOpportunities.success) setOpportunities(dataOpportunities.opportunities);
       } catch (err) {
