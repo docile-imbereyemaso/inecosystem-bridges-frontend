@@ -1,9 +1,11 @@
 import PageBreadcrumb from "../components/common/PageBreadCrumb";
 import PageMeta from "../components/common/PageMeta";
-import { useEffect, useState } from "react";
-import { FaTimes, FaPlus, FaSave } from "react-icons/fa";
+import { use, useEffect, useState } from "react";
+import { FaSave } from "react-icons/fa";
 import { useAuth } from "../../lib/useAuth.js";
 import { API_URL } from "../../lib/API.js";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const sectors = [
   "Technology", "Healthcare", "Education", "Construction", "Manufacturing",
@@ -20,7 +22,7 @@ const skillOptions = [
 export default function UserProfiles() {
   const token=localStorage.getItem("token_ineco")
   const { user } = useAuth();
-
+  
   const [profile, setProfile] = useState({
     firstName: "",
     lastName: "",
@@ -29,8 +31,7 @@ export default function UserProfiles() {
     bio: "",
   });
 
-  const [skills, setSkills] = useState<string[]>([]);
-  const [newSkill, setNewSkill] = useState("");
+  // Skills removed
   const [selectedSectors, setSelectedSectors] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -48,15 +49,15 @@ export default function UserProfiles() {
         if (!res.ok) throw new Error("Failed to fetch profile");
 
         const data = await res.json();
-        console.log(data.user)
+        console.log(data.user["first_name"]);
         setProfile({
-          firstName: data.user.first_name || "",
-          lastName: data.user.last_name || "",
-          email: data.user.email || "",
-          phone: data.user.phone || "",
-          bio: data.user.bio || "",
+          firstName: data.user["first_name"] || "",
+          lastName: data.user["last_name"] || "",
+          email: data.user["email"] || "",
+          phone: data.user["phone"] || "",
+          bio: data.user["bio"] || "",
         });
-        setSkills(data.user.skills || []);
+  // Skills removed
         setSelectedSectors(data.user.sectors || []);
       } catch (error) {
         console.error("Error fetching profile:", error);
@@ -75,7 +76,7 @@ fetchProfile();
     try {
       const updatedData = {
         ...profile,
-        skills,
+  // skills removed
         sectors: selectedSectors,
       };
       const token = localStorage.getItem("token_ineco")
@@ -92,23 +93,14 @@ fetchProfile();
       if (!res.ok) throw new Error("Failed to update profile");
 
       console.log("Updated profile:", updatedData); // ✅ Log updated data
-      alert("Profile updated successfully!");
+  toast.success("Profile updated successfully!", { position: "top-right", autoClose: 3000 });
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Error updating profile.");
+  toast.error("Error updating profile.", { position: "top-right", autoClose: 3000 });
     }
   };
 
-  const addSkill = () => {
-    if (newSkill.trim() && !skills.includes(newSkill.trim())) {
-      setSkills((prev) => [...prev, newSkill.trim()]);
-      setNewSkill("");
-    }
-  };
-
-  const removeSkill = (skillToRemove: string) => {
-    setSkills((prev) => prev.filter((skill) => skill !== skillToRemove));
-  };
+  // Skills functions removed
 
   const handleSectorToggle = (sector: string) => {
     setSelectedSectors((prev) =>
@@ -146,7 +138,7 @@ fetchProfile();
                 </p>
                 <input
                   type="text"
-                  value={profile.firstName}
+                  value={user["first_name"] || profile.firstName}
                   onChange={(e) =>
                     setProfile((prev) => ({ ...prev, firstName: e.target.value }))
                   }
@@ -161,7 +153,7 @@ fetchProfile();
                 </p>
                 <input
                   type="text"
-                  value={profile.lastName}
+                  value={user["last_name"] || profile.lastName}
                   onChange={(e) =>
                     setProfile((prev) => ({ ...prev, lastName: e.target.value }))
                   }
@@ -171,11 +163,11 @@ fetchProfile();
 
               <div>
                 <p className="mb-2 text-xs text-gray-500 dark:text-gray-400">
-                  Email:{profile.email}
+                  Email:{user["email"] || profile.email}
                 </p>
                 <input
                   type="email"
-                  value={profile.email}
+                  value={user["email"] || profile.email}
                   onChange={(e) =>
                     setProfile((prev) => ({ ...prev, email: e.target.value }))
                   }
@@ -189,7 +181,7 @@ fetchProfile();
                 </p>
                 <input
                   type="text"
-                  value={profile.phone}
+                  value={user["phone"] || profile.phone}
                   onChange={(e) =>
                     setProfile((prev) => ({ ...prev, phone: e.target.value }))
                   }
@@ -202,7 +194,7 @@ fetchProfile();
                   Bio
                 </p>
                 <textarea
-                  value={profile.bio}
+                  value={user["bio"] || profile.bio}
                   onChange={(e) =>
                     setProfile((prev) => ({ ...prev, bio: e.target.value }))
                   }
@@ -212,53 +204,7 @@ fetchProfile();
             </div>
           </div>
 
-          {/* Skills */}
-          <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-            <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 mb-6">
-              Skills
-            </h4>
-
-            <div className="flex flex-wrap gap-2 mb-4">
-              {skills.map((skill, index) => (
-                <span
-                  key={index}
-                  className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-3 py-1 flex items-center space-x-2 rounded"
-                >
-                  <span>{skill}</span>
-                  <button
-                    onClick={() => removeSkill(skill)}
-                    className="ml-2 hover:bg-blue-300 dark:hover:bg-blue-700 rounded-full p-1"
-                    aria-label="Remove skill"
-                  >
-                    <FaTimes className="h-3 w-3" />
-                  </button>
-                </span>
-              ))}
-            </div>
-
-            <div className="flex space-x-2 max-w-md">
-              <select
-                value={newSkill}
-                onChange={(e) => setNewSkill(e.target.value)}
-                className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 px-3 py-2 rounded"
-              >
-                <option value="">Add a skill...</option>
-                {skillOptions
-                  .filter((skill) => !skills.includes(skill))
-                  .map((skill) => (
-                    <option key={skill} value={skill}>
-                      {skill}
-                    </option>
-                  ))}
-              </select>
-              <button
-                onClick={addSkill}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded flex items-center"
-              >
-                <FaPlus className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
+          {/* Skills section removed */}
 
           {/* Interested Sectors */}
           <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
@@ -292,6 +238,7 @@ fetchProfile();
           >
             <FaSave /> Save Changes
           </button>
+          <ToastContainer className={'z-40'}/>
         </div>
       </div>
     </>

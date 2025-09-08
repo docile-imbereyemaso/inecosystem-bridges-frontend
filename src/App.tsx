@@ -38,6 +38,7 @@ import Opportunities from "./tvet/pages/Opportunities";
 import CompanyRegistration from "./pages/CompanyRegistration";
 import ProtectedRoute from "./lib/ProtectedRoute.jsx"
 import TvetDashboard from "./tvet/pages/Tvetdashboard.jsx";
+import PrivateSector from "./user/pages/PrivateSector.js";
 
 
 export default function App() {
@@ -64,7 +65,7 @@ export default function App() {
           <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
             <Route index path="/user/profile" element={<UserProfiles />} />
             <Route path="/user/internship" element={<Training />} />
-            <Route path="/user/rewards" element={<Rewards />} />
+            <Route path="/user/privateSector" element={<PrivateSector />} />
             <Route path="/user/*" element={<UserNotFound />} />
           </Route>
           {/* Private sector Dashboard layout */}

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { NavLink } from "react-router";
 import ThemeToggle from "./ThemeToggle";
-import logo from '../../public/images/logo.png';
+import logo from '/images/logo.png';
 
 
 function Navbar() {
