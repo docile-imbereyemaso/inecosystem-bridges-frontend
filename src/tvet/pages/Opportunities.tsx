@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 
+import {API_URL} from '../../lib/API.js'
+
 const Opportunities = () => {
   const token = localStorage.getItem("token_ineco");
 
@@ -26,7 +28,7 @@ const Opportunities = () => {
     const fetchOpportunities = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/api/admin/getopportunities",
+          `${API_URL}admin/getopportunities`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -50,7 +52,7 @@ const Opportunities = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://localhost:3000/api/admin/addopportunity",
+        `${API_URL}admin/addopportunity`,
         {
           method: "POST",
           headers: {
@@ -92,7 +94,7 @@ const Opportunities = () => {
   return (
     <div className="p-4 space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl text-white font-bold">Opportunities</h2>
+        <h2 className="text-2xl text-blue-500 font-bold">Opportunities</h2>
         <button
           onClick={() => setShowModal(true)}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
