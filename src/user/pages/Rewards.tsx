@@ -90,82 +90,56 @@ const Rewards = () => {
     }
   };
 
-  const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-  if (loading) return <p style={{ padding: '20px' }}>Loading certificates...</p>;
-  if (error) return <p style={{ color: 'red', padding: '20px' }}>{error}</p>;
+  if (loading) return <p className="p-5 text-gray-600 dark:text-gray-400">Loading certificates...</p>;
+  if (error) return <p className="p-5 text-red-600 dark:text-red-400">{error}</p>;
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif', minHeight: '100vh', backgroundColor: isDark ? '#1f1f1f' : '#f5f5f5', color: isDark ? '#fff' : '#333' }}>
-      <h1 style={{ marginBottom: '20px', fontSize: '2rem', borderBottom: `2px solid ${isDark ? '#444' : '#ccc'}`, paddingBottom: '10px' }}>Your Certificates</h1>
+    <div className="min-h-screen p-5 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white font-sans">
+      <h1 className="mb-5 text-3xl font-bold border-b-2 border-gray-300 dark:border-gray-600 pb-3">
+        Your Certificates
+      </h1>
 
       {/* Add Certificate Button */}
       <button
         onClick={() => setIsAddModalOpen(true)}
-        style={{
-          marginBottom: '20px',
-          backgroundColor: '#1e40af',
-          color: '#fff',
-          border: 'none',
-          padding: '10px 15px',
-          borderRadius: '5px',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px'
-        }}
+        className="mb-5 flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded-md transition-colors duration-200"
       >
         <FaPlus /> Add Certificate
       </button>
 
       {certificates.length === 0 ? (
-        <p>No certificates found.</p>
+        <p className="text-gray-600 dark:text-gray-400">No certificates found.</p>
       ) : (
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{
-            width: '100%',
-            borderCollapse: 'collapse',
-            backgroundColor: isDark ? '#2b2b2b' : '#fff',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
-          }}>
+        <div className="overflow-x-auto rounded-lg shadow-lg">
+          <table className="w-full bg-white dark:bg-gray-800 border-collapse">
             <thead>
               <tr>
-                <th style={thStyle(isDark)}>Name</th>
-                <th style={thStyle(isDark)}>Organization</th>
-                <th style={thStyle(isDark)}>Type</th>
-                <th style={thStyle(isDark)}>Issued</th>
-                <th style={thStyle(isDark)}>Expires</th>
-                <th style={thStyle(isDark)}>Credential ID</th>
-                <th style={thStyle(isDark)}>Skills</th>
-                <th style={thStyle(isDark)}>Description</th>
-                <th style={thStyle(isDark)}>Actions</th>
+                <th className="text-left p-3 bg-gray-800 dark:bg-gray-700 text-white text-sm font-medium">Name</th>
+                <th className="text-left p-3 bg-gray-800 dark:bg-gray-700 text-white text-sm font-medium">Organization</th>
+                <th className="text-left p-3 bg-gray-800 dark:bg-gray-700 text-white text-sm font-medium">Type</th>
+                <th className="text-left p-3 bg-gray-800 dark:bg-gray-700 text-white text-sm font-medium">Issued</th>
+                <th className="text-left p-3 bg-gray-800 dark:bg-gray-700 text-white text-sm font-medium">Expires</th>
+                <th className="text-left p-3 bg-gray-800 dark:bg-gray-700 text-white text-sm font-medium">Credential ID</th>
+                <th className="text-left p-3 bg-gray-800 dark:bg-gray-700 text-white text-sm font-medium">Skills</th>
+                <th className="text-left p-3 bg-gray-800 dark:bg-gray-700 text-white text-sm font-medium">Description</th>
+                <th className="text-left p-3 bg-gray-800 dark:bg-gray-700 text-white text-sm font-medium">Actions</th>
               </tr>
             </thead>
             <tbody>
               {certificates.map(cert => (
-                <tr key={cert.certificate_id} style={trStyle(isDark)}>
-                  <td style={tdStyle(isDark)}>{cert.name}</td>
-                  <td style={tdStyle(isDark)}>{cert.issuing_organization}</td>
-                  <td style={tdStyle(isDark)}>{cert.certificate_type}</td>
-                  <td style={tdStyle(isDark)}>{new Date(cert.issue_date).toLocaleDateString()}</td>
-                  <td style={tdStyle(isDark)}>{cert.expiry_date ? new Date(cert.expiry_date).toLocaleDateString() : '-'}</td>
-                  <td style={tdStyle(isDark)}>{cert.credential_id || '-'}</td>
-                  <td style={tdStyle(isDark)}>{cert.skills?.length > 0 ? cert.skills.join(', ') : '-'}</td>
-                  <td style={tdStyle(isDark)}>{cert.description || '-'}</td>
-                  <td style={tdStyle(isDark)}>
+                <tr key={cert.certificate_id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150">
+                  <td className="p-3 border-b border-gray-200 dark:border-gray-600 text-sm">{cert.name}</td>
+                  <td className="p-3 border-b border-gray-200 dark:border-gray-600 text-sm">{cert.issuing_organization}</td>
+                  <td className="p-3 border-b border-gray-200 dark:border-gray-600 text-sm">{cert.certificate_type}</td>
+                  <td className="p-3 border-b border-gray-200 dark:border-gray-600 text-sm">{new Date(cert.issue_date).toLocaleDateString()}</td>
+                  <td className="p-3 border-b border-gray-200 dark:border-gray-600 text-sm">{cert.expiry_date ? new Date(cert.expiry_date).toLocaleDateString() : '-'}</td>
+                  <td className="p-3 border-b border-gray-200 dark:border-gray-600 text-sm">{cert.credential_id || '-'}</td>
+                  <td className="p-3 border-b border-gray-200 dark:border-gray-600 text-sm">{cert.skills?.length > 0 ? cert.skills.join(', ') : '-'}</td>
+                  <td className="p-3 border-b border-gray-200 dark:border-gray-600 text-sm">{cert.description || '-'}</td>
+                  <td className="p-3 border-b border-gray-200 dark:border-gray-600 text-sm">
                     <button
                       onClick={() => handleView(cert)}
-                      style={{
-                        backgroundColor: '#1e40af',
-                        color: '#fff',
-                        border: 'none',
-                        padding: '6px 10px',
-                        borderRadius: '5px',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px'
-                      }}
+                      className="flex items-center gap-1 bg-blue-700 hover:bg-blue-800 text-white px-3 py-1 rounded transition-colors duration-200 text-sm"
                     >
                       <FaEye /> View
                     </button>
@@ -179,32 +153,99 @@ const Rewards = () => {
 
       {/* View Certificate Modal */}
       {isViewModalOpen && selectedCertificate && (
-        <Modal onClose={() => setIsViewModalOpen(false)} isDark={isDark}>
-          <h2>{selectedCertificate.name}</h2>
-          <p><strong>Organization:</strong> {selectedCertificate.issuing_organization}</p>
-          <p><strong>Type:</strong> {selectedCertificate.certificate_type}</p>
-          <p><strong>Issued:</strong> {new Date(selectedCertificate.issue_date).toLocaleDateString()}</p>
-          {selectedCertificate.expiry_date && <p><strong>Expires:</strong> {new Date(selectedCertificate.expiry_date).toLocaleDateString()}</p>}
-          {selectedCertificate.credential_id && <p><strong>Credential ID:</strong> {selectedCertificate.credential_id}</p>}
-          {selectedCertificate.description && <p><strong>Description:</strong> {selectedCertificate.description}</p>}
-          {selectedCertificate.skills?.length > 0 && <p><strong>Skills:</strong> {selectedCertificate.skills.join(', ')}</p>}
+        <Modal onClose={() => setIsViewModalOpen(false)}>
+          <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">{selectedCertificate.name}</h2>
+          <div className="space-y-3 text-gray-700 dark:text-gray-200">
+            <p><span className="font-semibold">Organization:</span> {selectedCertificate.issuing_organization}</p>
+            <p><span className="font-semibold">Type:</span> {selectedCertificate.certificate_type}</p>
+            <p><span className="font-semibold">Issued:</span> {new Date(selectedCertificate.issue_date).toLocaleDateString()}</p>
+            {selectedCertificate.expiry_date && (
+              <p><span className="font-semibold">Expires:</span> {new Date(selectedCertificate.expiry_date).toLocaleDateString()}</p>
+            )}
+            {selectedCertificate.credential_id && (
+              <p><span className="font-semibold">Credential ID:</span> {selectedCertificate.credential_id}</p>
+            )}
+            {selectedCertificate.description && (
+              <p><span className="font-semibold">Description:</span> {selectedCertificate.description}</p>
+            )}
+            {selectedCertificate.skills?.length > 0 && (
+              <p><span className="font-semibold">Skills:</span> {selectedCertificate.skills.join(', ')}</p>
+            )}
+          </div>
         </Modal>
       )}
 
       {/* Add Certificate Modal */}
       {isAddModalOpen && (
-        <Modal onClose={() => setIsAddModalOpen(false)} isDark={isDark}>
-          <h2>Add New Certificate</h2>
-          <form onSubmit={handleAddCertificate} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <input type="text" placeholder="Name" value={newCert.name} onChange={e => setNewCert({...newCert, name: e.target.value})} required style={inputStyle(isDark)} />
-            <input type="text" placeholder="Organization" value={newCert.issuing_organization} onChange={e => setNewCert({...newCert, issuing_organization: e.target.value})} required style={inputStyle(isDark)} />
-            <input type="text" placeholder="Type" value={newCert.certificate_type} onChange={e => setNewCert({...newCert, certificate_type: e.target.value})} required style={inputStyle(isDark)} />
-            <input type="date" placeholder="Issue Date" value={newCert.issue_date} onChange={e => setNewCert({...newCert, issue_date: e.target.value})} required style={inputStyle(isDark)} />
-            <input type="date" placeholder="Expiry Date" value={newCert.expiry_date} onChange={e => setNewCert({...newCert, expiry_date: e.target.value})} style={inputStyle(isDark)} />
-            <input type="text" placeholder="Credential ID" value={newCert.credential_id} onChange={e => setNewCert({...newCert, credential_id: e.target.value})} style={inputStyle(isDark)} />
-            <input type="text" placeholder="Description" value={newCert.description} onChange={e => setNewCert({...newCert, description: e.target.value})} style={inputStyle(isDark)} />
-            <input type="text" placeholder="Skills (comma separated)" value={newCert.skills} onChange={e => setNewCert({...newCert, skills: e.target.value})} style={inputStyle(isDark)} />
-            <button type="submit" style={{ ...inputStyle(isDark), backgroundColor: '#1e40af', color: '#fff', border: 'none', cursor: 'pointer' }}>Add Certificate</button>
+        <Modal onClose={() => setIsAddModalOpen(false)}>
+          <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">Add New Certificate</h2>
+          <form onSubmit={handleAddCertificate} className="space-y-4">
+            <input 
+              type="text" 
+              placeholder="Name" 
+              value={newCert.name} 
+              onChange={e => setNewCert({...newCert, name: e.target.value})} 
+              required 
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+            <input 
+              type="text" 
+              placeholder="Organization" 
+              value={newCert.issuing_organization} 
+              onChange={e => setNewCert({...newCert, issuing_organization: e.target.value})} 
+              required 
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+            <input 
+              type="text" 
+              placeholder="Type" 
+              value={newCert.certificate_type} 
+              onChange={e => setNewCert({...newCert, certificate_type: e.target.value})} 
+              required 
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+            <input 
+              type="date" 
+              placeholder="Issue Date" 
+              value={newCert.issue_date} 
+              onChange={e => setNewCert({...newCert, issue_date: e.target.value})} 
+              required 
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+            <input 
+              type="date" 
+              placeholder="Expiry Date" 
+              value={newCert.expiry_date} 
+              onChange={e => setNewCert({...newCert, expiry_date: e.target.value})} 
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+            <input 
+              type="text" 
+              placeholder="Credential ID" 
+              value={newCert.credential_id} 
+              onChange={e => setNewCert({...newCert, credential_id: e.target.value})} 
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+            <input 
+              type="text" 
+              placeholder="Description" 
+              value={newCert.description} 
+              onChange={e => setNewCert({...newCert, description: e.target.value})} 
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+            <input 
+              type="text" 
+              placeholder="Skills (comma separated)" 
+              value={newCert.skills} 
+              onChange={e => setNewCert({...newCert, skills: e.target.value})} 
+              className="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+            />
+            <button 
+              type="submit" 
+              className="w-full p-3 bg-blue-700 hover:bg-blue-800 text-white rounded-md transition-colors duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Add Certificate
+            </button>
           </form>
         </Modal>
       )}
@@ -213,63 +254,19 @@ const Rewards = () => {
 };
 
 // Modal Component
-const Modal = ({ children, onClose, isDark }) => (
-  <div style={{
-    position: 'fixed', inset: 0,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 999
-  }}>
-    <div style={{
-      backgroundColor: isDark ? '#2b2b2b' : '#fff',
-      borderRadius: '8px',
-      maxWidth: '600px',
-      width: '90%',
-      padding: '20px',
-      position: 'relative',
-      color: isDark ? '#fff' : '#333'
-    }}>
-      <button onClick={onClose} style={{
-        position: 'absolute',
-        top: '15px',
-        right: '15px',
-        background: 'none',
-        border: 'none',
-        cursor: 'pointer',
-        fontSize: '1.2rem',
-        color: isDark ? '#fff' : '#333'
-      }}>
+const Modal = ({ children, onClose }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-11/12 max-h-96 overflow-y-auto p-6 relative">
+      <button 
+        onClick={onClose} 
+        className="absolute top-4 right-4 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-xl transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500"
+        aria-label="Close modal"
+      >
         <FaTimes />
       </button>
       {children}
     </div>
   </div>
 );
-
-const thStyle = (isDark) => ({
-  textAlign: 'left',
-  padding: '12px',
-  backgroundColor: isDark ? '#444' : '#333',
-  color: '#fff',
-  fontSize: '0.95rem'
-});
-
-const tdStyle = (isDark) => ({
-  padding: '12px',
-  borderBottom: `1px solid ${isDark ? '#555' : '#ddd'}`,
-  fontSize: '0.9rem'
-});
-
-const trStyle = (isDark) => ({
-  transition: 'background-color 0.2s',
-  cursor: 'default'
-});
-
-const inputStyle = (isDark) => ({
-  padding: '10px',
-  borderRadius: '5px',
-  border: `1px solid ${isDark ? '#555' : '#ccc'}`,
-  backgroundColor: isDark ? '#1f1f1f' : '#fff',
-  color: isDark ? '#fff' : '#333'
-});
 
 export default Rewards;

@@ -3,9 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router";
 import { useSidebar } from "../context/SidebarContext";
 import { ThemeToggleButton } from "../components/common/ThemeToggleButton";
-import NotificationDropdown from "../components/header/NotificationDropdown";
 import UserDropdown from "../components/header/UserDropdown";
-
+import logo from '/images/logo.png';
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
 
@@ -85,7 +84,12 @@ const AppHeader: React.FC = () => {
           </button>
 
           <Link to="/user/profile" className="lg:hidden">
-            <p className="dark:text-white text-gray-900 font-semibold">Inecosystem logo</p>
+            <p className="dark:text-white text-gray-900 font-semibold">
+
+               <p>
+                <img src={logo} alt="Inecosystem Logo" className="size-12" />
+              </p>
+            </p>
           </Link>
 
           <button
@@ -119,7 +123,7 @@ const AppHeader: React.FC = () => {
             {/* <!-- Dark Mode Toggler --> */}
             <ThemeToggleButton />
             {/* <!-- Dark Mode Toggler --> */}
-            <NotificationDropdown />
+           
             {/* <!-- Notification Menu Area --> */}
           </div>
           {/* <!-- User Area --> */}

@@ -1,44 +1,23 @@
 import { useState } from "react";
-import { FaEye, FaEyeSlash, FaCheck, FaTimes } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const sectors = [
-  "Technology",
-  "Healthcare",
-  "Education",
-  "Construction",
-  "Manufacturing",
-  "Finance",
-  "Retail",
-  "Tourism",
-  "Agriculture",
+  "Information and Communication Technology (ICT)",
+  "Construction and Building Services",
+  "Agriculture and Food Processing",
+  "Tourism and Hospitality",
+  "Manufacturing and Industrial Technology",
+  "Beauty and Aesthetics",
+  "Transportation and Logistics",
+  "Retail and Business Services",
+  "Finance and Insurance",
   "Energy",
 ];
 
-const skillOptions = [
-  "React",
-  "JavaScript",
-  "Python",
-  "Java",
-  "C++",
-  "SQL",
-  "HTML/CSS",
-  "Node.js",
-  "TypeScript",
-  "PHP",
-  "Ruby",
-  "Swift",
-  "Kotlin",
-  "Go",
-  "Project Management",
-  "Data Analysis",
-  "Digital Marketing",
-  "Graphic Design",
-  "Nursing",
-  "Teaching",
-  "Accounting",
-  "Sales",
-  "Customer Service",
-];
+// Skills removed
 
 export default function Signup() {
   const [formData, setFormData] = useState({
@@ -50,8 +29,7 @@ export default function Signup() {
     password: "",
     confirmPassword: "",
   });
-  const [skills, setSkills] = useState<string[]>([]);
-  const [newSkill, setNewSkill] = useState("");
+  // Skills removed
   const [selectedSectors, setSelectedSectors] = useState<string[]>([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -67,16 +45,7 @@ export default function Signup() {
     }
   };
 
-  const addSkill = () => {
-    if (newSkill.trim() && !skills.includes(newSkill.trim())) {
-      setSkills(prev => [...prev, newSkill.trim()]);
-      setNewSkill("");
-    }
-  };
-
-  const removeSkill = (skillToRemove: string) => {
-    setSkills(prev => prev.filter(skill => skill !== skillToRemove));
-  };
+  // Skills functions removed
 
   const handleSectorToggle = (sector: string) => {
     setSelectedSectors(prev =>
@@ -106,7 +75,7 @@ export default function Signup() {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
-    if (skills.length === 0) newErrors.skills = "At least one skill is required";
+  // Skills validation removed
     if (selectedSectors.length === 0) newErrors.sectors = "At least one sector is required";
 
     setErrors(newErrors);
@@ -127,7 +96,7 @@ export default function Signup() {
         email: formData.email,
         phone: formData.phone,
         bio: formData.bio,
-        skills: skills,
+  // skills removed
         sectors: selectedSectors,
         password: formData.password,
       };
@@ -141,9 +110,7 @@ export default function Signup() {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Registration successful!");
-        // Optional: redirect to login page
-        // window.location.href = "/login";
+  toast.success("Registration successful!", { position: "top-right", autoClose: 3000 });
       } else {
         setErrors({ submit: data.message || "Registration failed" });
       }
@@ -163,6 +130,10 @@ export default function Signup() {
       <p className="text-gray-600 dark:text-gray-400 mb-6">
         Create your account on INECOSYSTEM BRIDGES
       </p>
+      <div className="mb-6">
+        <span className="text-gray-600 dark:text-gray-400">Already have an account? </span>
+        <Link to="/login" className="text-blue-600 hover:underline">Login</Link>
+      </div>
 
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] lg:p-6">
         <h3 className="mb-5 text-lg font-semibold text-gray-800 dark:text-white/90 lg:mb-7">
@@ -323,48 +294,7 @@ export default function Signup() {
             </div>
           </div>
 
-          {/* Skills */}
-          <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
-            <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 mb-6">Skills *</h4>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {skills.map((skill, index) => (
-                <span
-                  key={index}
-                  className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 px-3 py-1 flex items-center space-x-2 rounded hover:bg-blue-200 dark:hover:bg-blue-800"
-                >
-                  <span>{skill}</span>
-                  <button
-                    type="button"
-                    onClick={() => removeSkill(skill)}
-                    className="ml-2 hover:bg-blue-300 dark:hover:bg-blue-700 rounded-full p-1"
-                  >
-                    <FaTimes className="h-3 w-3" />
-                  </button>
-                </span>
-              ))}
-            </div>
-            {errors.skills && <p className="mt-1 text-xs text-red-500 mb-4">{errors.skills}</p>}
-
-            <div className="flex space-x-2 max-w-md">
-              <select
-                value={newSkill}
-                onChange={e => setNewSkill(e.target.value)}
-                className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-800 dark:text-white px-3 py-2 rounded"
-              >
-                <option value="">Add a skill...</option>
-                {skillOptions.filter(skill => !skills.includes(skill)).map(skill => (
-                  <option key={skill} value={skill}>{skill}</option>
-                ))}
-              </select>
-              <button
-                type="button"
-                onClick={addSkill}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded flex items-center"
-              >
-                <FaCheck className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
+          {/* Skills section removed */}
 
           {/* Sectors */}
           <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
@@ -408,6 +338,7 @@ export default function Signup() {
           </div>
         </form>
       </div>
-    </div>
+  <ToastContainer />
+  </div>
   );
 }
