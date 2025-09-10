@@ -13,6 +13,7 @@ export const useAuth = () => {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+    
   }, []);
 
   // Check if user is authenticated

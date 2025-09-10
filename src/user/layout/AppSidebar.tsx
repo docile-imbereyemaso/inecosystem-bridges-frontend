@@ -2,14 +2,12 @@ import { useCallback } from "react";
 import { Link, useLocation } from "react-router";
 import { MdMenuBook } from "react-icons/md";
 import { BsFillAwardFill } from "react-icons/bs";
+import { IoAddCircleSharp } from "react-icons/io5";
+import logo from '/images/logo.png';
 
 
 // Assume these icons are imported from an icon library
-import {
-  GridIcon,
-  HorizontaLDots,
-  UserCircleIcon,
-} from "../icons";
+import { FaThLarge, FaEllipsisH, FaUserCircle } from "react-icons/fa";
 import { useSidebar } from "../context/SidebarContext";
 
 type NavItem = {
@@ -20,26 +18,26 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    icon: <GridIcon />,
+    icon: <FaThLarge />,
     name: "User Dashboard",
     path: "/user/profile",
   },
   {
-    icon: <UserCircleIcon />,
+    icon: <FaUserCircle />,
     name: "User Profile",
     path: "/user/profile",
   },
   {
     icon: <MdMenuBook />,
-    name: "Training and Internship",
+    name: "Hand-on experience",
     path: "/user/internship",
   },
-  {
-    icon: <BsFillAwardFill />,
-    name: "Rewards and Certificates",
-    path: "/user/rewards",
-  },
   
+  {
+    icon: <IoAddCircleSharp />,
+    name: "Private Sectors Directory",
+    path: "/user/privateSector",
+  },
 ];
 
 const AppSidebar: React.FC = () => {
@@ -103,11 +101,15 @@ const AppSidebar: React.FC = () => {
         <Link to="/user/profile">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
-              <p>Inecosystem logo</p>
+              <p>
+                <img src={logo} alt="Inecosystem Logo" className="size-12" />
+              </p>
              
             </>
           ) : (
-            <p>logo</p>
+            <p>
+                <img src={logo} alt="Inecosystem Logo" className="size-12" />
+              </p>
            
           )}
         </Link>
@@ -128,7 +130,7 @@ const AppSidebar: React.FC = () => {
                 {isExpanded || isHovered || isMobileOpen ? (
                   "Menu"
                 ) : (
-                  <HorizontaLDots className="size-6" />
+                  <FaEllipsisH className="size-6" />
                 )}
               </h2>
               {renderMenuItems(navItems)}

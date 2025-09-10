@@ -9,14 +9,14 @@ const TVETSuccessStories = () => {
       id: 1,
       name: "Jean Baptiste Uwimana",
       age: 26,
-      program: "Civil Engineering Technology",
+      program: "Construction and Building services",
       company: "RDB Construction Ltd",
       quote: "TVET completely transformed my understanding of construction. The hands-on training with real equipment and industry mentors gave me skills that employers desperately needed. What amazed me most was how quickly I could apply classroom theory to actual construction sites. Within months, I was leading small teams and solving complex structural problems.",
       extendedStory: "Starting as a high school graduate with no clear direction, Jean Baptiste discovered his passion for construction during a TVET open day. The 18-month program combined theoretical knowledge with intensive practical training. He worked on real construction projects, learned to read blueprints, and mastered modern construction techniques. His final project involved designing and overseeing the construction of a community center.",
       background: "High school graduate with no technical experience",
       progression: "Apprentice → Site Supervisor → Project Manager",
       salary: "850K RWF/month",
-      sector: "Construction",
+      sector: "Construction and Building services",
       image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face",
       youtubeUrl: "https://youtube.com/watch?v=construction-story-1",
       impact: "Led construction of 15+ residential projects, trained 25+ apprentices",
@@ -34,8 +34,8 @@ const TVETSuccessStories = () => {
       background: "Primary school graduate, worked in family farming",
       progression: "Student → Junior Plumber → Lead Installation Specialist",
       salary: "750K RWF/month",
-      sector: "Construction",
-      image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&h=200&fit=crop&crop=face",
+      sector: "Construction and Building services",
+      image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face",
       youtubeUrl: "https://youtube.com/watch?v=construction-story-2",
       impact: "Installed water systems for 200+ homes, mentored 15+ women in trades",
       skills: ["Water System Design", "Pipe Installation", "Team Leadership", "Quality Testing"],
@@ -54,7 +54,7 @@ const TVETSuccessStories = () => {
       background: "Computer café operator with basic computer skills",
       progression: "Student → Junior Developer → Software Engineer",
       salary: "1.4M RWF/month",
-      sector: "ICT & Tech",
+      sector: "ICT and MUltimedia",
       image: "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=200&h=200&fit=crop&crop=face",
       youtubeUrl: "https://youtube.com/watch?v=ict-story-1",
       impact: "Developed 8+ mobile applications, trained 30+ junior developers",
@@ -72,7 +72,7 @@ const TVETSuccessStories = () => {
       background: "Art student with passion but no professional training",
       progression: "Student → Junior Designer → Creative Director",
       salary: "1.1M RWF/month",
-      sector: "ICT & Tech",
+      sector: "ICT and MUltimedia",
       image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&h=200&fit=crop&crop=face",
       youtubeUrl: "https://youtube.com/watch?v=creative-story-1",
       impact: "Designed campaigns for 40+ brands, increased client revenue by 60%",
@@ -103,19 +103,20 @@ const TVETSuccessStories = () => {
       id: 6,
       name: "Patrick Niyonsenga",
       age: 26,
-      program: "Hotel Management & Hospitality",
-      company: "Kigali Serena Hotel",
-      quote: "TVET's hospitality program taught me that exceptional service is both an art and a science. We learned everything from front desk operations to event management, but the real value was in understanding guest psychology and creating memorable experiences. The internships at top hotels gave me exposure to international standards and diverse clientele.",
-      extendedStory: "Patrick worked as a restaurant server but dreamed of hotel management. The comprehensive TVET program covered hotel operations, event planning, financial management, and customer service excellence. He completed rotations in different hotel departments, worked during major conferences and events, and learned from experienced hospitality professionals. His final project involved planning and executing a major international conference.",
-      background: "Restaurant server with customer service experience",
-      progression: "Student → Front Desk Supervisor → Assistant Hotel Manager",
+      program: "Electrical technology",
+      company: "Kigali Electrical tech",
+      quote: "TVET's energy program taught me that reliable power is both an engineering challenge and a science. We learned everything from electrical installations to renewable energy systems, but the real value was in understanding how energy impacts communities and industries. The internships with top energy firms gave me exposure to modern technologies and international standards.",
+      extendedStory: "Patrick worked as a casual laborer in local construction but dreamed of becoming an energy technician. The comprehensive TVET program covered electrical systems, renewable energy solutions, power distribution, and safety management. He completed rotations in different energy projects, worked on solar installations for rural electrification, and learned from experienced energy professionals. His final project involved designing and implementing a solar-powered irrigation system for a farming cooperative.",
+      background: "Casual construction worker with basic electrical repair experience",
+      progression: "Student → Junior Energy Technician → Renewable Energy Project Supervisor",
       salary: "950K RWF/month",
       sector: "Energy", // Keeping as Energy to maintain 2 per sector structure
       image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&h=200&fit=crop&crop=face",
       youtubeUrl: "https://youtube.com/watch?v=hospitality-story-1",
-      impact: "Manages 30+ staff members, increased guest satisfaction by 25%",
-      skills: ["Operations Management", "Event Planning", "Staff Training", "Customer Relations"],
-      certification: "Certified Hotel Administrator (CHA)"
+     impact: "Installed and maintained renewable energy systems for 200+ households, improved energy access in rural areas by 30%",
+skills: ["Electrical Installation", "Renewable Energy Systems", "Power Distribution", "Safety Management"],
+
+      certification: "Kigali Electrical tech"
     }
   ];
 
@@ -330,18 +331,18 @@ const TVETSuccessStories = () => {
           <div className="stats stats-horizontal shadow-2xl bg-white dark:bg-gray-800 rounded-3xl max-w-4xl mx-auto border border-gray-100 dark:border-gray-700 max-lg:stats-vertical">
             <div className="stat px-8 py-6">
               <div className="stat-title text-lg text-gray-900">Average Salary Growth</div>
-              <div className="stat-value text-primary text-3xl">450%</div>
-              <div className="stat-desc text-sm text-rose-900">Within 3 years</div>
+              <div className="stat-value text-primary text-3xl">90%</div>
+              <div className="stat-desc text-sm text-zinc-400 font-semibold">Within 3 years</div>
             </div>
             <div className="stat px-8 py-6">
               <div className="stat-title text-lg text-gray-900">Career Advancement</div>
               <div className="stat-value text-secondary text-3xl">2-4 Years</div>
-              <div className="stat-desc text-sm text-rose-900">To leadership roles</div>
+              <div className="stat-desc text-sm text-zinc-400 font-semibold">To leadership roles</div>
             </div>
             <div className="stat px-8 py-6">
               <div className="stat-title text-lg  text-gray-900">Employment Success</div>
               <div className="stat-value text-accent text-3xl">98%</div>
-              <div className="stat-desc text-sm text-rose-900">Job placement rate</div>
+              <div className="stat-desc text-sm text-zinc-400 font-semibold">Job placement rate</div>
             </div>
           </div>
         </div>
@@ -373,7 +374,7 @@ const TVETSuccessStories = () => {
           <h2 className="text-5xl font-bold mb-12">The TVET Advantage</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-white/15 backdrop-blur-lg rounded-3xl p-8 border border-white/20">
-              <div className="text-4xl font-bold mb-4">89%</div>
+              <div className="text-4xl font-bold mb-4">60%</div>
               <div className="text-lg font-semibold mb-2">Graduate Employment</div>
               <div className="text-sm opacity-90">Employed within 6 months of graduation</div>
             </div>

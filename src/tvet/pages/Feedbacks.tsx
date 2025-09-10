@@ -1,374 +1,148 @@
-import { useState } from 'react';
-import { FaPlus, FaTimes, FaStar, FaChartLine } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { useAuth } from '../../lib/useAuth';
+import { API_URL } from '../../lib/API';
 
-interface SkillFeedback {
-  id: string;
-  skillName: string;
-  currentLevel: number;
-  desiredLevel: number;
-  priority: 'low' | 'medium' | 'high';
-  feedback: string;
-  trainingNeeded: boolean;
-}
+type Insight = {
+  insight_id: string;
+  title: string;
+  sector: string;
+  skills_gap_suggestion: string;
+  priority: string;
+  date_created: string;
+  tags: string[];
+  status?: string;
+  created_by?: string;
+  author?: {
+    user_id: string;
+    first_name: string;
+    last_name: string;
+    company_name: string;
+    email: string;
+    user_type: string;
+  };
+};
 
-const skillCategories = [
-  'Technical Skills',
-  'Soft Skills',
-  'Digital Literacy',
-  'Communication',
-  'Problem Solving',
-  'Leadership',
-  'Project Management',
-  'Data Analysis'
-];
+const Analytics: React.FC = () => {
+  const { user } = useAuth();
+  const token = typeof window !== "undefined" ? localStorage.getItem("token_ineco") : null;
 
-const Feedbacks = () => {
-  const [skillsFeedback, setSkillsFeedback] = useState<SkillFeedback[]>([
-    {
-      id: '1',
-      skillName: 'React Development',
-      currentLevel: 3,
-      desiredLevel: 5,
-      priority: 'high',
-      feedback: 'Need advanced training in React hooks and state management',
-      trainingNeeded: true,
-    },
-    {
-      id: '2',
-      skillName: 'Data Analysis',
-      currentLevel: 2,
-      desiredLevel: 4,
-      priority: 'medium',
-      feedback: 'Require training in statistical analysis and visualization tools',
-      trainingNeeded: true,
-    },
-  ]);
+  const [insights, setInsights] = useState<Insight[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const [newSkill, setNewSkill] = useState<{
-    skillName: string;
-    currentLevel: number;
-    desiredLevel: number;
-    priority: 'low' | 'medium' | 'high';
-    feedback: string;
-    trainingNeeded: boolean;
-  }>({
-    skillName: '',
-    currentLevel: 1,
-    desiredLevel: 5,
-    priority: 'medium',
-    feedback: '',
-    trainingNeeded: false,
-  });
+  useEffect(() => {
+    const fetchInsights = async () => {
+      if (!token) return;
 
-  const [selectedCategory, setSelectedCategory] = useState('');
+      setLoading(true);
+      try {
+        const response = await fetch(`${API_URL}insights`, {
+          method: "GET",
+          headers: { 
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
+        });
 
-  const addSkillFeedback = () => {
-    if (!newSkill.skillName.trim()) return;
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
 
-    const skillFeedback: SkillFeedback = {
-      id: Date.now().toString(),
-      ...newSkill,
+        const data = await response.json();
+        if (data.success) {
+          setInsights(data.insights);
+        } else {
+          throw new Error(data.message || "Failed to fetch insights");
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setInsights([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    setSkillsFeedback((prev) => [...prev, skillFeedback]);
-    setNewSkill({
-      skillName: '',
-      currentLevel: 1,
-      desiredLevel: 5,
-      priority: 'medium',
-      feedback: '',
-      trainingNeeded: false,
-    });
-  };
-
-  const removeSkillFeedback = (id: string) => {
-    setSkillsFeedback((prev) => prev.filter((skill) => skill.id !== id));
-  };
+    fetchInsights();
+  }, [token]);
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'high':
-        return 'bg-red-600 text-white';
-      case 'medium':
-        return 'bg-yellow-600 text-white';
-      case 'low':
-        return 'bg-green-600 text-white';
-      default:
-        return 'bg-gray-600 text-white';
+      case 'high': return 'bg-red-600';
+      case 'medium': return 'bg-yellow-600';
+      case 'low': return 'bg-green-600';
+      default: return 'bg-yellow-600';
     }
   };
 
-  const renderStars = (level: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <FaStar
-        key={i}
-        className={`h-4 w-4 ${
-          i < level ? 'text-yellow-400' : 'text-slate-500'
-        }`}
-      />
-    ));
-  };
-
-  const handleSubmitFeedback = () => {
-    console.log('Skills feedback submitted:', skillsFeedback);
-    alert('Skills gap feedback submitted successfully!');
+  const getPriorityLabel = (priority: string) => {
+    switch (priority) {
+      case 'high': return 'High';
+      case 'medium': return 'Medium';
+      case 'low': return 'Low';
+      default: return priority;
+    }
   };
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-semibold text-white mb-2">
-          Skills Gap Feedback
-        </h2>
-        <p className="text-slate-400">
-          Identify skill gaps and provide feedback for training needs
-        </p>
-      </div>
-
-      {/* Add New Skill Feedback */}
-      <div className="bg-slate-800 border border-slate-700 rounded-lg">
-        <div className="p-4 border-b border-slate-700">
-          <h3 className="text-white flex items-center text-lg font-semibold">
-            <FaPlus className="mr-2" />
-            Add Skills Feedback
-          </h3>
-          <p className="text-slate-400 text-sm">
-            Assess current skills and identify training needs
-          </p>
+    <div className="min-h-screen dark:bg-slate-900 p-6">
+      <div className="max-w-6xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-white text-2xl mb-2">Industry Insights</h1>
+          <p className="text-slate-400">Track industry trends and skills gap analysis</p>
         </div>
-        <div className="p-4 space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="text-slate-300 text-sm">Skill Category</label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full mt-1 rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
-              >
-                <option value="">Select a category</option>
-                {skillCategories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
-            </div>
 
-            <div>
-              <label className="text-slate-300 text-sm">Skill Name</label>
-              <input
-                type="text"
-                value={newSkill.skillName}
-                onChange={(e) =>
-                  setNewSkill((prev) => ({ ...prev, skillName: e.target.value }))
-                }
-                placeholder="e.g., React Development, Data Analysis"
-                className="w-full mt-1 rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
-              />
-            </div>
+        {loading ? (
+          <div className="text-white">Loading Insights...</div>
+        ) : insights.length === 0 ? (
+          <div className="bg-slate-800 border border-slate-700 rounded-lg p-12 text-center">
+            <h3 className="text-slate-400 text-lg mb-2">No insights yet</h3>
+            <p className="text-slate-500 mb-4">No industry insights to display at this time.</p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="text-slate-300 text-sm">Current Level</label>
-              <select
-                value={newSkill.currentLevel.toString()}
-                onChange={(e) =>
-                  setNewSkill((prev) => ({
-                    ...prev,
-                    currentLevel: parseInt(e.target.value),
-                  }))
-                }
-                className="w-full mt-1 rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
-              >
-                {[1, 2, 3, 4, 5].map((level) => (
-                  <option key={level} value={level}>
-                    {level}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="text-slate-300 text-sm">Desired Level</label>
-              <select
-                value={newSkill.desiredLevel.toString()}
-                onChange={(e) =>
-                  setNewSkill((prev) => ({
-                    ...prev,
-                    desiredLevel: parseInt(e.target.value),
-                  }))
-                }
-                className="w-full mt-1 rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
-              >
-                {[1, 2, 3, 4, 5].map((level) => (
-                  <option key={level} value={level}>
-                    {level}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="text-slate-300 text-sm">Priority</label>
-              <select
-                value={newSkill.priority}
-                onChange={(e) =>
-                  setNewSkill((prev) => ({
-                    ...prev,
-                    priority: e.target.value as 'low' | 'medium' | 'high',
-                  }))
-                }
-                className="w-full mt-1 rounded bg-slate-700 border border-slate-600 text-white px-3 py-2"
-              >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <label className="text-slate-300 text-sm">
-              Feedback & Training Needs
-            </label>
-            <textarea
-              value={newSkill.feedback}
-              onChange={(e) =>
-                setNewSkill((prev) => ({ ...prev, feedback: e.target.value }))
-              }
-              placeholder="Describe the skill gap and specific training requirements..."
-              className="w-full mt-1 rounded bg-slate-700 border border-slate-600 text-white px-3 py-2 min-h-[100px]"
-            />
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <input
-              type="checkbox"
-              checked={newSkill.trainingNeeded}
-              onChange={(e) =>
-                setNewSkill((prev) => ({
-                  ...prev,
-                  trainingNeeded: e.target.checked,
-                }))
-              }
-              className="rounded border-slate-600 bg-slate-700 text-blue-600 focus:ring-blue-500"
-            />
-            <span className="text-slate-300 text-sm">
-              Formal training required
-            </span>
-          </div>
-
-          <button
-            onClick={addSkillFeedback}
-            className="flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-          >
-            <FaPlus className="mr-2" /> Add Skill Feedback
-          </button>
-        </div>
-      </div>
-
-      {/* Skills Feedback List */}
-      <div className="bg-slate-800 border border-slate-700 rounded-lg">
-        <div className="p-4 border-b border-slate-700">
-          <h3 className="text-white flex items-center text-lg font-semibold">
-            <FaChartLine className="mr-2" />
-            Skills Gap Assessment
-          </h3>
-          <p className="text-slate-400 text-sm">
-            Review and manage identified skill gaps
-          </p>
-        </div>
-        <div className="p-4">
-          {skillsFeedback.length === 0 ? (
-            <p className="text-slate-400 text-center py-8">
-              No skills feedback added yet.
-            </p>
-          ) : (
-            <div className="space-y-4">
-              {skillsFeedback.map((skill) => (
-                <div
-                  key={skill.id}
-                  className="border border-slate-700 rounded-lg p-4 bg-slate-750"
-                >
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h4 className="font-semibold text-white">
-                        {skill.skillName}
-                      </h4>
-                      <span
-                        className={`inline-block text-xs px-2 py-1 rounded ${getPriorityColor(
-                          skill.priority
-                        )}`}
-                      >
-                        {skill.priority} priority
+        ) : (
+          <div className="grid gap-4">
+            {insights.map(insight => (
+              <div key={insight.insight_id} className="bg-slate-800 border border-slate-700 rounded-lg p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-white text-lg">{insight.title}</h3>
+                      <span className={`${getPriorityColor(insight.priority)} text-white px-2 py-1 rounded text-xs`}>
+                        {getPriorityLabel(insight.priority)}
                       </span>
                     </div>
-                    <button
-                      onClick={() => removeSkillFeedback(skill.id)}
-                      className="text-slate-400 hover:text-red-400"
-                    >
-                      <FaTimes />
-                    </button>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                    <div>
-                      <p className="text-sm text-slate-400 mb-1">
-                        Current Level
-                      </p>
-                      <div className="flex items-center space-x-1">
-                        {renderStars(skill.currentLevel)}
-                        <span className="text-slate-300 ml-2">
-                          ({skill.currentLevel}/5)
+                    <div className="flex gap-2 mb-3">
+                      <span className="bg-purple-600 text-white px-2 py-1 rounded text-xs">{insight.sector}</span>
+                      <span className="border border-slate-600 text-slate-300 px-2 py-1 rounded text-xs">
+                        {new Date(insight.date_created).toLocaleDateString()}
+                      </span>
+                      {insight.author && (
+                        <span className="border border-slate-600 text-slate-300 px-2 py-1 rounded text-xs">
+                          By: {insight.author.company_name || `${insight.author.first_name} ${insight.author.last_name}`}
                         </span>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm text-slate-400 mb-1">
-                        Desired Level
-                      </p>
-                      <div className="flex items-center space-x-1">
-                        {renderStars(skill.desiredLevel)}
-                        <span className="text-slate-300 ml-2">
-                          ({skill.desiredLevel}/5)
-                        </span>
-                      </div>
+                      )}
                     </div>
                   </div>
-
-                  {skill.feedback && (
-                    <div className="mb-3">
-                      <p className="text-sm text-slate-400 mb-1">Feedback</p>
-                      <p className="text-slate-300">{skill.feedback}</p>
-                    </div>
-                  )}
-
-                  {skill.trainingNeeded && (
-                    <span className="inline-block text-xs px-2 py-1 border border-blue-600 text-blue-400 rounded">
-                      Training Required
-                    </span>
-                  )}
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
 
-      {/* Divider */}
-      <div className="h-px bg-slate-700" />
+                <div className="mb-4">
+                  <h4 className="text-slate-300 mb-2">Skills Gap Analysis & Suggestions</h4>
+                  <p className="text-slate-400 leading-relaxed">{insight.skills_gap_suggestion}</p>
+                </div>
 
-      <div className="flex justify-end">
-        <button
-          onClick={handleSubmitFeedback}
-          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-        >
-          Submit Skills Feedback
-        </button>
+                {insight.tags && insight.tags.length > 0 && (
+                  <div>
+                    <h4 className="text-slate-300 mb-2">Related Skills & Technologies</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {insight.tags.map((tag, index) => (
+                        <span key={index} className="border border-slate-600 text-slate-300 px-2 py-1 rounded text-xs">{tag}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default Feedbacks;
+export default Analytics;

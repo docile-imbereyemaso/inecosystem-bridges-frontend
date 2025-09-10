@@ -1,55 +1,76 @@
 import { useState, useEffect } from 'react';
+import { useAuth } from '../../lib/useAuth';
+import { API_URL } from '../../lib/API';
 
 type Insight = {
-  id: string;
+  insight_id: string;
   title: string;
   sector: string;
-  skillsGapSuggestion: string;
+  skills_gap_suggestion: string;
   priority: string;
-  dateCreated: string;
+  date_created: string;
   tags: string[];
+  status?: string;
+  created_by?: string;
+  author?: {
+    user_id: string;
+    first_name: string;
+    last_name: string;
+    company_name: string;
+    email: string;
+    user_type: string;
+  };
 };
 
 const Analytics: React.FC = () => {
-// DISPLAYING INTERNSHIPS
+  const { user } = useAuth();
+  const token = typeof window !== "undefined" ? localStorage.getItem("token_ineco") : null;
 
   const [insights, setInsights] = useState<Insight[]>([]);
-
   const [loading, setLoading] = useState(true);
-useEffect(() => {
-  const fetchCompanies = async () => {
+
+  useEffect(() => {
+    const fetchInsights = async () => {
+      if (!token) return;
+      
       setLoading(true);
       try {
-      const response = await fetch("http://localhost:5000/api/getInsights", {
-        method: "GET", // Changed from GET to POST
-        headers: { "Content-Type": "application/json" }
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      setInsights(data);
-    } catch (err) {
-      console.error("Fetch error:", err);
-      setInsights([]); // Set empty array to prevent map error
-    }finally{
+        const response = await fetch(`${API_URL}insights`, {
+          method: "GET",
+          headers: { 
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        if (data.success) {
+          setInsights(data.insights);
+        } else {
+          throw new Error(data.message || "Failed to fetch insights");
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setInsights([]);
+      } finally {
         setLoading(false);
       }
     };
 
-    fetchCompanies();
-  }, []);
-
+    fetchInsights();
+  }, [token]);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingInsight, setEditingInsight] = useState<Insight | null>(null);
-  const [formData, setFormData] = useState<Omit<Insight, 'id' | 'dateCreated'>>({
+  const [formData, setFormData] = useState({
     title: '',
     sector: '',
-    skillsGapSuggestion: '',
-    priority: 'Medium',
+    skills_gap_suggestion: '',
+    priority: 'medium',
     tags: []
   });
 
@@ -61,17 +82,17 @@ useEffect(() => {
       setFormData({
         title: insight.title,
         sector: insight.sector,
-        skillsGapSuggestion: insight.skillsGapSuggestion,
+        skills_gap_suggestion: insight.skills_gap_suggestion,
         priority: insight.priority,
-        tags: insight.tags
+        tags: insight.tags || []
       });
     } else {
       setEditingInsight(null);
       setFormData({
         title: '',
         sector: '',
-        skillsGapSuggestion: '',
-        priority: 'Medium',
+        skills_gap_suggestion: '',
+        priority: 'medium',
         tags: []
       });
     }
@@ -100,67 +121,106 @@ useEffect(() => {
       tags: prev.tags.filter((_, i) => i !== index)
     }));
   };
-const saveInsight = async () => {
-  try {
-    const url = "http://localhost:5000/api/insights";
-    const method = "POST";
 
-    const response = await fetch(url, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-
-    const responseText = await response.text();
-    console.log("Raw response:", responseText);
+  const saveInsight = async () => {
+    if (!token) {
+      alert("You need to be logged in to save insights");
+      return;
+    }
 
     try {
-      const responseData = JSON.parse(responseText);
+      const url = editingInsight 
+        ? `${API_URL}insights/${editingInsight.insight_id}`
+        : `${API_URL}insights`;
+      
+      const method = editingInsight ? "PUT" : "POST";
+
+      const response = await fetch(url, {
+        method,
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const responseData = await response.json();
       
       if (!response.ok) {
-        // Show detailed error information
-        const errorMessage = responseData.error || responseData.message || responseData.detail || "Failed to save insight";
-        console.error("Backend error details:", responseData);
+        const errorMessage = responseData.error || responseData.message || "Failed to save insight";
         throw new Error(errorMessage);
       }
 
-      if (editingInsight) {
-        setInsights(prev => prev.map(insight => 
-          insight.id === editingInsight.id ? responseData.insight : insight
-        ));
+      if (responseData.success) {
+        if (editingInsight) {
+          setInsights(prev => prev.map(insight => 
+            insight.insight_id === editingInsight.insight_id ? responseData.insight : insight
+          ));
+        } else {
+          setInsights(prev => [...prev, responseData.insight]);
+        }
+        
+        closeDialog();
+        alert(responseData.message || "Insight saved successfully");
       } else {
-        setInsights(prev => [...prev, responseData.insight]);
+        throw new Error(responseData.message || "Failed to save insight");
       }
-      
-      closeDialog();
-    } catch (parseError) {
-      console.error("JSON parse error:", parseError);
-      throw new Error(`Server returned: ${responseText}`);
+    } catch (error: any) {
+      console.error("Save insight error:", error);
+      alert(`Error: ${error.message}`);
     }
-  } catch (error: any) {
-    console.error("Full error details:", error);
-    alert(`Error: ${error.message}\n\nCheck console for more details.`);
-  }
-};
-  const deleteInsight = (id: string) => {
-    setInsights(prev => prev.filter(insight => insight.id !== id));
+  };
+
+  const deleteInsight = async (id: string) => {
+    if (!token) {
+      alert("You need to be logged in to delete insights");
+      return;
+    }
+
+    if (!confirm("Are you sure you want to delete this insight?")) return;
+
+    try {
+      const response = await fetch(`${API_URL}insights/${id}`, {
+        method: "DELETE",
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      const responseData = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(responseData.message || "Failed to delete insight");
+      }
+
+      if (responseData.success) {
+        setInsights(prev => prev.filter(insight => insight.insight_id !== id));
+        alert("Insight deleted successfully");
+      } else {
+        throw new Error(responseData.message || "Failed to delete insight");
+      }
+    } catch (error: any) {
+      console.error("Delete insight error:", error);
+      alert(`Error: ${error.message}`);
+    }
   };
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
-      case 'High':
+      case 'high':
         return (
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.996-.833-2.732 0L4.268 16.5c-.77.833.192 2.5 1.732 2.5z" />
           </svg>
         );
-      case 'Medium':
+      case 'medium':
         return (
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
           </svg>
         );
-      case 'Low':
+      case 'low':
         return (
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
@@ -177,14 +237,23 @@ const saveInsight = async () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'High':
+      case 'high':
         return 'bg-red-600';
-      case 'Medium':
+      case 'medium':
         return 'bg-yellow-600';
-      case 'Low':
+      case 'low':
         return 'bg-green-600';
       default:
         return 'bg-yellow-600';
+    }
+  };
+
+  const getPriorityLabel = (priority: string) => {
+    switch (priority) {
+      case 'high': return 'High';
+      case 'medium': return 'Medium';
+      case 'low': return 'Low';
+      default: return priority;
     }
   };
 
@@ -211,87 +280,98 @@ const saveInsight = async () => {
         {/* Insights Cards */}
         <div className="grid gap-4">
           {loading ? (
-  <div>Loading Insights...</div>
-) : (insights.map((insight) => (
-            <div key={insight.id} className="bg-slate-800 border border-slate-700 rounded-lg p-6">
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-white text-lg">{insight.title}</h3>
-                    <span className={`${getPriorityColor(insight.priority)} text-white px-2 py-1 rounded text-xs flex items-center gap-1`}>
-                      {getPriorityIcon(insight.priority)}
-                      {insight.priority}
-                    </span>
-                  </div>
-                  <div className="flex gap-2 mb-3">
-                    <span className="bg-purple-600 text-white px-2 py-1 rounded text-xs">{insight.sector}</span>
-                    <span className="border border-slate-600 text-slate-300 px-2 py-1 rounded text-xs">
-                      {new Date(insight.dateCreated).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => openDialog(insight)}
-                    className="text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 p-2 rounded transition-colors"
-                    title="Edit Insight"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                  </button>
-                  <button
-                    onClick={() => deleteInsight(insight.id)}
-                    className="text-red-400 hover:text-red-300 hover:bg-red-400/10 p-2 rounded transition-colors"
-                    title="Delete Insight"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <h4 className="text-slate-300 mb-2">Skills Gap Analysis & Suggestions</h4>
-                <p className="text-slate-400 leading-relaxed">{insight.skillsGapSuggestion}</p>
-              </div>
-
-              {insight.tags.length > 0 && (
-                <div>
-                  <h4 className="text-slate-300 mb-2">Related Skills & Technologies</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {insight.tags.split(",").map((tag, index) => (
-                      <span key={index} className="border border-slate-600 text-slate-300 px-2 py-1 rounded text-xs">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )))}
-        </div>
-
-        {/* Empty State */}
-        {insights.length === 0 && (
-          <div className="bg-slate-800 border border-slate-700 rounded-lg p-12 text-center">
-            <svg className="w-12 h-12 text-slate-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-            </svg>
-            <h3 className="text-slate-400 text-lg mb-2">No insights yet</h3>
-            <p className="text-slate-500 mb-4">Start tracking industry trends and skills gaps to build valuable insights.</p>
-            <button 
-              onClick={() => openDialog()}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 mx-auto transition-colors"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            <div className="text-white">Loading Insights...</div>
+          ) : insights.length === 0 ? (
+            <div className="bg-slate-800 border border-slate-700 rounded-lg p-12 text-center">
+              <svg className="w-12 h-12 text-slate-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
-              Add First Insight
-            </button>
-          </div>
-        )}
+              <h3 className="text-slate-400 text-lg mb-2">No insights yet</h3>
+              <p className="text-slate-500 mb-4">Start tracking industry trends and skills gaps to build valuable insights.</p>
+              <button 
+                onClick={() => openDialog()}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 mx-auto transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Add First Insight
+              </button>
+            </div>
+          ) : (
+            insights.map((insight) => (
+              <div key={insight.insight_id} className="bg-slate-800 border border-slate-700 rounded-lg p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-white text-lg">{insight.title}</h3>
+                      <span className={`${getPriorityColor(insight.priority)} text-white px-2 py-1 rounded text-xs flex items-center gap-1`}>
+                        {getPriorityIcon(insight.priority)}
+                        {getPriorityLabel(insight.priority)}
+                      </span>
+                      {insight.status && (
+                        <span className="bg-gray-600 text-white px-2 py-1 rounded text-xs">
+                          {insight.status}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex gap-2 mb-3">
+                      <span className="bg-purple-600 text-white px-2 py-1 rounded text-xs">{insight.sector}</span>
+                      <span className="border border-slate-600 text-slate-300 px-2 py-1 rounded text-xs">
+                        {new Date(insight.date_created).toLocaleDateString()}
+                      </span>
+                      {insight.author && (
+                        <span className="border border-slate-600 text-slate-300 px-2 py-1 rounded text-xs">
+                          By: {insight.author.company_name || `${insight.author.first_name} ${insight.author.last_name}`}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  {user?.user_id === insight.created_by && (
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => openDialog(insight)}
+                        className="text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 p-2 rounded transition-colors"
+                        title="Edit Insight"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={() => deleteInsight(insight.insight_id)}
+                        className="text-red-400 hover:text-red-300 hover:bg-red-400/10 p-2 rounded transition-colors"
+                        title="Delete Insight"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mb-4">
+                  <h4 className="text-slate-300 mb-2">Skills Gap Analysis & Suggestions</h4>
+                  <p className="text-slate-400 leading-relaxed">{insight.skills_gap_suggestion}</p>
+                </div>
+
+                {insight.tags && insight.tags.length > 0 && (
+                  <div>
+                    <h4 className="text-slate-300 mb-2">Related Skills & Technologies</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {insight.tags.map((tag, index) => (
+                        <span key={index} className="border border-slate-600 text-slate-300 px-2 py-1 rounded text-xs">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
 
         {/* Modal Dialog */}
         {isDialogOpen && (
@@ -346,13 +426,13 @@ const saveInsight = async () => {
                   <div>
                     <label className="block text-slate-300 mb-1">Priority</label>
                     <select
-                      value={formData.priority || 'Medium'}
+                      value={formData.priority || 'medium'}
                       onChange={(e) => setFormData(prev => ({ ...prev, priority: e.target.value }))}
                       className="w-full bg-slate-700 border border-slate-600 text-white rounded px-3 py-2"
                     >
-                      <option value="Low">Low</option>
-                      <option value="Medium">Medium</option>
-                      <option value="High">High</option>
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
                     </select>
                   </div>
                 </div>
@@ -361,8 +441,8 @@ const saveInsight = async () => {
                 <div>
                   <label className="block text-slate-300 mb-1">Skills Gap Suggestion</label>
                   <textarea
-                    value={formData.skillsGapSuggestion || ''}
-                    onChange={(e) => setFormData(prev => ({ ...prev, skillsGapSuggestion: e.target.value }))}
+                    value={formData.skills_gap_suggestion || ''}
+                    onChange={(e) => setFormData(prev => ({ ...prev, skills_gap_suggestion: e.target.value }))}
                     placeholder="Describe the skills gap and provide suggestions for addressing it..."
                     className="w-full bg-slate-700 border border-slate-600 text-white rounded px-3 py-2 min-h-32"
                   />

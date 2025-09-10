@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { FiChevronRight, FiUsers, FiClock, FiDollarSign, FiAward, FiPlay, FiCheckCircle, FiArrowRight, FiBookOpen, FiBriefcase, FiTrendingUp } from 'react-icons/fi';
 import TVETSuccessStories from './TVETSuccessStories';
 import TvetSocialCTA from './TvetSocialCTA';
+import TVETSectors from '../tvet/pages/Tvetsectors.jsx'
 
 const Tvetmattersection = () => {
   const [activeTab, setActiveTab] = useState('digital');
@@ -35,15 +36,7 @@ const Tvetmattersection = () => {
         { name: "Green Building", duration: "20 months", placement: "91%", salary: "$18,000-28,000" }
       ]
     },
-    healthcare: {
-      title: "Healthcare",
-      programs: [
-        { name: "Nursing Assistant", duration: "10 months", placement: "96%", salary: "$14,000-22,000" },
-        { name: "Medical Technology", duration: "15 months", placement: "93%", salary: "$16,000-25,000" },
-        { name: "Pharmacy Technology", duration: "12 months", placement: "90%", salary: "$15,000-23,000" },
-        { name: "Elderly Care", duration: "8 months", placement: "94%", salary: "$12,000-19,000" }
-      ]
-    },
+   
     manufacturing: {
       title: "Advanced Manufacturing",
       programs: [
@@ -56,8 +49,8 @@ const Tvetmattersection = () => {
   };
 
   const partners = [
-    "MTN Rwanda", "Bank of Kigali", "Equity Bank", "Airtel Rwanda", 
-    "COGEBANQUE", "Inyange Industries", "Crystal Ventures", "Simba Telecom"
+    "XYZ", "ABC", "Rwanda tech", "The Gym Rwanda", 
+     "Inyange Industries", "Crystal Ventures", "Simba Telecom"
   ];
 
   const faqs = [
@@ -67,7 +60,7 @@ const Tvetmattersection = () => {
     },
     {
       question: "Can I still go to university later if I want?",
-      answer: "Yes! Many universities now recognize TVET qualifications for advanced standing. You can also pursue part-time degree programs while working. Some of our graduates earn their degrees while already established in their careers."
+      answer: "Yes! Many universities now recognize Rwanda TVET secondary school qualifications for advanced standing. You can also pursue part-time degree programs while working. Some of our graduates earn their degrees while already established in their careers."
     },
     {
       question: "What if I don't know which program to choose?",
@@ -100,7 +93,7 @@ const Tvetmattersection = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
   <button className="bg-yellow-500 text-black px-8 py-4 rounded-lg font-semibold text-lg hover:bg-yellow-400 dark:hover:bg-yellow-600 transition-colors flex items-center justify-center">
-          Explore TVET Programs <FiArrowRight className="ml-2 h-5 w-5" />
+          Explore TVET sectors <FiArrowRight className="ml-2 h-5 w-5" />
         </button>
               <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-blue-900 dark:hover:bg-gray-800 dark:hover:text-white transition-colors flex items-center justify-center">
                 <FiPlay className="mr-2 h-5 w-5" /> Watch Success Stories
@@ -181,7 +174,7 @@ const Tvetmattersection = () => {
               </div>
               <div>
                 <div className="text-4xl font-bold text-purple-600 dark:text-purple-300 mb-2">200+</div>
-                <p className="text-gray-600">Partner companies hiring our graduates</p>
+                <p className="text-gray-600">Private Sector companies hiring our graduates</p>
               </div>
             </div>
           </div>
@@ -248,6 +241,8 @@ const Tvetmattersection = () => {
             </div>
           </div>
         </div>
+
+        <TVETSectors/>
       </div>
 
       {/* Comparison Section */}
@@ -352,15 +347,15 @@ const Tvetmattersection = () => {
             </div>
             <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow text-center">
               <h4 className="font-semibold mb-2 dark:text-gray-100">No Barriers</h4>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">Open to all backgrounds - passion matters more than grades</p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm">Open to all backgrounds - passion and grades matter</p>
             </div>
             <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow text-center">
-              <h4 className="font-semibold mb-2 dark:text-gray-100">Campus Tours</h4>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">Visit our modern facilities virtually or in person</p>
+              <h4 className="font-semibold mb-2 dark:text-gray-100">Reach out</h4>
+              <p className="text-gray-600 dark:text-gray-300 text-sm">Visit our modern facilities online or in person</p>
             </div>
             <div className="bg-white dark:bg-gray-900 p-6 rounded-lg shadow text-center">
               <h4 className="font-semibold mb-2 dark:text-gray-100">Parent Support</h4>
-              <p className="text-gray-600 dark:text-gray-300 text-sm">Information sessions to address family concerns</p>
+              <p className="text-gray-600 dark:text-gray-300 text-sm">Online Information sessions to address family concerns</p>
             </div>
           </div>
         </div>

@@ -1,52 +1,21 @@
 import { useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Link, useNavigate } from 'react-router';
-import { FiUser, FiHome, FiBook, FiEye, FiEyeOff, FiMail, FiLock, FiChevronDown } from 'react-icons/fi';
-import {API_URL} from "../lib/API.js"
+import { FiEye, FiEyeOff, FiMail, FiLock } from 'react-icons/fi';
+import {API_URL} from "../lib/API.js";
+import logo from '/images/logo.png';
 import axios from "axios"
+
 const LoginComponent = () => {
-  const [userType, setUserType] = useState('student');
   const [showPassword, setShowPassword] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [error,setError] = useState(null)
-  const [isLoading, setLoading] = useState(false)
-  const navigate = useNavigate()
+  const [error, setError] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-
-  const userTypes = [
-    {
-      id: 'student',
-      label: 'Student / Individual',
-      icon: FiUser,
-      color: 'from-blue-500 to-cyan-500',
-      description: 'Access learning opportunities and career development resources',
-      canRegister: true,
-      registrationLink: '/IndividualSignUp'
-    },
-    {
-      id: 'private',
-      label: 'Private Sector',
-      icon: FiHome,
-      color: 'from-green-500 to-emerald-500',
-      description: 'Connect with talent and invest in skills development',
-      canRegister: true,
-      registrationLink: '/privateSectorRegistration'
-    },
-    {
-      id: 'tvet',
-      label: 'TVET Institution',
-      icon: FiBook,
-      color: 'from-purple-500 to-indigo-500',
-      description: 'Manage programs and connect with industry partners',
-      canRegister: false,
-      registrationLink: null
-    }
-  ];
-
-  const currentUserType = userTypes.find(type => type.id === userType);
-  if (!currentUserType) return null;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -55,165 +24,86 @@ const LoginComponent = () => {
     });
   };
 
-const handleLogin = async (e: React.FormEvent<HTMLButtonElement>) => {
-  e.preventDefault();
-  setLoading(true);
-  try {
-    const { data } = await axios.post(`${API_URL}auth/login`, formData);
-    setLoading(false);
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const { data } = await axios.post(`${API_URL}auth/login`, formData);
+      setLoading(false);
 
-    if (data.success) {
-      // Save token
-      localStorage.setItem("token_ineco", data.token);
+      if (data.success) {
+        // Save token
+        localStorage.setItem("token_ineco", data.token);
 
-      // Prepare user object
-      const da = {
-        user_id:data.user.user_id,
-        first_name: data.user.first_name,
-        last_name: data.user.last_name,
-        email: data.user.email,
-        phone: data.user.phone,
-        bio: data.user.bio,
-        user_type: data.user.user_type,
-        is_approved: data.user.is_approved,
-        company_name: data.user.company_name,
-        company_size: data.user.company_size,
-        industry: data.user.industry,
-        tvet_institution: data.user.tvet_institution,
-        position: data.user.position,
-      };
+        // Prepare user object
+        const da = {
+          user_id: data.user.user_id,
+          first_name: data.user.first_name,
+          last_name: data.user.last_name,
+          email: data.user.email,
+          phone: data.user.phone,
+          bio: data.user.bio,
+          user_type: data.user.user_type,
+          is_approved: data.user.is_approved,
+          company_name: data.user.company_name,
+          company_size: data.user.company_size,
+          industry: data.user.industry,
+          tvet_institution: data.user.tvet_institution,
+          position: data.user.position,
+        };
 
-      // Save as JSON string
-      localStorage.setItem("token_user", JSON.stringify(da));
-      if(da.user_type === "individual"){
-            navigate("/user/profile");
-      }else if(da.user_type === "private_sector"){
-            navigate("/privateSector/profile");
+  // Save as JSON string
+  localStorage.setItem("token_user", JSON.stringify(da));
+  toast.success("Login successful!", { position: "top-right", autoClose: 3000 });
+  // Navigate based on user type
+        if(da.user_type === "individual"){
+          navigate("/user/profile");
+        } else if(da.user_type === "private_sector"){
+          navigate("/privateSector/profile");
+        } else if(da.user_type === "tvet"){
+          navigate("/tvet/profile");
+        }
       }
-      else if(da.user_type==="tvet"){
-            navigate("/tvet/profile");
-      }
-      
+    } catch (error) {
+      setLoading(false);
+  setError((error as any)?.response?.data?.message);
     }
-  } catch (error: any) {
-    setLoading(false);
-    setError(error?.response?.data?.message);
-  }
-};
-
+  };
 
   const handleGoogleLogin = () => {
-    console.log('Google login for:', userType);
+    console.log('Google login');
     // Handle Google OAuth login
-  };
-
-  const handleUserTypeSelect = (type: string) => {
-    setUserType(type);
-    setIsDropdownOpen(false);
-  };
-
-
-  const getRegistrationText = () => {
-    switch (userType) {
-      case 'student':
-        return 'Create Individual Account';
-      case 'private':
-        return 'Register your Private Sector here';
-      case 'tvet':
-        return null;
-      default:
-        return 'Register here';
-    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-black flex flex-col items-center justify-center p-2">
       <div className="w-full max-w-md">
-        <div></div>
         {/* Home Button at Top */}
         <div className="mb-3 text-center">
           <Link to="/" className="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-xl font-medium transition-colors text-sm animate-pulse">
-                  Back to Home
+            Back to Home
           </Link>
         </div>
 
         {/* Logo and Header */}
         <div className="text-center mb-4">
-          <div className="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-600 to-green-500 rounded-2xl mb-2 shadow-lg">
-            <span className="text-white font-bold text-xl">I</span>
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-2 shadow-lg">
+            <span className="text-white font-bold text-xl">
+              <img src={logo} alt="inecosystem-bridge" />
+            </span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-            INECOSYSTEM
+            INECOSYSTEM-BRIDGE
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 text-xs">
-            Community Platform
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Sign in to access your account
           </p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-4 border border-gray-200 dark:border-gray-700">
-          {/* User Type Selection */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              I am signing in as:
-            </label>
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="w-full flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-              >
-                <div className="flex items-center space-x-3 flex-1">
-                  <div className="text-left flex-1">
-                    <div className="font-medium text-gray-900 dark:text-white">
-                      {currentUserType.label}
-                    </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400">
-                      {currentUserType.description}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className={`w-10 h-10 bg-gradient-to-r ${currentUserType.color} rounded-lg flex items-center justify-center`}>
-                    <currentUserType.icon className="text-white text-lg" />
-                  </div>
-                  <FiChevronDown className={`text-gray-400 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
-                </div>
-              </button>
-
-              {/* Dropdown Menu */}
-              {isDropdownOpen && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-xl shadow-lg z-10">
-                  {userTypes.map((type) => (
-                    <button
-                      key={type.id}
-                      onClick={() => handleUserTypeSelect(type.id)}
-                      className={`w-full flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
-                        type.id === userType ? 'bg-blue-50 dark:bg-blue-900/20' : ''
-                      } ${type.id === userTypes[0].id ? 'rounded-t-xl' : ''} ${
-                        type.id === userTypes[userTypes.length - 1].id ? 'rounded-b-xl' : ''
-                      }`}
-                    >
-                      <div className="text-left flex-1">
-                        <div className="font-medium text-gray-900 dark:text-white">
-                          {type.label}
-                        </div>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
-                          {type.description}
-                        </div>
-                      </div>
-                      <div className={`w-10 h-10 bg-gradient-to-r ${type.color} rounded-lg flex items-center justify-center ml-3`}>
-                        <type.icon className="text-white text-lg" />
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
           {/* Google Sign In */}
-          <div className="mb-4">
+          <div className="mb-6">
             <button
               onClick={handleGoogleLogin}
               className="w-full flex items-center justify-center space-x-3 px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors shadow-sm"
@@ -231,7 +121,7 @@ const handleLogin = async (e: React.FormEvent<HTMLButtonElement>) => {
           </div>
 
           {/* Divider */}
-          <div className="relative mb-4">
+          <div className="relative mb-6">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-200 dark:border-gray-600"></div>
             </div>
@@ -242,12 +132,15 @@ const handleLogin = async (e: React.FormEvent<HTMLButtonElement>) => {
             </div>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
+              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+            </div>
+          )}
 
-          { error && <div className="error">
-                   {error}
-          </div>}
           {/* Login Form */}
-          <div className="space-y-4">
+          <form onSubmit={handleLogin} className="space-y-4">
             {/* Email Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -263,6 +156,7 @@ const handleLogin = async (e: React.FormEvent<HTMLButtonElement>) => {
                   value={formData.email}
                   onChange={handleInputChange}
                   placeholder="Enter your email"
+                  required
                   className="w-full pl-12 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-all"
                 />
               </div>
@@ -283,6 +177,7 @@ const handleLogin = async (e: React.FormEvent<HTMLButtonElement>) => {
                   value={formData.password}
                   onChange={handleInputChange}
                   placeholder="Enter your password"
+                  required
                   className="w-full pl-12 pr-12 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent transition-all"
                 />
                 <button
@@ -316,41 +211,44 @@ const handleLogin = async (e: React.FormEvent<HTMLButtonElement>) => {
 
             {/* Sign In Button */}
             <button
-              onClick={handleLogin}
-              className={`w-full bg-gradient-to-r ${currentUserType.color} hover:shadow-lg text-white font-medium py-3 px-4 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800`}
-             disabled={isLoading}
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:shadow-lg text-white font-medium py-3 px-4 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-             { isLoading?"Processing...": `Sign In to ${currentUserType.label} Portal`}
+              {isLoading ? "Signing In..." : "Sign In"}
             </button>
+          </form>
 
-            {/* Registration Section */}
-            <div className="text-center pt-4 border-t border-gray-200 dark:border-gray-700">
-              {currentUserType.canRegister ? (
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Don't have an account?{' '}
-                      <Link
-                        to={currentUserType.registrationLink || '#'}
-                        className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium hover:underline"
-                      >
-                        {getRegistrationText()}
-                      </Link>
+          {/* Registration Links */}
+          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <p className="text-sm text-gray-600 dark:text-gray-400 text-center mb-4">
+              Don't have an account? Register as:
+            </p>
+            <div className="space-y-2">
+              <Link
+                to="/IndividualSignUp"
+                className="block w-full text-center px-4 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors text-sm font-medium"
+              >
+                Student / Individual
+              </Link>
+              <Link
+                to="/privateSectorRegistration"
+                className="block w-full text-center px-4 py-2 text-green-600 dark:text-green-400 hover:bg-green-50 dark:hover:bg-green-900/20 rounded-lg transition-colors text-sm font-medium"
+              >
+                Private Sector
+              </Link>
+              <div className="text-center">
+                <p className="text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 rounded-lg">
+                  TVET Institution accounts are created by administrators
                 </p>
-              ) : (
-                <div className="space-y-2">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    TVET Institution Access
-                  </p>
-                  <p className="text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-3 py-2 rounded-lg">
-                    Institution accounts are created by administrators. Contact support if you need access.
-                  </p>
-                </div>
-              )}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Mission Statement */}
         <div className="mt-4 text-center">
+        <ToastContainer />
           <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed max-w-sm mx-auto">
             Empowering future-ready talent by strengthening collaboration between 
             TVET institutions, the private sector, and industries.
