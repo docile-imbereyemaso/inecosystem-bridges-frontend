@@ -29,13 +29,13 @@ const navItems: NavItem[] = [
   },
   {
     icon: <MdMenuBook />,
-    name: "Opportunities Hub",
+    name: "Hand-on experience",
     path: "/user/internship",
   },
   
   {
     icon: <IoAddCircleSharp />,
-    name: "Connect to private Sectors",
+    name: "Private Sectors Directory",
     path: "/user/privateSector",
   },
 ];

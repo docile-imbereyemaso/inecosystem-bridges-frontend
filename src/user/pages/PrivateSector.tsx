@@ -1,5 +1,18 @@
-import React from 'react';
-import { FaBuilding, FaUsers, FaChartLine, FaMapMarkerAlt, FaPhone, FaEnvelope, FaGlobe } from 'react-icons/fa';
+import React, { useState } from 'react';
+import {
+  FaBuilding,
+  FaUsers,
+  FaChartLine,
+  FaMapMarkerAlt,
+  FaPhone,
+  FaEnvelope,
+  FaGlobe,
+  FaCheck,
+  FaSpinner,
+  FaHandshake,
+  FaBell,
+  FaWhatsapp
+} from 'react-icons/fa';
 
 type PrivateSectorCompany = {
   id: string;
@@ -28,12 +41,13 @@ const sampleCompanies: PrivateSectorCompany[] = [
     industry: 'Technology',
     employees: '250-500',
     location: 'Kigali, Rwanda',
-    description: 'Leading software development and IT consulting company specializing in digital transformation for businesses across East Africa.',
+    description:
+      'Leading software development and IT consulting company specializing in digital transformation for businesses across East Africa.',
     website: 'www.techcorp.rw',
     phone: '+250 788 123 456',
     email: 'info@techcorp.rw',
     revenue: '$2.5M - $5M',
-    founded: 2018
+    founded: 2018,
   },
   {
     id: '2',
@@ -41,12 +55,13 @@ const sampleCompanies: PrivateSectorCompany[] = [
     industry: 'Renewable Energy',
     employees: '100-250',
     location: 'Kigali, Rwanda',
-    description: 'Solar and renewable energy solutions provider, committed to sustainable energy infrastructure development.',
+    description:
+      'Solar and renewable energy solutions provider, committed to sustainable energy infrastructure development.',
     website: 'www.greenerergy.rw',
     phone: '+250 788 987 654',
     email: 'contact@greenerergy.rw',
     revenue: '$1M - $2.5M',
-    founded: 2020
+    founded: 2020,
   },
   {
     id: '3',
@@ -54,20 +69,53 @@ const sampleCompanies: PrivateSectorCompany[] = [
     industry: 'Logistics & Transportation',
     employees: '50-100',
     location: 'Kigali, Rwanda',
-    description: 'Comprehensive logistics and supply chain management services for businesses across the region.',
+    description:
+      'Comprehensive logistics and supply chain management services for businesses across the region.',
     website: 'www.logisticshub.rw',
     phone: '+250 788 555 777',
     email: 'services@logisticshub.rw',
     revenue: '$500K - $1M',
-    founded: 2019
-  }
+    founded: 2019,
+  },
 ];
 
-const PrivateSector: React.FC<PrivateSectorProps> = ({ 
-  userSector = 'Technical sector', 
-  companies = sampleCompanies
+const PrivateSector: React.FC<PrivateSectorProps> = ({
+  userSector = 'Technical sector',
+  companies = sampleCompanies,
 }) => {
-  // Enhanced design: always light mode, clean cards
+  // Track connection status for each company by ID
+  const [connectedCompanies, setConnectedCompanies] = useState<{
+    [key: string]: boolean;
+  }>({});
+  
+  // Track loading state for connection process
+  const [loadingConnections, setLoadingConnections] = useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const handleConnection = async (id: string, companyName: string) => {
+    // Set loading state
+    setLoadingConnections(prev => ({
+      ...prev,
+      [id]: true
+    }));
+
+    // Simulate API call or connection process
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    // Update connection status
+    setConnectedCompanies(prev => ({
+      ...prev,
+      [id]: true,
+    }));
+
+    // Clear loading state
+    setLoadingConnections(prev => ({
+      ...prev,
+      [id]: false
+    }));
+  };
+
   const themeClasses = 'bg-gray-50 text-gray-900';
   const cardClasses = 'bg-white border-gray-200';
 
@@ -76,22 +124,23 @@ const PrivateSector: React.FC<PrivateSectorProps> = ({
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2 dark:text-gray-200">Private Sector Directory</h1>
-          <p className="text-lg text-gray-600 dark:text-gray-200">
+          <h1 className="text-3xl font-bold mb-2 dark:text-gray-300">Private Sector Directory</h1>
+          <p className="text-lg text-gray-600">
             Companies in {userSector}
           </p>
         </div>
 
-       
-
         {/* Companies Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6  dark:bg-gray-900 p-4 rounded-lg">
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 p-4 rounded-lg">
           {companies.map((company) => (
-            <div key={company.id} className={`p-6 rounded-lg border ${cardClasses} hover:shadow-lg transition-shadow`}>
+            <div
+              key={company.id}
+              className={`p-6 rounded-lg border ${cardClasses} hover:shadow-lg transition-all duration-300 hover:scale-[1.02]`}
+            >
               {/* Company Header */}
               <div className="mb-4">
-                <h3 className="text-xl font-bold mb-1">{company.name}</h3>
-                <span className="inline-block px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800">
+                <h3 className="text-xl font-bold mb-2">{company.name}</h3>
+                <span className="inline-block px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800 font-medium">
                   {company.industry}
                 </span>
               </div>
@@ -121,19 +170,21 @@ const PrivateSector: React.FC<PrivateSectorProps> = ({
               </div>
 
               {/* Description */}
-              <p className="text-sm mb-4 text-gray-600">
+              <p className="text-sm mb-4 text-gray-600 line-clamp-3">
                 {company.description}
               </p>
 
-              {/* Contact Information */}
-              <div className="border-t pt-4 space-y-2">
+              {/* Contact Info + Connect */}
+              <div className="border-t pt-4 space-y-3">
                 {company.website && (
                   <div className="flex items-center">
                     <FaGlobe className="h-4 w-4 mr-2 text-gray-500" />
-                    <a href={`https://${company.website}`} 
-                       className="text-sm text-blue-500 hover:text-blue-600"
-                       target="_blank" 
-                       rel="noopener noreferrer">
+                    <a
+                      href={`https://${company.website}`}
+                      className="text-sm text-blue-600 hover:text-blue-700 transition-colors"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       {company.website}
                     </a>
                   </div>
@@ -147,12 +198,87 @@ const PrivateSector: React.FC<PrivateSectorProps> = ({
                 {company.email && (
                   <div className="flex items-center">
                     <FaEnvelope className="h-4 w-4 mr-2 text-gray-500" />
-                    <a href={`mailto:${company.email}`} 
-                       className="text-sm text-blue-500 hover:text-blue-600">
+                    <a
+                      href={`mailto:${company.email}`}
+                      className="text-sm text-blue-600 hover:text-blue-700 transition-colors"
+                    >
                       {company.email}
                     </a>
                   </div>
                 )}
+
+                {/* Enhanced Connect Button */}
+                <div className="pt-2">
+                  {!connectedCompanies[company.id] ? (
+                    <button
+                      className={`
+                        w-full flex items-center justify-center gap-2 
+                        bg-gradient-to-r from-blue-600 to-indigo-600 
+                        hover:from-blue-700 hover:to-indigo-700 
+                        text-white font-semibold px-4 py-3 rounded-lg 
+                        transition-all duration-300 ease-in-out
+                        transform hover:scale-105 hover:shadow-lg
+                        active:scale-95
+                        disabled:opacity-70 disabled:cursor-not-allowed
+                        disabled:hover:scale-100 disabled:hover:shadow-none
+                        ${loadingConnections[company.id] ? 'cursor-wait' : ''}
+                      `}
+                      onClick={() => handleConnection(company.id, company.name)}
+                      disabled={loadingConnections[company.id]}
+                    >
+                      {loadingConnections[company.id] ? (
+                        <>
+                          <FaSpinner className="h-4 w-4 animate-spin" />
+                          Connecting...
+                        </>
+                      ) : (
+                        <>
+                          <FaHandshake className="h-4 w-4" />
+                          Connect & Grow
+                        </>
+                      )}
+                    </button>
+                  ) : (
+                    <div className="space-y-3">
+                      {/* Success State */}
+                      <div className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold px-4 py-3 rounded-lg">
+                        <FaCheck className="h-4 w-4" />
+                        Successfully Connected
+                      </div>
+                      
+                      {/* Professional Follow-up Message */}
+                      <div className="bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-lg p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="flex-shrink-0 w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center">
+                            <FaCheck className="h-4 w-4 text-amber-600" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-amber-900 mb-1">
+                              Connection Established
+                            </h4>
+                            <p className="text-sm text-amber-800 mb-2">
+                              Thank you for connecting with {company.name}! We'll keep you updated on collaboration opportunities.
+                            </p>
+                            <div className="flex items-center gap-4 text-xs text-amber-700">
+                              <div className="flex items-center gap-1">
+                                <FaEnvelope className="h-3 w-3" />
+                                Email updates
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <FaWhatsapp className="h-3 w-3" />
+                                WhatsApp notifications
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <FaBell className="h-3 w-3" />
+                                Priority alerts
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))}
