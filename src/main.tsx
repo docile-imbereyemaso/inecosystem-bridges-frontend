@@ -3,9 +3,9 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import "swiper/swiper-bundle.css";
 import "flatpickr/dist/flatpickr.css";
-import App from "./App.tsx";
-import { AppWrapper } from "./user/components/common/PageMeta.tsx";
-import { ThemeProvider } from "./user/context/ThemeContext.tsx";
+import App from "./App.jsx";
+import { AppWrapper } from "./user/components/common/PageMeta.jsx";
+import { ThemeProvider } from "./user/context/ThemeContext.jsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

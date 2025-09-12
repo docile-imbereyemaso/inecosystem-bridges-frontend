@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 
-import Navbar from '../common-components/Navbar';
+import Navbar from '../common-components/Navbar.jsx';
 import HeroSection from './otherpages/HeroSection';
 import MainSection from './MainSection';
-import Topnav from '../common-components/Topnav.tsx';
-import FooterComponent from './FooterComponent.tsx';
+import Topnav from '../common-components/Topnav.jsx';
+import FooterComponent from './FooterComponent.jsx';
 const Home: React.FC = () => {
 
 

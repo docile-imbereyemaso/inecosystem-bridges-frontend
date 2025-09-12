@@ -1,5 +1,5 @@
-import FooterComponent from './FooterComponent.tsx';
-import LoginComponent from './LoginComponent.tsx';
+import FooterComponent from './FooterComponent.jsx';
+import LoginComponent from './LoginComponent.jsx';
 const Login = () => {
     
      

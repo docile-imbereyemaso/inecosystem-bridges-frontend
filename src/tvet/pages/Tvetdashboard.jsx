@@ -1,7 +1,7 @@
 
 import Patnerships from './Patnerships'
 import Opportunities from './Opportunities'
-import Statistics from './Statistics.tsx'
+import Statistics from './Statistics.jsx'
 import SkillsOpportunityAnalysis from './SkillsAnalysis.jsx'
 
 
