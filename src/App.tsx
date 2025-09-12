@@ -30,7 +30,6 @@ import TvetLayout from "./tvet/layout/TvetLayout";
 import TvetProfiles from "./tvet/pages/TvetProfiles";
 import Training from "./user/pages/Training";
 import Home from "./pages/Home";
-import Rewards from "./user/pages/Rewards";
 import Partnerships from "./tvet/pages/Patnerships";
 import Feedbacks from "./tvet/pages/Feedbacks";
 import Statistics from "./tvet/pages/Statistics";
