@@ -33,8 +33,8 @@ const AIChatbot: React.FC = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      content: "👋 Hello! I'm your TVET AI Assistant. I'm here to help bridge the gap between students, private sector, and TVET institutions. How can I assist you today?",
+      id: '1', 
+      content: "👋 Hello! I'm your INECOSYSTEM BRIDGE AI Assistant. I'm here to help bridge the gap between students, private sector, and TVET institutions. How can I assist you today?",
       sender: 'bot',
       timestamp: new Date(),
       category: 'general'
@@ -195,8 +195,8 @@ const AIChatbot: React.FC = () => {
           <div className="absolute -top-2 -right-2 w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
         </button>
         <div className="mt-4 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-3 rounded-lg shadow-lg max-w-xs">
-          <p className="text-sm font-medium">TVET AI Assistant</p>
-          <p className="text-xs text-gray-600 dark:text-gray-400">Get answers about TVET programs & partnerships</p>
+          <p className="text-sm font-medium">INECOSYSTEM BRIDGE AI Assistant</p>
+          <p className="text-xs text-gray-600 dark:text-gray-400">Feel free to ask</p>
         </div>
       </div>
     );
@@ -214,7 +214,7 @@ const AIChatbot: React.FC = () => {
                 <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-green-400 rounded-full border-2 border-white"></div>
               </div>
               <div>
-                <h3 className="font-bold text-lg">TVET AI Assistant</h3>
+                <h3 className="font-bold text-lg">INECOSYSTEM BRIDGE AI Assistant</h3>
                 <p className="text-sm text-blue-100">Connecting Students & Industry</p>
               </div>
             </div>

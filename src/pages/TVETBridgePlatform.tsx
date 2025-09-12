@@ -2,7 +2,7 @@ import React, {  useState, useEffect } from 'react';
 import { FiSearch, FiMapPin, FiExternalLink, FiBell } from 'react-icons/fi';
 import Navbar from '../common-components/Navbar';
 import FooterComponent from './FooterComponent';
-
+import { API_URL } from "../lib/API";
 
 
 type Job = {
@@ -17,36 +17,34 @@ type Job = {
 };
 
 const TVETBridgePlatform = () => {
-  const [activeTab, setActiveTab] = useState('jobs');
-  const [jobListings, setJobs] = useState<Job[]>([]);
+  const [activeTab, setActiveTab] = useState('jobs');  
+    const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
-useEffect(() => {
-  const fetchCompanies = async () => {
-      setLoading(true);
-      try {
-      const response = await fetch("http://localhost:5000/api/jobsData", {
-        method: "GET", // Changed from GET to POST
-        headers: { "Content-Type": "application/json" }
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      setJobs(data);
+const fetchJobs = async () => {
+    setLoading(true);
+    try {
+const res = await fetch(`${API_URL}jobs/allJobs`, {
+  credentials: "include", // allow cookies to be sent
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+      if (!res.ok) throw new Error(`Fetch jobs failed: ${res.status}`);
+      const data = await res.json();
+      setJobs(data.jobs);
     } catch (err) {
-      console.error("Fetch error:", err);
-      setJobs([]); // Set empty array to prevent map error
-    }finally{
-        setLoading(false);
-      }
-    };
+      console.error("Fetch jobs error:", err);
+      setJobs([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchCompanies();
+  useEffect(() => {
+    fetchJobs();
   }, []);
 
-  console.log(jobListings);
+console.log(jobs);
   const organizations = [
     {
       id: 1,
@@ -207,44 +205,60 @@ useEffect(() => {
       </div>
       <div className="space-y-4">
         {loading ? (
-  <div>Loading jobs...</div>
-) : (jobListings.map((job: Job) => (
-          <div key={job.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow">
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-600 dark:from-cyan-700 dark:to-blue-800 rounded-lg flex items-center justify-center text-white font-bold">
-                {job.name.split(" ").map((s: string) => s[0]).join(" ")}
-              </div>
-              <div className="flex-1">
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white hover:text-cyan-600 dark:hover:text-cyan-300 cursor-pointer">
-                      {job.title}
-                    </h3>
-                    <p className="text-gray-700 dark:text-gray-300 font-medium">{job.company}</p>
-                    <div className="flex items-center text-gray-500 dark:text-gray-400 text-sm mt-1">
-                      <FiMapPin className="w-4 h-4 mr-1" />
-                      {job.location}
-                    </div>
-                  <div className="flex gap-2 flex-wrap mt-2">
-                     <span className="px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
-                       {job.sector}
-                     </span>
-                     <span className="px-3 py-1 rounded-full text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
-                       {job.experience}
-                     </span>
-                   </div>
-                  </div>
-                  <div className="text-gray-500 dark:text-gray-400 text-sm">
-                    {job.timeAgo}
-                  </div>
-                  
-                </div>
-              </div>
-            </div>
-            
-            <a href="#" className="text-cyan-500 hover:underline block px-3 py-2 bg-slate-800 w-fit mt-3 rounded-lg font-semibold transition hover:bg-slate-800/90 duration-300 dark:bg-indigo-500">View job details</a>
-          </div>
-        )))}
+                    <div>Loading jobs...</div>
+                  ) : jobs.length === 0 ? (
+                    <div>No jobs found.</div>
+                  ) : (
+                    jobs.map((job) => (
+                      <div key={job.job_id} className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+                        <div className="flex justify-between items-start mb-4">
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">{job.name}</h3>
+                            <div className="flex gap-2 mt-2">
+                              <span className="bg-green-600 text-white px-2 py-1 rounded text-xs">{job.type}</span>
+                              <span className="bg-purple-600 text-white px-2 py-1 rounded text-xs">{job.level}</span>
+                              <span className="bg-orange-600 text-white px-2 py-1 rounded text-xs">
+                                {job.positions} position{job.positions > 1 ? "s" : ""}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => window.open(job.application_link, "_blank")}
+                              className="text-green-400 hover:text-green-300 hover:bg-green-400/10 p-2 rounded"
+                            >
+                              <FiExternalLink className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+        
+                        <div className="flex flex-col md:flex-row gap-4">
+                          <div className="flex-1">
+                            <h4 className="text-gray-600 dark:text-gray-400 mb-1">Skills Required</h4>
+                            <div className="flex flex-wrap gap-1">
+                              {job.skills_required.map((skill, i) => (
+                                <span key={i} className="border border-gray-300 px-2 py-1 rounded text-xs text-gray-700 dark:text-gray-300">
+                                  {skill}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="text-gray-600 dark:text-gray-400 mb-1">Qualifications</h4>
+                            <ul className="text-gray-700 dark:text-gray-300 text-sm space-y-1">
+                              {job.qualifications.map((q, i) => (
+                                <li key={i}>• {q}</li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="text-gray-600 dark:text-gray-400 mb-1">Period</h4>
+                            <p className="text-gray-800 dark:text-white/90">{job.period}</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
       </div>
     </div>
   );
