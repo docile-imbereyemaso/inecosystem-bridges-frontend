@@ -1,8 +1,8 @@
 
 import Patnerships from './Patnerships'
 import Opportunities from './Opportunities'
-import Statistics from './Statistics.tsx'
-import SkillsOpportunityAnalysis from './SkillsAnalysis.jsx'
+import Statistics from './Statistics'
+import SkillsOpportunityAnalysis from './SkillsAnalysis'
 
 
 const TvetDashboard = () => {
