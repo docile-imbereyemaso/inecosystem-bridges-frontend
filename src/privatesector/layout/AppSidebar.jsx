@@ -2,9 +2,9 @@ import { useCallback } from "react";
 import { Link, useLocation } from "react-router";
 import { FiBook, FiBarChart2 } from "react-icons/fi";
 
-import { FaThLarge, FaUserCircle, FaBox, FaEllipsisH } from "react-icons/fa";
+import { FaThLarge, FaUserCircle, FaBox, FaEllipsisH, FaUsers } from "react-icons/fa";
 import { useSidebar } from "../context/SidebarContext";
-
+import { NotificationBell } from "../../pages/NotificationPage";
 
 
 const navItems= [
@@ -25,7 +25,7 @@ const navItems= [
   },
   {
     icon: <FiBarChart2 />,
-    name: "Analytics and private sector insights",
+    name: "Analytics & Insights",
     path: "/privateSector/analytics",
   },
   {
@@ -37,6 +37,16 @@ const navItems= [
     icon: <FiBook />,
     name: "Contributions",
     path: "/privateSector/contributions",
+  },
+  {
+    icon: <FaUsers />,
+    name: "My Community",
+    path: "/privateSector/community",
+  },
+   {
+    icon: <NotificationBell/>,
+    name: "Notifications",
+    path: "/user/notifications",
   },
 ];
 

@@ -34,6 +34,7 @@ export default function UserProfiles() {
   // Skills removed
   const [selectedSectors, setSelectedSectors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false); // Add saving state
 
   // Fetch profile data from API
   useEffect(() => {
@@ -49,16 +50,16 @@ export default function UserProfiles() {
         if (!res.ok) throw new Error("Failed to fetch profile");
 
         const data = await res.json();
-        console.log(data.user["first_name"]);
-        setProfile({
-          firstName: data.user["first_name"] || "",
-          lastName: data.user["last_name"] || "",
-          email: data.user["email"] || "",
-          phone: data.user["phone"] || "",
-          bio: data.user["bio"] || "",
+     
+       setProfile({
+          firstName: data?.first_name || "",
+          lastName: data?.last_name || "",
+          email: data?.email || "",
+          phone: data?.phone || "",
+          bio: data?.bio || "",
         });
-  // Skills removed
-        setSelectedSectors(data.user.sectors || []);
+      
+        setSelectedSectors(data.sectors || []);
       } catch (error) {
         console.error("Error fetching profile:", error);
       } finally {
@@ -73,10 +74,10 @@ fetchProfile();
 
   // Save updated profile
   const saveProfile = async () => {
+    setSaving(true); // Start saving
     try {
       const updatedData = {
         ...profile,
-  // skills removed
         sectors: selectedSectors,
       };
       const token = localStorage.getItem("token_ineco")
@@ -92,11 +93,13 @@ fetchProfile();
 
       if (!res.ok) throw new Error("Failed to update profile");
 
-      console.log("Updated profile:", updatedData); // ✅ Log updated data
-  toast.success("Profile updated successfully!", { position: "top-right", autoClose: 3000 });
+      console.log("Updated profile:", updatedData);
+      toast.success("Profile updated successfully!", { position: "top-right", autoClose: 3000 });
     } catch (error) {
       console.error("Error updating profile:", error);
-  toast.error("Error updating profile.", { position: "top-right", autoClose: 3000 });
+      toast.error("Error updating profile.", { position: "top-right", autoClose: 3000 });
+    } finally {
+      setSaving(false); // End saving
     }
   };
 
@@ -218,7 +221,7 @@ fetchProfile();
                   key={sector}
                   onClick={() => handleSectorToggle(sector)}
                   className={`text-sm px-3 py-2 rounded border ${
-                    selectedSectors.includes(sector)
+                    selectedSectors.includes(sector) || sector===profile.sector
                       ? "bg-blue-600 text-white border-blue-600"
                       : "border-gray-300 text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
                   }`}
@@ -234,9 +237,10 @@ fetchProfile();
         <div className="mt-6 flex justify-end">
           <button
             onClick={saveProfile}
-            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded"
+            className={`flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded ${saving ? "opacity-60 cursor-not-allowed" : ""}`}
+            disabled={saving}
           >
-            <FaSave /> Save Changes
+            {saving ? "Saving..." : <><FaSave /> Save Changes</>}
           </button>
           <ToastContainer className={'z-40'}/>
         </div>

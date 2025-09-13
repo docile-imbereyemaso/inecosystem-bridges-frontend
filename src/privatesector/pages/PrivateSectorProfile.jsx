@@ -30,6 +30,9 @@ export default function PrivateSectorProfiles() {
   const [newContact, setNewContact] = useState({ type: "", value: "" });
   const [newOffering, setNewOffering] = useState("");
 
+  // Add loading state
+  const [loading, setLoading] = useState(false);
+
   // ---------- utilities ----------
   const asArray = (val) => {
     if (!val) return [];
@@ -101,6 +104,7 @@ export default function PrivateSectorProfiles() {
   const saveCompany = async () => {
     if (!user?.user_id || !token) return;
 
+    setLoading(true); // Start loading
     try {
       // 1) Update USER table
       const userUpdate = await fetch(`${API_URL}companies`, {
@@ -159,6 +163,8 @@ const companyPayload = {
     } catch (error) {
       console.error("Save error:", error);
       alert("Error saving profile");
+    } finally {
+      setLoading(false); // End loading
     }
   };
 
@@ -405,9 +411,10 @@ const companyPayload = {
           </button>
           <button
             onClick={saveCompany}
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            className={`rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 ${loading ? "opacity-60 cursor-not-allowed" : ""}`}
+            disabled={loading}
           >
-            Save Changes
+            {loading ? 'Saving...' : 'Save Changes'}
           </button>
         </div>
       </div>

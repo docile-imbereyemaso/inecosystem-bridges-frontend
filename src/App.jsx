@@ -23,6 +23,7 @@ import JobBoard from "./privatesector/pages/JobBoard";
 import Analytics from "./privatesector/pages/Analytics";
 import Internerships from "./privatesector/pages/Internerships";
 import Contributions from "./privatesector/pages/Contributions";
+import PrivateSectorConnections from "./user/pages/PrivateSectorConnections";
 
 
 
@@ -38,7 +39,8 @@ import CompanyRegistration from "./pages/CompanyRegistration";
 import ProtectedRoute from "./lib/ProtectedRoute.jsx"
 import TvetDashboard from "./tvet/pages/Tvetdashboard.jsx";
 import PrivateSector from "./user/pages/PrivateSector.jsx";
-
+import { NotificationPage } from "./pages/NotificationPage.jsx";
+import MyCommunity from "./privatesector/pages/MyCommunity.jsx";
 
 export default function App() {
   return (
@@ -51,7 +53,7 @@ export default function App() {
           <Route path="/tvetmatters" element={<Tvetmatters />} />
           <Route path="/ai-chatbot" element={<AIChatbot />} />
           <Route path="/login" element={<Login />} />
-
+             
           
           <Route path="/jobBoard" element={<TVETBridgePlatform />} />
 
@@ -65,6 +67,9 @@ export default function App() {
             <Route index path="/user/profile" element={<UserProfiles />} />
             <Route path="/user/internship" element={<Training />} />
             <Route path="/user/privateSector" element={<PrivateSector />} />
+            <Route path="/user/private-sector-connections" element={<PrivateSectorConnections />} />
+          <Route path="/user/notifications" element={<NotificationPage/>} />
+
             <Route path="/user/*" element={<UserNotFound />} />
           </Route>
           {/* Private sector Dashboard layout */}
@@ -74,7 +79,11 @@ export default function App() {
             <Route path="/privateSector/internships" element={<Internerships />} />
             <Route path="/privateSector/analytics" element={<Analytics />} />
             <Route path="/privateSector/contributions" element={<Contributions />} />
+            <Route path="/privateSector/notifications" element={<NotificationPage/>} />
+            <Route path="/privateSector/community" element={<MyCommunity/>} />
+
             <Route path="/privateSector/*" element={<PrivateNotFound />} />
+
           </Route>
           {/* Tvet Dasboard layout */}
           <Route element={ <ProtectedRoute><TvetLayout /></ProtectedRoute> }>

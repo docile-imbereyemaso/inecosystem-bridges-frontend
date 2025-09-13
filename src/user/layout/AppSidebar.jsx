@@ -5,11 +5,11 @@ import { BsFillAwardFill } from "react-icons/bs";
 import { IoAddCircleSharp } from "react-icons/io5";
 import logo from '/images/logo.png';
 
-
+import { IoIosNotifications } from "react-icons/io";
 // Assume these icons are imported from an icon library
-import { FaThLarge, FaEllipsisH, FaUserCircle } from "react-icons/fa";
+import { FaThLarge, FaEllipsisH, FaUserCircle,FaUsers } from "react-icons/fa";
 import { useSidebar } from "../context/SidebarContext";
-
+import { NotificationBell } from "../../pages/NotificationPage";
 // ...existing code...
 
 const navItems = [
@@ -33,6 +33,17 @@ const navItems = [
     icon: <IoAddCircleSharp />,
     name: "Private Sectors Directory",
     path: "/user/privateSector",
+  },
+
+   {
+    icon: <FaUsers/>,
+    name: "My Connections",
+    path: "/user/private-sector-connections",
+  },
+   {
+    icon: <NotificationBell/>,
+    name: "Notifications",
+    path: "/user/notifications",
   },
 ];
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from "../../lib/useAuth";
 import { API_URL } from "../../lib/API";
+import { toast } from "react-toastify";
 
 const Internships = () => {
   
@@ -16,18 +17,20 @@ const Internships = () => {
     sector: '',
     period: '',
     applicationOpen: true,
-    deadline: ''
+    deadline: '',
+    description: '', // <-- Add description field
   });
 
   const [internships, setInternships] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false); // <-- Add saving state
 
   useEffect(() => {
     const fetchInternships = async () => {
       setLoading(true);
       try {
         const token = localStorage.getItem("token_ineco");
-        const response = await fetch("http://localhost:3000/api/internships", {
+        const response = await fetch(`${API_URL}internships`, {
           method: "GET",
           headers: { 
             "Content-Type": "application/json",
@@ -77,7 +80,8 @@ const Internships = () => {
         sector: internship.sector,
         period: internship.period,
         applicationOpen: internship.applicationOpen,
-        deadline: internship.deadline
+        deadline: internship.deadline,
+        description: internship.description || '', // <-- Add description
       });
     } else {
       setEditingInternship(null);
@@ -89,7 +93,8 @@ const Internships = () => {
         sector: '',
         period: '',
         applicationOpen: true,
-        deadline: ''
+        deadline: '',
+        description: '', // <-- Add description
       });
     }
     setIsDialogOpen(true);
@@ -101,58 +106,61 @@ const Internships = () => {
   };
 
   const saveInternship = async () => {
-  // Validate required fields
-  if (!formData.name || !formData.type || !formData.level || !formData.deadline) {
-    alert("Name, type, level, and deadline are required");
-    return;
-  }
+    // Validate required fields
+  
 
-  try {
-    const token = localStorage.getItem("token_ineco");
-    const url = editingInternship 
-      ? `http://localhost:3000/api/internships/${editingInternship.id}` 
-      : "http://localhost:3000/api/internships";
+    setSaving(true); 
+    try {
+      const token = localStorage.getItem("token_ineco");
+      const url = editingInternship 
+        ? `${API_URL}internships/${editingInternship.id}` 
+        : `${API_URL}internships`;
 
-    const method = editingInternship ? "PUT" : "POST";
+      const method = editingInternship ? "PUT" : "POST";
 
-    // Send ONLY the essential fields for now
-    const requestData = {
-      name: formData.name,
-      type: formData.type,
-      level: formData.level,
-      sponsorship: formData.sponsorship,
-      sector: formData.sector,
-      period: formData.period,
-      application_open: formData.applicationOpen,
-      deadline: formData.deadline
-      // Omit optional fields for now: description, requirements, benefits, etc.
-    };
+      const requestData = {
+        name: formData.name,
+        type: formData.type,
+        level: formData.level,
+        sponsorship: formData.sponsorship,
+        sector: formData.sector,
+        period: formData.period,
+        application_open: formData.applicationOpen,
+        deadline: formData.deadline,
+        description: formData.description, // <-- Add description
+      };
 
-    console.log("Sending request data:", requestData);
+      const response = await fetch(url, {
+        method: method,
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(requestData),
+      });
 
-    const response = await fetch(url, {
-      method: method,
-      headers: { 
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
-      body: JSON.stringify(requestData),
-    });
+      const responseData = await response.json();
 
-    const responseData = await response.json();
-    console.log("Response status:", response.status);
-    console.log("Response data:", responseData);
+      if (!response.ok) {
+        throw new Error(responseData.message || "Failed to save internship");
+      }
+
     
-    if (!response.ok) {
-      throw new Error(responseData.message || "Failed to save internship");
-    }
+    alert("Internship Saved successfully!")
+        
 
-    // ... rest of your success handling code
-  } catch (error) {
-    console.error("Error saving internship:", error);
-    alert(error.message || "Failed to save internship");
-  }
-};
+      setIsDialogOpen(false);
+      setEditingInternship(null);
+
+      // Optionally, refresh internships list
+      // You can refetch or update state here
+    } catch (error) {
+      console.error("Error saving internship:", error);
+      toast.error(error.message || "Failed to save internship", { position: "top-right", autoClose: 3000 });
+    } finally {
+      setSaving(false); // <-- End saving
+    }
+  };
 
 
   const deleteInternship = async (id) => {
@@ -261,9 +269,9 @@ const Internships = () => {
                   <div>
                     <h3 className="text-white text-lg mb-2">{internship.name}</h3>
                     <div className="flex gap-2 mb-3 flex-wrap">
-                      <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs">{internship.type}</span>
-                      <span className="bg-purple-600 text-white px-2 py-1 rounded text-xs">{internship.level}</span>
-                      <span className="bg-green-600 text-white px-2 py-1 rounded text-xs">{internship.sector}</span>
+                      <span className="bg-blue-300 text-white px-2 py-1 rounded text-xs">{internship.type}</span>
+                      <span className="bg-purple-300 text-white px-2 py-1 rounded text-xs">{internship.level}</span>
+                      <span className="bg-green-300 text-white px-2 py-1 rounded text-xs">{internship.sector}</span>
                       {internship.sponsorship && (
                         <span className="bg-yellow-600 text-white px-2 py-1 rounded text-xs">Sponsored</span>
                       )}
@@ -338,7 +346,7 @@ const Internships = () => {
 
         {/* Modal Dialog */}
         {isDialogOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex items-center justify-center p-4 z-50 max-h-screen top-0">
             <div className="bg-slate-800 border border-slate-700 text-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-semibold">
@@ -445,6 +453,18 @@ const Internships = () => {
                   />
                 </div>
 
+                {/* Internship Description */}
+                <div>
+                  <label className="block text-slate-300 mb-1">Description</label>
+                  <textarea
+                    value={formData.description || ''}
+                    onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                    className="w-full bg-slate-700 border border-slate-600 text-white rounded px-3 py-2"
+                    placeholder="Describe the internship role, requirements, etc."
+                    rows={4}
+                  />
+                </div>
+
                 {/* Toggle Switches */}
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -491,14 +511,16 @@ const Internships = () => {
                   <button
                     onClick={closeDialog}
                     className="border border-slate-600 text-slate-300 hover:bg-slate-700 px-4 py-2 rounded transition-colors"
+                    disabled={saving}
                   >
                     Cancel
                   </button>
                   <button
                     onClick={saveInternship}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors"
+                    className={`bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors ${saving ? "opacity-60 cursor-not-allowed" : ""}`}
+                    disabled={saving}
                   >
-                    {editingInternship ? 'Update Internship' : 'Add Internship'}
+                    {saving ? (editingInternship ? "Updating..." : "Adding...") : (editingInternship ? 'Update Internship' : 'Add Internship')}
                   </button>
                 </div>
               </div>

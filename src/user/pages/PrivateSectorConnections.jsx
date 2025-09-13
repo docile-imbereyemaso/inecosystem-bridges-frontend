@@ -15,7 +15,7 @@ import {
 import { API_URL } from "../../lib/API";
 import { useAuth } from "../../lib/useAuth";
 import { toast, ToastContainer } from "react-toastify";
-const PrivateSector = () => {
+const PrivateSectorConnections = () => {
   const [users, setUsers] = useState([]);
   const [connectedCompanies, setConnectedCompanies] = useState({});
   const [loadingConnections, setLoadingConnections] = useState({});
@@ -120,7 +120,7 @@ console.log(connectedCompanies)
 
         {/* Companies Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 p-4 rounded-lg">
-          {users.map((user) => (
+          {users.filter((p)=>connectedCompanies[p.user_id]).map((user) => (
             <div
               key={user.user_id}
               className={`p-6 rounded-lg border ${cardClasses} hover:shadow-lg transition-all duration-300 hover:scale-[1.02]`}
@@ -231,4 +231,4 @@ console.log(connectedCompanies)
   );
 };
 
-export default PrivateSector;
+export default PrivateSectorConnections;
