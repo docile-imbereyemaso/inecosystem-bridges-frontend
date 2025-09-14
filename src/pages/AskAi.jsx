@@ -57,7 +57,29 @@ Your task:
   - pattern for youTube links: {"skill": "Skill Name", "link": "https://www.youtube.com/results?search_query=Skill+Name+tutorial"}
   - Practical experience suggestions
 
-Return ONLY a JSON object, nothing else.`;
+Return ONLY a JSON object, nothing else.
+Example of the expected response format:
+
+{
+  "careerChoice": "PHP Developer",
+  "duration": "6 months",
+  "roadmap": {
+    "Month 1": {
+      "mainFocus": "PHP Fundamentals",
+      "skillsToLearn": ["Variables", "Functions", "Arrays"],
+      "learningResources": [
+        "PHP.net documentation",
+        { "name": "Codecademy PHP Course", "url": "https://www.codecademy.com/learn/learn-php" }
+      ],
+      "youtubeLinks": {
+        "Variables": { "skill": "Variables", "link": "https://www.youtube.com/results?search_query=Variables+tutorial" },
+        "Functions": { "skill": "Functions", "link": "https://www.youtube.com/results?search_query=Functions+tutorial" }
+      },
+      "practicalExperience": ["Build a simple calculator", "Create a basic form that processes data"]
+    },
+    "Month 2": { /* ... */ }
+  }
+`;
   }
 
   async function handleGenerate(e) {
@@ -101,6 +123,7 @@ Return ONLY a JSON object, nothing else.`;
       let parsed;
       try {
         parsed = JSON.parse(text);
+        console.log(parsed)
       } catch {
         parsed = { error: "AI response was not valid JSON", raw: text };
       }
