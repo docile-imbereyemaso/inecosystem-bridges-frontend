@@ -41,6 +41,7 @@ import TvetDashboard from "./tvet/pages/Tvetdashboard.jsx";
 import PrivateSector from "./user/pages/PrivateSector.jsx";
 import { NotificationPage } from "./pages/NotificationPage.jsx";
 import MyCommunity from "./privatesector/pages/MyCommunity.jsx";
+import AskAi from "./pages/AskAi.jsx";
 
 export default function App() {
   return (
@@ -51,7 +52,7 @@ export default function App() {
           {/* Landing and About Us pages outside of dashboard layouts */}
           <Route  index path="/" element={<Home />} />
           <Route path="/tvetmatters" element={<Tvetmatters />} />
-          <Route path="/ai-chatbot" element={<AIChatbot />} />
+          <Route path="/ai-chatbot" element={<AskAi />} />
           <Route path="/login" element={<Login />} />
              
           
