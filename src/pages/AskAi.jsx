@@ -1,31 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { API_KEY } from "../lib/API";
 import jsPDF from "jspdf";
 import image from '/images/logo.png';
 import { Link } from "react-router";
 
-const NavTop = () => {
+const NavTop = ({ darkMode, setDarkMode }) => {
   return (
     <nav className="bg-indigo-600 shadow-md rounded-2xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-1">
         <div className="flex flex-col sm:flex-row justify-between h-16 items-center">
-          
           <Link to="/" className="flex-shrink-0 flex items-center space-x-3">
             <img src={image} alt="Logo" className="h-10 w-auto" />
             <h1 className="text-white font-bold text-xl tracking-wide">
               INECOSYSTEM BRIDGE
             </h1>
           </Link>
-
-          <div className="flex space-x-6">
+          <div className="flex space-x-6 items-center">
             <h3 className="text-gray-100">AI Career Roadmap Generator</h3>
+            {/* Dark mode toggle */}
+            <button
+              onClick={() => setDarkMode((d) => !d)}
+              className="ml-4 px-3 py-1 rounded-lg bg-white/20 text-white font-semibold shadow hover:bg-indigo-700 transition"
+              aria-label="Toggle dark mode"
+              title="Toggle dark mode"
+            >
+              {darkMode ? (
+                <svg className="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              ) : (
+                <svg className="w-5 h-5 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M12 1v2m0 18v2m11-11h-2M3 12H1m16.95 6.95l-1.41-1.41M6.34 6.34L4.93 4.93m12.02 0l-1.41 1.41M6.34 17.66l-1.41 1.41" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+            </button>
           </div>
         </div>
       </div>
     </nav>
   );
 };
-
 
 export default function AskAi() {
   const [career, setCareer] = useState("");
@@ -35,6 +50,22 @@ export default function AskAi() {
   const [responseJson, setResponseJson] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [darkMode, setDarkMode] = useState(() => {
+    // Try to use system preference on first load
+    if (typeof window !== "undefined") {
+      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    return false;
+  });
+
+  // Update <html> class for Tailwind dark mode
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [darkMode]);
 
  function buildPrompt(careerValue, durationValue, youtubeOnlyFlag) {
   return `You are a career roadmap generator AI.
@@ -262,280 +293,270 @@ function downloadPDF() {
 
 return (
     <div className="min-h-screen bg-[#E4F8E2] dark:bg-gray-900 transition-colors duration-300 pb-10">
-        <div className="max-w-3xl mx-auto p-6 bg-white/90 backdrop-blur-md min-h-screen shadow-2xl rounded-3xl border border-indigo-100">
-            <NavTop />
+      <div className="max-w-3xl mx-auto p-6 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md min-h-screen shadow-2xl rounded-3xl border border-indigo-100 dark:border-gray-700">
+        <NavTop darkMode={darkMode} setDarkMode={setDarkMode} />
 
-            <form
-                onSubmit={handleGenerate}
-                className="space-y-6 py-4 my-4 bg-white rounded-xl shadow-inner px-6"
-            >
-                {/* Career */}
-                <div>
-                    <label className="block text-sm font-bold text-indigo-700 tracking-wide">
-                        Your Career Choice:
-                    </label>
-                    <input
-                        value={career}
-                        onChange={(e) => setCareer(e.target.value)}
-                        placeholder="e.g. Data Analyst, Electrician, Nurse"
-                        className="mt-2 block w-full rounded-xl border border-indigo-200 focus:ring-2 focus:ring-indigo-300 p-3 bg-white/80 shadow-sm transition"
-                    />
-                </div>
+        <form
+          onSubmit={handleGenerate}
+          className="space-y-6 py-4 my-4 bg-white dark:bg-gray-900 rounded-xl shadow-inner px-6"
+        >
+          {/* Career */}
+          <div>
+            <label className="block text-sm font-bold text-indigo-700 dark:text-gray-200 tracking-wide">
+              Your Career Choice:
+            </label>
+            <input
+              value={career}
+              onChange={(e) => setCareer(e.target.value)}
+              placeholder="e.g. Data Analyst, Electrician, Nurse"
+              className="mt-2 block w-full rounded-xl border border-indigo-200 focus:ring-2 focus:ring-indigo-300 p-3 bg-white/80 shadow-sm transition"
+            />
+          </div>
 
-                {/* Duration */}
-                <div>
-                    <label className="block text-sm font-bold text-indigo-700 tracking-wide">
-                        Duration
-                    </label>
-                    <div className="flex gap-2 mt-2 items-center">
-                        <select
-                            value={duration}
-                            onChange={(e) => setDuration(e.target.value)}
-                            className="rounded-xl p-2 border border-indigo-200 bg-white/80 shadow-sm"
-                        >
-                            <option>3 months</option>
-                            <option>6 months</option>
-                            <option>1 year</option>
-                            <option>3 years</option>
-                            <option value="custom">Custom</option>
-                        </select>
-                        {duration === "custom" && (
-                            <input
-                                value={customDuration}
-                                onChange={(e) => setCustomDuration(e.target.value)}
-                                placeholder="e.g. 9 months"
-                                className="p-2 border rounded-xl bg-white/80 shadow-sm"
-                            />
-                        )}
-                        <label className="ml-4 inline-flex items-center cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={youtubeOnly}
-                                onChange={(e) => setYoutubeOnly(e.target.checked)}
-                                className="mr-2 accent-indigo-600"
-                            />
-                            <span className="text-indigo-700 font-medium">YouTube only</span>
-                        </label>
-                    </div>
-                </div>
-
-                {/* Buttons */}
-                {error && (
-                    <div className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2 border border-red-200">
-                        {error}
-                    </div>
-                )}
-                <div className="flex gap-3">
-                    <button
-                        type="submit"
-                        className="px-6 py-2 rounded-xl bg-indigo-600 text-white font-semibold shadow-lg hover:scale-105 transition disabled:opacity-60"
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <span className="flex items-center gap-2">
-                                <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-                                    <circle
-                                        className="opacity-25"
-                                        cx="12"
-                                        cy="12"
-                                        r="10"
-                                        stroke="currentColor"
-                                        strokeWidth="4"
-                                        fill="none"
-                                    />
-                                    <path
-                                        className="opacity-75"
-                                        fill="currentColor"
-                                        d="M4 12a8 8 0 018-8v8z"
-                                    />
-                                </svg>
-                                Generating...
-                            </span>
-                        ) : (
-                            "Generate"
-                        )}
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => {
-                            setCareer("");
-                            setDuration("6 months");
-                            setCustomDuration("");
-                            setResponseJson(null);
-                            setError(null);
-                        }}
-                        className="px-6 py-2 rounded-xl border border-indigo-200 bg-white/80 text-indigo-700 font-semibold shadow hover:bg-indigo-50 transition"
-                    >
-                        Reset
-                    </button>
-                </div>
-            </form>
-
-            <div className="mt-8 p-6 border rounded-2xl bg-white shadow-lg">
-                <div className="flex justify-between items-center mb-3">
-                    <h3 className="font-bold text-lg text-indigo-800 flex items-center gap-2">
-                        <svg className="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                            <path d="M12 4v16m8-8H4" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                        Generated Roadmap
-                    </h3>
-                    {responseJson && (
-                        <div className="flex gap-2">
-                            {/* <button
-                                onClick={handleCopyJSON}
-                                className="text-sm px-2 py-1 border rounded"
-                            >
-                                Copy JSON
-                            </button>
-                            <button
-                                onClick={downloadJSON}
-                                className="text-sm px-2 py-1 border rounded"
-                            >
-                                Download JSON
-                            </button> */}
-                            <button
-                                onClick={downloadPDF}
-                                className="text-sm px-3 py-1 rounded-lg bg-indigo-600 text-white font-semibold shadow hover:scale-105 transition"
-                            >
-                                Download PDF
-                            </button>
-                        </div>
-                    )}
-                </div>
-
-                <div className="mt-3">
-                    {loading && (
-                        <div className="flex items-center gap-2 text-sm text-indigo-600">
-                            <svg className="animate-spin h-5 w-5 text-indigo-500" viewBox="0 0 24 24">
-                                <circle
-                                    className="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    strokeWidth="4"
-                                    fill="none"
-                                />
-                                <path
-                                    className="opacity-75"
-                                    fill="currentColor"
-                                    d="M4 12a8 8 0 018-8v8z"
-                                />
-                            </svg>
-                            Generating roadmap...
-                        </div>
-                    )}
-                    {!loading && !responseJson && (
-                        <div className="text-sm text-gray-500 italic">
-                            No response yet. Fill the form and click <span className="font-semibold text-indigo-700">Generate</span>.
-                        </div>
-                    )}
-                    {responseJson && (
-                        <div className="space-y-8">
-                            <div className="p-5 bg-white rounded-xl shadow flex flex-col gap-1">
-                                <h3 className="text-xl font-extrabold text-indigo-800 flex items-center gap-2">
-                                    
-                                    Career Roadmap: {responseJson.careerChoice}
-                                </h3>
-                                <p className="text-sm text-indigo-700 font-medium">
-                                    Duration: {responseJson.duration}
-                                </p>
-                            </div>
-                            <div className="space-y-6">
-
-                                {/* TVET School Recommendations */}
-                                {responseJson.tvetSchools && responseJson.tvetSchools.length > 0 && (
-                                    <div className="p-5 border rounded-xl bg-white shadow">
-                                        <h3 className="text-md font-bold text-indigo-700 mb-2 flex items-center gap-2">
-                                           
-                                            Recommended TVET Schools in Rwanda
-                                        </h3>
-                                        <p className="mb-2 text-gray-700">The following is a list of TVET schools you can learn from:</p>
-                                        <ul className="list-inside text-sm text-gray-700">
-                                            {responseJson.tvetSchools.map((school, i) => (
-                                                <li key={i} className="mb-2">
-                                                    <p className="font-semibold text-indigo-800">{school.name}</p>
-                                                    <div className="px-3">
-                                                        <p>Location: <span className="text-indigo-700">{school.location}</span></p>
-                                                        <p>
-                                                            Relevant Programs:{" "}
-                                                            <span className="text-indigo-700">{school.programs?.join(", ") || "N/A"}</span>
-                                                        </p>
-                                                    </div>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
-                                )}
-                                {Object.entries(responseJson.roadmap || {}).map(
-                                    ([phase, details], idx) => (
-                                        <div
-                                            key={phase}
-                                            className="border rounded-xl p-5 bg-white shadow"
-                                        >
-                                            <h4 className="text-lg font-bold text-indigo-700 mb-2 flex items-center gap-2">
-                                                <span className="inline-block bg-indigo-200 text-indigo-800 rounded-full px-3 py-1 text-xs font-bold mr-2 shadow">
-                                                    {phase}
-                                                </span>
-                                                {details.mainFocus}
-                                            </h4>
-
-                                            <div className="mb-2">
-                                                <p className="text-sm font-semibold text-gray-700">
-                                                    Skills to Learn:
-                                                </p>
-                                                <ul className="list-disc list-inside text-sm text-gray-700 mb-2 ml-4">
-                                                    {details.skillsToLearn?.map((s, i) => (
-                                                        <li key={i}>{s}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-
-                                            {details.youtubeLinks && (
-                                                <div className="mb-2">
-                                                    <p className="text-sm font-semibold text-gray-700">
-                                                        Video Tutorials:
-                                                    </p>
-                                                    <ul className="list-disc list-inside text-sm text-blue-700 mb-2 ml-4">
-                                                        {Object.entries(details.youtubeLinks).map(
-                                                            ([skill, link], i) => (
-                                                                <li key={i}>
-                                                                    <a
-                                                                        href={link?.link}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        className="hover:underline hover:text-indigo-600 transition"
-                                                                    >
-                                                                        {link?.skill}
-                                                                    </a>
-                                                                </li>
-                                                            )
-                                                        )}
-                                                    </ul>
-                                                </div>
-                                            )}
-
-                                            <div>
-                                                <p className="text-sm font-semibold text-gray-700">
-                                                    Practical Experience:
-                                                </p>
-                                                <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
-                                                    {details.practicalExperience?.map((e, i) => (
-                                                        <li key={i}>{e}</li>
-                                                    ))}
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    )
-                                )}
-                            </div>
-                        </div>
-                    )}
-                </div>
+          {/* Duration */}
+          <div>
+            <label className="block text-sm font-bold text-indigo-700 dark:text-gray-200 tracking-wide">
+              Duration
+            </label>
+            <div className="flex gap-2 mt-2 items-center">
+              <select
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                className="rounded-xl p-2 border border-indigo-200 bg-white/80 shadow-sm"
+              >
+                <option>3 months</option>
+                <option>6 months</option>
+                <option>1 year</option>
+                <option>3 years</option>
+                <option value="custom">Custom</option>
+              </select>
+              {duration === "custom" && (
+                <input
+                  value={customDuration}
+                  onChange={(e) => setCustomDuration(e.target.value)}
+                  placeholder="e.g. 9 months"
+                  className="p-2 border rounded-xl bg-white/80 shadow-sm"
+                />
+              )}
+              <label className="ml-4 inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={youtubeOnly}
+                  onChange={(e) => setYoutubeOnly(e.target.checked)}
+                  className="mr-2 accent-indigo-600"
+                />
+                <span className="text-indigo-700 dark:text-gray-200 font-medium">YouTube only</span>
+              </label>
             </div>
+          </div>
+
+          {/* Buttons */}
+          {error && (
+            <div className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2 border border-red-200">
+              {error}
+            </div>
+          )}
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              className="px-6 py-2 rounded-xl bg-indigo-600 text-white font-semibold shadow-lg hover:scale-105 transition disabled:opacity-60"
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                      fill="none"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8z"
+                    />
+                  </svg>
+                  Generating...
+                </span>
+              ) : (
+                "Generate"
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setCareer("");
+                setDuration("6 months");
+                setCustomDuration("");
+                setResponseJson(null);
+                setError(null);
+              }}
+              className="px-6 py-2 rounded-xl border border-indigo-200 bg-white/80 dark:text-gray-200 font-semibold shadow hover:bg-indigo-50 transition"
+            >
+              Reset
+            </button>
+          </div>
+        </form>
+
+        <div className="mt-8 p-6 border rounded-2xl bg-white dark:bg-gray-900 shadow-lg">
+          <div className="flex justify-between items-center mb-3">
+            <h3 className="font-bold text-lg text-indigo-700 dark:text-gray-200 flex items-center gap-2">
+              <svg className="w-6 h-6 " fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M12 4v16m8-8H4" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Generated Roadmap
+            </h3>
+            {responseJson && (
+              <div className="flex gap-2">
+
+                <button
+                  onClick={downloadPDF}
+                  className="text-sm px-3 py-1 rounded-lg bg-indigo-600 text-white font-semibold shadow hover:scale-105 transition"
+                >
+                  Download PDF
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-3">
+            {loading && (
+              <div className="flex items-center gap-2 text-sm text-indigo-600">
+                <svg className="animate-spin h-5 w-5 text-indigo-500" viewBox="0 0 24 24">
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8z"
+                  />
+                </svg>
+                Generating roadmap...
+              </div>
+            )}
+            {!loading && !responseJson && (
+              <div className="text-sm text-gray-500 italic">
+                No response yet. Fill the form and click{" "}
+                <span className="font-semibold dark:text-gray-200">Generate</span>.
+              </div>
+            )}
+            {responseJson && (
+              <div className="space-y-8">
+                <div className="p-5 bg-white rounded-xl shadow flex flex-col gap-1">
+                  <h3 className="text-xl font-extrabold text-indigo-800 flex items-center gap-2">
+                    
+                    Career Roadmap: {responseJson.careerChoice}
+                  </h3>
+                  <p className="text-sm text-indigo-700 font-medium">
+                    Duration: {responseJson.duration}
+                  </p>
+                </div>
+                <div className="space-y-6">
+
+                  {/* TVET School Recommendations */}
+                  {responseJson.tvetSchools && responseJson.tvetSchools.length > 0 && (
+                    <div className="p-5 border rounded-xl bg-white shadow">
+                      <h3 className="text-md font-bold text-indigo-700 mb-2 flex items-center gap-2">
+                       
+                        Recommended TVET Schools in Rwanda
+                      </h3>
+                      <p className="mb-2 text-gray-700">The following is a list of TVET schools you can learn from:</p>
+                      <ul className="list-inside text-sm text-gray-700">
+                        {responseJson.tvetSchools.map((school, i) => (
+                          <li key={i} className="mb-2">
+                            <p className="font-semibold text-indigo-800">{school.name}</p>
+                            <div className="px-3">
+                              <p>Location: <span className="text-indigo-700">{school.location}</span></p>
+                              <p>
+                                Relevant Programs:{" "}
+                                <span className="text-indigo-700">{school.programs?.join(", ") || "N/A"}</span>
+                              </p>
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  {Object.entries(responseJson.roadmap || {}).map(
+                    ([phase, details], idx) => (
+                      <div
+                        key={phase}
+                        className="border rounded-xl p-5 bg-white shadow"
+                      >
+                        <h4 className="text-lg font-bold text-indigo-700 mb-2 flex items-center gap-2">
+                          <span className="inline-block bg-indigo-200 text-indigo-800 rounded-full px-3 py-1 text-xs font-bold mr-2 shadow">
+                            {phase}
+                          </span>
+                          {details.mainFocus}
+                        </h4>
+
+                        <div className="mb-2">
+                          <p className="text-sm font-semibold text-gray-700">
+                            Skills to Learn:
+                          </p>
+                          <ul className="list-disc list-inside text-sm text-gray-700 mb-2 ml-4">
+                            {details.skillsToLearn?.map((s, i) => (
+                              <li key={i}>{s}</li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {details.youtubeLinks && (
+                          <div className="mb-2">
+                            <p className="text-sm font-semibold text-gray-700">
+                              Video Tutorials:
+                            </p>
+                            <ul className="list-disc list-inside text-sm text-blue-700 mb-2 ml-4">
+                              {Object.entries(details.youtubeLinks).map(
+                                ([skill, link], i) => (
+                                  <li key={i}>
+                                    <a
+                                      href={link?.link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="hover:underline hover:text-indigo-600 transition"
+                                    >
+                                      {link?.skill}
+                                    </a>
+                                  </li>
+                                )
+                              )}
+                            </ul>
+                          </div>
+                        )}
+
+                        <div>
+                          <p className="text-sm font-semibold text-gray-700">
+                            Practical Experience:
+                          </p>
+                          <ul className="list-disc list-inside text-sm text-gray-700 ml-4">
+                            {details.practicalExperience?.map((e, i) => (
+                              <li key={i}>{e}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    )
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
+      </div>
     </div>
-);
+  );
 }
 
 
