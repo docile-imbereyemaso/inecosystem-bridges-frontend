@@ -1,6 +1,31 @@
 import React, { useState } from "react";
 import { API_KEY } from "../lib/API";
 import jsPDF from "jspdf";
+import image from '/images/logo.png';
+import { Link } from "react-router";
+
+const NavTop = () => {
+  return (
+    <nav className="bg-indigo-600 shadow-md rounded-2xl">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-1">
+        <div className="flex flex-col sm:flex-row justify-between h-16 items-center">
+          
+          <Link to="/" className="flex-shrink-0 flex items-center space-x-3">
+            <img src={image} alt="Logo" className="h-10 w-auto" />
+            <h1 className="text-white font-bold text-xl tracking-wide">
+              INECOSYSTEM BRIDGE
+            </h1>
+          </Link>
+
+          <div className="flex space-x-6">
+            <h3 className="text-gray-100">AI Career Roadmap Generator</h3>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
 
 export default function AskAi() {
   const [career, setCareer] = useState("");
@@ -188,28 +213,28 @@ function downloadPDF() {
 }
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-2xl shadow-md">
-      <h2 className="text-2xl font-semibold mb-4">
-        AskAi — Career Roadmap Generator
-      </h2>
+    <div className="min-h-screen bg-[#E4F8E2] dark:bg-gray-900 transition-colors duration-300 pb-10">
+        <div className="max-w-3xl mx-auto p-6 bg-white   min-h-screen shadow-md ">
+        <NavTop />
+    
 
-      <form onSubmit={handleGenerate} className="space-y-4">
+      <form onSubmit={handleGenerate} className="space-y-4 py-3 my-3">
         {/* Career */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Career
+          <label className="block text-sm font-bold text-gray-700">
+            Your Career Choice: 
           </label>
           <input
             value={career}
             onChange={(e) => setCareer(e.target.value)}
             placeholder="e.g. Data Analyst, Electrician, Nurse"
-            className="mt-1 block w-full rounded-lg border-gray-200 shadow-sm focus:ring-2 focus:ring-indigo-200 p-2"
+            className="mt-1  block w-full rounded-lg border border-gray-300  focus:ring-2 focus:ring-indigo-200 p-2"
           />
         </div>
 
         {/* Duration */}
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm font-bold text-gray-700">
             Duration
           </label>
           <div className="flex gap-2 mt-2 items-center">
@@ -218,6 +243,7 @@ function downloadPDF() {
               onChange={(e) => setDuration(e.target.value)}
               className="rounded-lg p-2 border"
             >
+              <option>3 months</option>
               <option>6 months</option>
               <option>1 year</option>
               <option>3 years</option>
@@ -269,7 +295,6 @@ function downloadPDF() {
         </div>
       </form>
 
-      {/* Display Response */}
       <div className="mt-6 p-4 border rounded-lg bg-gray-50">
         <div className="flex justify-between items-center mb-2">
           <h3 className="font-medium">Generated Roadmap</h3>
@@ -377,5 +402,12 @@ function downloadPDF() {
         </div>
       </div>
     </div>
+    </div>
+
   );
 }
+
+
+
+
+
