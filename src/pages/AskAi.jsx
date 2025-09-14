@@ -8,7 +8,7 @@ const NavTop = ({ darkMode, setDarkMode }) => {
   return (
     <nav className="bg-indigo-600 shadow-md rounded-2xl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-1">
-        <div className="flex flex-col sm:flex-row justify-between h-16 items-center">
+        <div className="flex flex-col sm:flex-row justify-between  items-center">
           <Link to="/" className="flex-shrink-0 flex items-center space-x-3">
             <img src={image} alt="Logo" className="h-10 w-auto" />
             <h1 className="text-white font-bold text-xl tracking-wide">
