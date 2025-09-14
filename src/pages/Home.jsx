@@ -32,7 +32,7 @@ const Home = () => {
       <div id='navigation' className="hidden fixed z-10 w-full">
       <Topnav />
       </div>
-      
+
       <Navbar />
 
       <HeroSection />

@@ -24,7 +24,11 @@ export default function Topnav(){
   <NavLink to="/" className="text-lg md:text-base font-bold text-gray-900 dark:text-white">
       <div className="relative group">
       <img src={logo} alt="inecosyste-logo" className="size-12 group-hover:scale-75 transform transition-transform duration-700 ease-in-out"/>
-   <div className="absolute inset-0 bg-blend-multiply group-hover:bg-black/80 rounded-full transition duration-500 ease-in-out"></div>
+   <div className="absolute inset-0 bg-blend-multiply 
+   group-hover:bg-black/80 rounded-full transition duration-500 
+   ease-in-out">
+    
+   </div>
   </div>
   
   </NavLink>
@@ -33,12 +37,14 @@ export default function Topnav(){
   <ul className="hidden md:flex gap-x-4 items-center flex-1 justify-center text-sm md:text-base lg:text-lg">
           <li className="text-gray-700 dark:text-gray-200 relative group">
             <NavLink to="/tvetmatters" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out">Why TVET matters?
-              <div className="absolute w-0 bg-green-400  left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
+              <div className="absolute w-0 bg-green-400  left-0 -bottom-2
+               h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
             </NavLink>
           </li>
           <li className="text-gray-700 dark:text-gray-200 relative group">
             <NavLink to="/jobBoard" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out">Job Board
-              <div className="absolute w-0 bg-green-400  left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
+              <div className="absolute w-0 bg-green-400  left-0 -bottom-2
+               h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
             </NavLink>
           </li>
           <li className="text-gray-700 dark:text-gray-200 relative group">
