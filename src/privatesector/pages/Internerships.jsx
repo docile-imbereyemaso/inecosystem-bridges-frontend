@@ -18,7 +18,7 @@ const Internships = () => {
     period: '',
     applicationOpen: true,
     deadline: '',
-    description: '', // <-- Add description field
+    description: '', 
   });
 
   const [internships, setInternships] = useState([]);
@@ -54,7 +54,8 @@ const Internships = () => {
           sector: internship.sector,
           period: internship.period,
           applicationOpen: internship.application_open,
-          deadline: internship.deadline
+          deadline: internship.deadline,
+          description: internship.description
         }));
         
         setInternships(mappedInternships);
@@ -106,9 +107,6 @@ const Internships = () => {
   };
 
   const saveInternship = async () => {
-    // Validate required fields
-  
-
     setSaving(true); 
     try {
       const token = localStorage.getItem("token_ineco");
@@ -127,7 +125,7 @@ const Internships = () => {
         period: formData.period,
         application_open: formData.applicationOpen,
         deadline: formData.deadline,
-        description: formData.description, // <-- Add description
+        description: formData.description,
       };
 
       const response = await fetch(url, {
@@ -145,20 +143,39 @@ const Internships = () => {
         throw new Error(responseData.message || "Failed to save internship");
       }
 
-    
-    alert("Internship Saved successfully!")
-        
+      alert("Internship Saved successfully!");
+
+      // Map backend response to frontend structure
+      const newInternship = {
+        id: responseData.internship.internship_id,
+        name: responseData.internship.name,
+        type: responseData.internship.type,
+        level: responseData.internship.level,
+        sponsorship: responseData.internship.sponsorship,
+        sector: responseData.internship.sector,
+        period: responseData.internship.period,
+        applicationOpen: responseData.internship.application_open,
+        deadline: responseData.internship.deadline,
+        description: responseData.internship.description,
+      };
+
+      setInternships(prev => {
+        if (editingInternship) {
+          // Update in place
+          return prev.map(i => i.id === editingInternship.id ? newInternship : i);
+        } else {
+          // Add new to top
+          return [newInternship, ...prev];
+        }
+      });
 
       setIsDialogOpen(false);
       setEditingInternship(null);
-
-      // Optionally, refresh internships list
-      // You can refetch or update state here
     } catch (error) {
       console.error("Error saving internship:", error);
       toast.error(error.message || "Failed to save internship", { position: "top-right", autoClose: 3000 });
     } finally {
-      setSaving(false); // <-- End saving
+      setSaving(false);
     }
   };
 
@@ -168,7 +185,7 @@ const Internships = () => {
 
     try {
       const token = localStorage.getItem("token_ineco");
-      const response = await fetch(`http://localhost:3000/api/internships/${id}`, {
+      const response = await fetch(`${API_URL}/internships/${id}`, {
         method: "DELETE",
         headers: { 
           "Content-Type": "application/json",
@@ -196,7 +213,7 @@ const Internships = () => {
       
       if (!internship) return;
 
-      const response = await fetch(`http://localhost:3000/api/internships/${id}`, {
+      const response = await fetch(`${API_URL}/internships/${id}`, {
         method: "PUT",
         headers: { 
           "Content-Type": "application/json",
@@ -263,83 +280,105 @@ const Internships = () => {
               </button>
             </div>
           ) : (
-            internships.map((internship) => (
-              <div key={internship.id} className="bg-slate-800 border border-slate-700 rounded-lg p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <div>
-                    <h3 className="text-white text-lg mb-2">{internship.name}</h3>
-                    <div className="flex gap-2 mb-3 flex-wrap">
-                      <span className="bg-blue-300 text-white px-2 py-1 rounded text-xs">{internship.type}</span>
-                      <span className="bg-purple-300 text-white px-2 py-1 rounded text-xs">{internship.level}</span>
-                      <span className="bg-green-300 text-white px-2 py-1 rounded text-xs">{internship.sector}</span>
-                      {internship.sponsorship && (
-                        <span className="bg-yellow-600 text-white px-2 py-1 rounded text-xs">Sponsored</span>
-                      )}
-                      <span className={`px-2 py-1 rounded text-xs text-white ${
-                        internship.applicationOpen ? "bg-green-600" : "bg-red-600"
-                      }`}>
-                        {internship.applicationOpen ? "Applications Open" : "Applications Closed"}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => toggleApplicationStatus(internship.id)}
-                      className={`px-3 py-1 rounded text-sm transition-colors ${
-                        internship.applicationOpen 
-                          ? 'text-red-400 hover:text-red-300 hover:bg-red-400/10' 
-                          : 'text-green-400 hover:text-green-300 hover:bg-green-400/10'
-                      }`}
-                    >
-                      {internship.applicationOpen ? 'Close' : 'Open'}
-                    </button>
-                    <button
-                      onClick={() => openDialog(internship)}
-                      className="text-blue-400 hover:text-blue-300 hover:bg-blue-400/10 p-2 rounded transition-colors"
-                      title="Edit Internship"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() => deleteInternship(internship.id)}
-                      className="text-red-400 hover:text-red-300 hover:bg-red-400/10 p-2 rounded transition-colors"
-                      title="Delete Internship"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
+            internships.filter((p)=>new Date(p.deadline) > new Date()).map((internship) => (
+             <div
+  key={internship.id}
+  className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-md p-6 transition hover:shadow-lg"
+>
+  <div className="flex justify-between items-start mb-4">
+    <div>
+      <h3 className="text-indigo-600 dark:text-indigo-300 font-bold text-xl mb-1 tracking-tight">
+        {internship.name}
+      </h3>
+      <div className="flex gap-2 mb-2 flex-wrap">
+        <span className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200 px-2 py-1 rounded-full text-xs font-medium border border-blue-200 dark:border-blue-800">
+          {internship.type}
+        </span>
+        <span className="bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-200 px-2 py-1 rounded-full text-xs font-medium border border-purple-200 dark:border-purple-800">
+          {internship.level}
+        </span>
+        <span className="bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-200 px-2 py-1 rounded-full text-xs font-medium border border-green-200 dark:border-green-800">
+          {internship.sector}
+        </span>
+        {internship.sponsorship && (
+          <span className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200 px-2 py-1 rounded-full text-xs font-medium border border-yellow-200 dark:border-yellow-800">
+            Sponsored
+          </span>
+        )}
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-medium border ${
+            internship.applicationOpen
+              ? "bg-green-100 text-green-700 border-green-200 dark:bg-green-900 dark:text-green-200 dark:border-green-800"
+              : "bg-red-100 text-red-700 border-red-200 dark:bg-red-900 dark:text-red-200 dark:border-red-800"
+          }`}
+        >
+          {internship.applicationOpen ? "Applications Open" : "Applications Closed"}
+        </span>
+      </div>
+    </div>
+    <div className="flex gap-1">
+      <button
+        onClick={() => toggleApplicationStatus(internship.id)}
+        className={`px-3 py-1 rounded-lg text-xs font-semibold border transition-colors ${
+          internship.applicationOpen
+            ? "text-red-500 border-red-200 dark:text-red-300 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-800/40"
+            : "text-green-500 border-green-200 dark:text-green-300 dark:border-green-800 hover:bg-green-50 dark:hover:bg-green-800/40"
+        }`}
+      >
+        {internship.applicationOpen ? "Close" : "Open"}
+      </button>
+      <button
+        onClick={() => openDialog(internship)}
+        className="text-blue-500 border border-blue-200 dark:text-blue-300 dark:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-800/40 p-2 rounded-lg transition-colors"
+        title="Edit Internship"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        </svg>
+      </button>
+      <button
+        onClick={() => deleteInternship(internship.id)}
+        className="text-red-500 border border-red-200 dark:text-red-300 dark:border-red-800 hover:bg-red-50 dark:hover:bg-red-800/40 p-2 rounded-lg transition-colors"
+        title="Delete Internship"
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-slate-300">
-                  <div>
-                    <h4 className="mb-1">Duration</h4>
-                    <p className="text-white">{internship.period}</p>
-                  </div>
-                  <div>
-                    <h4 className="mb-1">Deadline</h4>
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      <p className="text-white">{new Date(internship.deadline).toLocaleDateString()}</p>
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="mb-1">Status</h4>
-                    <p className={`${
-                      new Date(internship.deadline) > new Date() 
-                        ? 'text-green-400' 
-                        : 'text-red-400'
-                    }`}>
-                      {new Date(internship.deadline) > new Date() ? 'Active' : 'Expired'}
-                    </p>
-                  </div>
-                </div>
-              </div>
+  <div>
+    <p className="text-gray-700 dark:text-slate-300 mb-4 text-sm">{internship.description}</p>
+  </div>
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+    <div>
+      <h4 className="mb-1 text-slate-500 dark:text-slate-400 font-semibold">Duration</h4>
+      <p className="text-slate-800 dark:text-white font-medium">{internship.period}</p>
+    </div>
+    <div>
+      <h4 className="mb-1 text-slate-500 dark:text-slate-400 font-semibold">Deadline</h4>
+      <div className="flex items-center gap-2">
+        <svg className="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <p className="text-slate-800 dark:text-white font-medium">{new Date(internship.deadline).toLocaleDateString()}</p>
+      </div>
+    </div>
+    <div>
+      <h4 className="mb-1 text-slate-500 dark:text-slate-400 font-semibold">Status</h4>
+      <p
+        className={`font-semibold ${
+          new Date(internship.deadline) > new Date()
+            ? "text-green-600 dark:text-green-400"
+            : "text-red-600 dark:text-red-400"
+        }`}
+      >
+        {new Date(internship.deadline) > new Date() ? "Active" : "Expired"}
+      </p>
+    </div>
+  </div>
+</div>
             ))
           )}
         </div>

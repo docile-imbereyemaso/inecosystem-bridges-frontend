@@ -46,7 +46,7 @@ const navItems= [
    {
     icon: <NotificationBell/>,
     name: "Notifications",
-    path: "/user/notifications",
+    path: "/privateSector/notifications",
   },
 ];
 
@@ -108,10 +108,10 @@ const AppSidebar= () => {
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
         }`}
       >
-        <Link to="/privateSector/profile">
+        <Link to="/privateSector/profile" className="block text-center">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
-              <p>In ecosystem logo</p>
+              <h1 className="text-2xl font-bold text-center text-indigo-500">INECOSYSTEM</h1>
             </>
           ) : (
            <p>logo</p>

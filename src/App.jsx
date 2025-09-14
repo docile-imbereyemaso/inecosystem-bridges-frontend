@@ -42,6 +42,7 @@ import PrivateSector from "./user/pages/PrivateSector.jsx";
 import { NotificationPage } from "./pages/NotificationPage.jsx";
 import MyCommunity from "./privatesector/pages/MyCommunity.jsx";
 import AskAi from "./pages/AskAi.jsx";
+import Forbidden from "./Forbidden";
 
 export default function App() {
   return (
@@ -54,27 +55,24 @@ export default function App() {
           <Route path="/tvetmatters" element={<Tvetmatters />} />
           <Route path="/ai-chatbot" element={<AskAi />} />
           <Route path="/login" element={<Login />} />
-             
-          
           <Route path="/jobBoard" element={<TVETBridgePlatform />} />
-
           <Route path="/IndividualSignUp" element={<IndividualSignUp />} />
           <Route path="/privateSectorRegistration" element={<CompanyRegistration/>}/>
           
-
+          {/* Forbidden route */}
+          <Route path="/forbidden" element={<Forbidden />} />
 
           {/* user Dashboard Layout */}
-          <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
+          <Route element={<ProtectedRoute roles={['individual']}><AppLayout /></ProtectedRoute>}>
             <Route index path="/user/profile" element={<UserProfiles />} />
             <Route path="/user/internship" element={<Training />} />
             <Route path="/user/privateSector" element={<PrivateSector />} />
             <Route path="/user/private-sector-connections" element={<PrivateSectorConnections />} />
-          <Route path="/user/notifications" element={<NotificationPage/>} />
-
+            <Route path="/user/notifications" element={<NotificationPage/>} />
             <Route path="/user/*" element={<UserNotFound />} />
           </Route>
           {/* Private sector Dashboard layout */}
-          <Route element={   <ProtectedRoute><PrivateLayout /></ProtectedRoute>}>
+          <Route element={   <ProtectedRoute roles={['private_sector']}><PrivateLayout /></ProtectedRoute>}>
             <Route path="/privateSector/profile" element={<PrivateSectorProfiles />} />
             <Route path="/privateSector/jobBoard" element={<JobBoard />} />
             <Route path="/privateSector/internships" element={<Internerships />} />
@@ -82,12 +80,10 @@ export default function App() {
             <Route path="/privateSector/contributions" element={<Contributions />} />
             <Route path="/privateSector/notifications" element={<NotificationPage/>} />
             <Route path="/privateSector/community" element={<MyCommunity/>} />
-
             <Route path="/privateSector/*" element={<PrivateNotFound />} />
-
           </Route>
           {/* Tvet Dasboard layout */}
-          <Route element={ <ProtectedRoute><TvetLayout /></ProtectedRoute> }>
+          <Route element={ <ProtectedRoute roles={['tvet']}><TvetLayout /></ProtectedRoute> }>
             <Route path="/tvet/profile" element={<TvetProfiles />} />
             <Route path="/tvet/partnership" element={<Partnerships />} />
             <Route path="/tvet/feedback" element={<Feedbacks />} />
@@ -95,7 +91,6 @@ export default function App() {
             <Route path="/tvet/opportunities" element={<Opportunities />} />
             <Route path="/tvet/*" element={<TvetNotFound />} />
             <Route path="/tvet-dashboard" element={<TvetDashboard />} />
-            
           </Route>
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />

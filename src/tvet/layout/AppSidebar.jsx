@@ -107,11 +107,12 @@ function AppSidebar() {
         <Link to="/tvet/profile">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
-              <p className="dark:text-white dark:font-semibold">In ecosystem logo</p>
+              <h1 className="text-2xl font-bold text-center text-indigo-500">INECOSYSTEM</h1>
               
             </>
           ) : (
-            <p>logo</p>
+            <h1 className="text-2xl font-bold text-center text-indigo-500">INECO</h1>
+
           )}
         </Link>
       </div>

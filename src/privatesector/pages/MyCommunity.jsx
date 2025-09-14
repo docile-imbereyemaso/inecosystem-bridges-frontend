@@ -206,7 +206,7 @@ Looking forward to hearing from you!`
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-2 flex-wrap gap-2">
                     <button
                       onClick={() => handleWhatsApp(connection.connected_user.phone)}
                       className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md text-sm transition-colors"

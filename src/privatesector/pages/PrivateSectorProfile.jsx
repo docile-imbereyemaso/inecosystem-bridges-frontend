@@ -130,8 +130,8 @@ export default function PrivateSectorProfiles() {
       // 2) Insert/Update COMPANY table
       const method = companyData.id ? "POST" : "POST";
       const url = companyData.id
-  ? `http://localhost:3000/api/companies/${companyData.id}`
-  : `http://localhost:3000/api/companies`;
+  ? `${API_URL}/companies/${companyData.id}`
+  : `${API_URL}/companies`;
 
 const companyPayload = {
   name: companyData.company_name,     // backend expects `name`
@@ -338,7 +338,7 @@ const companyPayload = {
                 ))}
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-2">
+              <div className="flex flex-col sm:flex-row gap-2 flex-wrap">
                 <input
                   type="text"
                   value={newContact.type}
