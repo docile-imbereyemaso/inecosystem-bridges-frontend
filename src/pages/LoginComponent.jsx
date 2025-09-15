@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
+import SignUpForm from './SignUpForm.jsx';
 import { FiUser, FiEye, FiEyeOff, FiMail, FiLock } from 'react-icons/fi';
 // @ts-ignore
 import {API_URL} from "../lib/API.js";
@@ -194,12 +195,22 @@ const LoginComponent = () => {
           <div className="text-center pt-4 border-t border-gray-200 dark:border-gray-700">
             <p className="text-sm text-gray-600 dark:text-gray-400">
               Don't have an account?{' '}
-              <Link
-                to="/IndividualSignUp"
-                className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium hover:underline"
-              >
-                Register here
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 items-center justify-center bg-gray-50 dark:bg-gray-800 rounded-lg p-6 sm:p-8 shadow-sm border border-gray-200 dark:border-gray-700 mt-3">
+        <Link
+          to="/SignUpForm"
+          className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium hover:underline transition-colors duration-200 text-center"
+        >
+          create Individual Account
+        </Link>
+        
+        <Link
+          to="/privateSectorForm"
+          className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium hover:underline transition-colors duration-200 text-center"
+        >
+          create the private sector Account
+        </Link>
+      </div>
+              
             </p>
             
           </div>
