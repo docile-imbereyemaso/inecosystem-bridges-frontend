@@ -79,7 +79,7 @@ const Tvetmattersection = () => {
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-6">
               Your Future Starts Here:<br />
-              <span className="text-yellow-400 dark:text-yellow-300">Discover Why TVET Matters</span>
+              <span className="text-yellow-400 dark:text-yellow-300">Discover Why TVET matters? Matters</span>
             </h1>
             <p className="text-xl md:text-2xl mb-8 text-blue-100 dark:text-blue-200">
               Get job-ready skills, earn while you learn, and launch a successful career in high-demand industries
@@ -96,12 +96,12 @@ const Tvetmattersection = () => {
         </div>
       </div>
 
-      {/* Why TVET Section */}
+      {/* Why TVET matters? Section */}
   <div className="py-16 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
-              Why TVET is Your Smart Choice
+              Why TVET matters? is Your Smart Choice
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
               Get ahead with practical skills that employers actually need

@@ -75,7 +75,7 @@ const MainSection = () => {
                 </div>
             </section>
 
-            {/* Why TVET Matters Section */}
+            {/* Why TVET matters? Matters Section */}
             <section 
                 data-section="tvet" 
                 className={getSectionClasses("tvet")}
@@ -86,7 +86,7 @@ const MainSection = () => {
                         <div className="flex items-center space-x-4">
                             <div className="text-center lg:text-right">
                                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-                                    Why TVET Matters?
+                                    Why TVET matters?
                                 </h2>
                                 <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto lg:ml-auto lg:mr-0 rounded-full"></div>
                             </div>

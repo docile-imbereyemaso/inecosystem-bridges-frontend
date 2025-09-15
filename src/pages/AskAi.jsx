@@ -308,8 +308,8 @@ return (
             <input
               value={career}
               onChange={(e) => setCareer(e.target.value)}
-              placeholder="e.g. Data Analyst, Electrician, Nurse"
-              className="mt-2 block w-full rounded-xl border border-indigo-200 focus:ring-2 focus:ring-indigo-300 p-3 bg-white/80 shadow-sm transition"
+              placeholder="e.g. Data Analyst, Electrician"
+              className="mt-2 block w-full rounded-xl border border-indigo-200 focus:ring-2 focus:ring-indigo-300 p-3 text-gray-900 bg-white/80 shadow-sm transition"
             />
           </div>
 
@@ -322,7 +322,7 @@ return (
               <select
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
-                className="rounded-xl p-2 border border-indigo-200 bg-white/80 shadow-sm"
+                className="rounded-xl text-gray-900 p-2 border border-indigo-200 bg-white/80 shadow-sm"
               >
                 <option>3 months</option>
                 <option>6 months</option>
@@ -395,7 +395,7 @@ return (
                 setResponseJson(null);
                 setError(null);
               }}
-              className="px-6 py-2 rounded-xl border border-indigo-200 bg-white/80 dark:text-gray-200 font-semibold shadow hover:bg-indigo-50 transition"
+              className="px-6  text-gray-900 dark:text-gray-900 py-2 rounded-xl border border-indigo-200 bg-white/80 dark:text-gray-200 font-semibold shadow hover:bg-indigo-50 transition"
             >
               Reset
             </button>
