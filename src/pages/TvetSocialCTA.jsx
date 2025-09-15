@@ -17,7 +17,7 @@ const TvetSocialCTA = () => {
     {
       name: 'Facebook',
       icon: FiFacebook,
-      url: '#facebook',
+      url: 'https://canary.discord.com/channels/1408465955511599154/1416067884169429102',
       color: 'hover:bg-blue-600',
       description: 'Join our community discussions'
     },
