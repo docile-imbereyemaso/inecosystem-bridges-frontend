@@ -191,6 +191,7 @@ const PrivateSectorRegistration = () => {
           <h1 className="text-4xl font-bold text-white mb-2">
             Private Sector Registration
           </h1>
+          <button className='bg-gray-500 rounded p-2 cursor-pointer hover:bg-black'>Back home</button>
           <p className="text-lg text-gray-300">
             Register your company to join the INECOSYSTEM platform
           </p>
