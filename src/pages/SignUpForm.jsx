@@ -82,7 +82,7 @@ const SignUpForm = () => {
       else if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters';
       if (formData.password !== formData.confirmPassword) newErrors.confirmPassword = 'Passwords do not match';
       if (!formData.resume) newErrors.resume = 'Resume is required';
-      if (!formData.officialDocument) newErrors.officialDocument = 'Official document is required';
+      
     }
     
     setErrors(newErrors);
@@ -513,7 +513,7 @@ const SignUpForm = () => {
 {/* Official Documents */}
 <div className="space-y-4">
   <label className="block text-lg font-semibold text-gray-700 dark:text-gray-200">
-    Official Documents (diploma or degree) *
+    Official Documents (diploma or degree) <small className='text-xs font-semibold italic'>TVET Graduate</small>
   </label>
   <input
     name="officialDocument"

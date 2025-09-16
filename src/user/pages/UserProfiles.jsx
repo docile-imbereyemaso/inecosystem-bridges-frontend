@@ -268,10 +268,11 @@ export default function UserProfiles() {
           <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800">
             <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 mb-4 flex items-center gap-2">
               <FaFilePdf className="text-red-500" />
-              Resume
+              Resume(CV)
             </h4>
             {profile.resume ? (
-              <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View Resume</a>
+              <a href={profile.official_document} target="_blank" 
+                       className="text-blue-400 underline">View Document</a>
             ) : (
               <span className="text-gray-400">No resume uploaded</span>
             )}
@@ -280,10 +281,10 @@ export default function UserProfiles() {
           <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800">
             <h4 className="text-lg font-semibold text-gray-800 dark:text-white/90 mb-4 flex items-center gap-2">
               <FaFilePdf className="text-blue-500" />
-              Official Document
+              Official Document(Diploma or Degree)
             </h4>
             {profile.official_document ? (
-              <a href={profile.official_document} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View Document</a>
+              <a href={profile.official_document} target="_blank"  className="text-blue-600 underline">View Document</a>
             ) : (
               <span className="text-gray-400">No document uploaded</span>
             )}
