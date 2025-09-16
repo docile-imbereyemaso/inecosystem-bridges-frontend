@@ -1,8 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 
 import Tvetmatters from "./pages/Tvetmatters";
+import SuccessStories from "./pages/SuccessStories";
 import AIChatbot from "./pages/aiChatbot/AIChatbot";
-import PrivateSectorForm from "./pages/PrivateSectorForm.jsx";
+import PrivateSectorForm from "./pages/PrivateSectorForm";
 import Login from "./pages/Login";
 import SignUpForm from "./pages/SignUpForm";
 import IndividualSignUp from "./pages/IndividualSignUp";
@@ -55,6 +56,7 @@ export default function App() {
           {/* Landing and About Us pages outside of dashboard layouts */}
           <Route  index path="/" element={<Home />} />
           <Route path="/tvetmatters" element={<Tvetmatters />} />
+          <Route path="/success-stories" element={<SuccessStories />} />
           <Route path="/ai-chatbot" element={<AskAi />} />
           <Route path="/login" element={<Login />} />
           <Route path="/jobBoard" element={<TVETBridgePlatform />} />

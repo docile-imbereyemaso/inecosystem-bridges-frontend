@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { FiPlus, FiTrash2 } from "react-icons/fi";
 import PageBreadcrumb from "../components/common/PageBreadCrumb";
 import PageMeta from "../components/common/PageMeta";
@@ -9,35 +9,35 @@ export default function PrivateSectorProfiles() {
   const { user } = useAuth();
   const token = typeof window !== "undefined" ? localStorage.getItem("token_ineco") : null;
 
+  // Company profile state
   const [companyData, setCompanyData] = useState({
-    id: null,                 // company id (from company table)
-    // User fields
+    id: null,
     company_name: "",
     bio: "",
     email: "",
     phone: "",
     sectors: [],
-    // Company fields (stored in company table)
     description: "",
     locations: [],
-    contacts: [],             // [{ type, value }]
+    contacts: [],
     offerings: [],
     internships: [],
     user_id: "",
   });
 
+  // UI states
   const [newLocation, setNewLocation] = useState("");
   const [newContact, setNewContact] = useState({ type: "", value: "" });
   const [newOffering, setNewOffering] = useState("");
-
-  // Add loading state
+  const [profileImage, setProfileImage] = useState(null);
+  const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef();
 
-  // ---------- utilities ----------
+  // Utility: ensure array
   const asArray = (val) => {
     if (!val) return [];
     if (Array.isArray(val)) return val;
-    // try parse JSON string arrays, else comma-split
     try {
       const parsed = JSON.parse(val);
       return Array.isArray(parsed) ? parsed : [];
@@ -49,47 +49,33 @@ export default function PrivateSectorProfiles() {
     }
   };
 
+  // Utility: dedupe array push
   const dedupePush = (arr, item, keyFn = (x) => (typeof x === "string" ? x.toLowerCase() : JSON.stringify(x).toLowerCase())) => {
     const exists = arr.some((x) => keyFn(x) === keyFn(item));
     return exists ? arr : [...arr, item];
   };
 
-  // ---------- fetch profile (user + company) ----------
+  // Fetch profile info
   const fetchProfile = async () => {
     if (!user?.user_id || !token) return;
-
     try {
-      const [userRes] = await Promise.all([
-        fetch(`${API_URL}users/profile/${user.user_id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        }),
-      ]);
-
+      const userRes = await fetch(`${API_URL}users/profile/${user.user_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const rawUser = await userRes.json();
- 
-
-      // support both { user: {...} } and flat {...}
       const userInfo = rawUser?.user ?? rawUser ?? {};
-      // support { company: {...} } or flat; also some APIs return null if not created
-      const companyInfo = userInfo.companies[0]?userInfo.companies[0]:{};
-
-
-      console.log(companyInfo)
-
-      // Prefer company values (if exist), fall back to user values.
-      // const company_name = (companyInfo?.company_name ?? userInfo?.company_name ?? "") || "";
-      // const bio = (userInfo?.bio ?? companyInfo?.description ?? "") || "";
-      // const description = (companyInfo?.description ?? userInfo?.bio ?? "") || "";
+      const companyInfo = userInfo.companies && userInfo.companies[0] ? userInfo.companies[0] : {};
 
       setCompanyData({
         ...userInfo,
-        contacts:companyInfo.contacts||[],
+        contacts: companyInfo.contacts || [],
         name: companyInfo.name,
         description: companyInfo.description,
-        locations: companyInfo.locations|| [],
-        offerings: companyInfo.offerings || []
+        locations: companyInfo.locations || [],
+        offerings: companyInfo.offerings || [],
       });
 
+      if (userInfo.profile_image) setProfileImage(userInfo.profile_image);
     } catch (err) {
       console.error("Fetch error:", err);
     }
@@ -100,13 +86,12 @@ export default function PrivateSectorProfiles() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.user_id, token]);
 
-  // ---------- save both user + company ----------
+  // Save company info
   const saveCompany = async () => {
     if (!user?.user_id || !token) return;
-
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
-      // 1) Update USER table
+      // Update USER table
       const userUpdate = await fetch(`${API_URL}companies`, {
         method: "POST",
         headers: {
@@ -121,54 +106,69 @@ export default function PrivateSectorProfiles() {
           sectors: companyData.sectors,
         }),
       });
+      if (!userUpdate.ok) throw new Error(`User update failed: ${await userUpdate.text()}`);
 
-      if (!userUpdate.ok) {
-        const msg = await userUpdate.text();
-        throw new Error(`User update failed: ${msg}`);
-      }
-
-      // 2) Insert/Update COMPANY table
-      const method = companyData.id ? "POST" : "POST";
+      // Update COMPANY table
       const url = companyData.id
-  ? `${API_URL}/companies/${companyData.id}`
-  : `${API_URL}/companies`;
-
-const companyPayload = {
-  name: companyData.company_name,     // backend expects `name`
-  description: companyData.bio,       // store user.bio into company.description
-  locations: companyData.locations,
-  contacts: companyData.contacts,
-  offerings: companyData.offerings,
-  internships: companyData.internships,
-  user_id: user.user_id,
-};
-
+        ? `${API_URL}/companies/${companyData.id}`
+        : `${API_URL}/companies`;
+      const companyPayload = {
+        name: companyData.company_name,
+        description: companyData.bio,
+        locations: companyData.locations,
+        contacts: companyData.contacts,
+        offerings: companyData.offerings,
+        internships: companyData.internships,
+        user_id: user.user_id,
+      };
       const compRes = await fetch(url, {
-        method,
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(companyPayload),
       });
+      if (!compRes.ok) throw new Error(`Company save failed: ${await compRes.text()}`);
 
-      if (!compRes.ok) {
-        const msg = await compRes.text();
-        throw new Error(`Company save failed: ${msg}`);
-      }
-
-      // Re-fetch to keep inputs filled with the latest from DB
       await fetchProfile();
       alert("Profile saved successfully!");
     } catch (error) {
       console.error("Save error:", error);
       alert("Error saving profile");
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
 
-  // ---------- handlers ----------
+  // Upload profile image
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await fetch(`${API_URL}companies/upload-profile-image`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success && data.url) {
+        setProfileImage(data.url);
+        alert("Profile image uploaded!");
+      } else {
+        alert("Upload failed");
+      }
+    } catch (err) {
+      alert("Error uploading image");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  // Add/remove handlers
   const addLocation = () => {
     const val = newLocation.trim();
     if (!val) return;
@@ -178,14 +178,12 @@ const companyPayload = {
     }));
     setNewLocation("");
   };
-
   const removeLocation = (index) => {
     setCompanyData((prev) => ({
       ...prev,
       locations: prev.locations.filter((_, i) => i !== index),
     }));
   };
-
   const addOffering = () => {
     const val = newOffering.trim();
     if (!val) return;
@@ -195,14 +193,12 @@ const companyPayload = {
     }));
     setNewOffering("");
   };
-
   const removeOffering = (index) => {
     setCompanyData((prev) => ({
       ...prev,
       offerings: prev.offerings.filter((_, i) => i !== index),
     }));
   };
-
   const addContact = () => {
     if (!newContact.type.trim() || !newContact.value.trim()) return;
     setCompanyData((prev) => ({
@@ -211,7 +207,6 @@ const companyPayload = {
     }));
     setNewContact({ type: "", value: "" });
   };
-
   const removeContact = (index) => {
     setCompanyData((prev) => ({
       ...prev,
@@ -225,18 +220,49 @@ const companyPayload = {
       <PageBreadcrumb pageTitle="Profile" />
 
       <div className="space-y-6">
-        <div>
+        <header>
           <h1 className="text-2xl font-semibold text-gray-800 dark:text-white/90 mb-2">
             Company Profile
           </h1>
           <p className="text-gray-500 dark:text-gray-400">
             Manage your company information and details
           </p>
-        </div>
+        </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        {/* Profile Picture Upload */}
+        <section className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] mb-4 flex items-center gap-6">
+          <div>
+            <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-blue-500 bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+              {profileImage ? (
+                <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+              ) : (
+                <span className="text-gray-400 dark:text-gray-600 text-4xl">+</span>
+              )}
+            </div>
+          </div>
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleImageChange}
+            />
+            <button
+              type="button"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+              onClick={() => fileInputRef.current.click()}
+              disabled={uploading}
+            >
+              {uploading ? "Uploading..." : profileImage ? "Change Profile Picture" : "Upload Profile Picture"}
+            </button>
+            <p className="text-xs text-gray-500 mt-2">Recommended size: 400x400px</p>
+          </div>
+        </section>
+
+        <form className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           {/* Basic Information */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+          <section className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
             <h3 className="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">
               Basic Information
             </h3>
@@ -254,7 +280,6 @@ const companyPayload = {
                   className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white/90"
                 />
               </div>
-
               <div>
                 <label className="mb-2 block text-xs leading-normal text-gray-500 dark:text-gray-400">
                   Company Description (Bio)
@@ -270,10 +295,10 @@ const companyPayload = {
                 />
               </div>
             </div>
-          </div>
+          </section>
 
           {/* Locations */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+          <section className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
             <h3 className="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">Locations</h3>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -284,6 +309,7 @@ const companyPayload = {
                   >
                     <span className="text-sm text-gray-800 dark:text-white/90 break-words">{location}</span>
                     <button
+                      type="button"
                       onClick={() => removeLocation(index)}
                       className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 self-end sm:self-center"
                     >
@@ -292,7 +318,6 @@ const companyPayload = {
                   </div>
                 ))}
               </div>
-
               <div className="flex flex-col sm:flex-row gap-2">
                 <input
                   type="text"
@@ -303,6 +328,7 @@ const companyPayload = {
                   className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white/90"
                 />
                 <button
+                  type="button"
                   onClick={addLocation}
                   className="rounded-lg bg-blue-600 px-3 py-2 text-white hover:bg-blue-700 sm:w-auto w-full"
                 >
@@ -310,10 +336,10 @@ const companyPayload = {
                 </button>
               </div>
             </div>
-          </div>
+          </section>
 
           {/* Contacts */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+          <section className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
             <h3 className="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">Contact Information</h3>
             <div className="space-y-3">
               <div className="space-y-2">
@@ -329,6 +355,7 @@ const companyPayload = {
                       <p className="text-sm text-gray-800 dark:text-white/90 break-words">{contact.value}</p>
                     </div>
                     <button
+                      type="button"
                       onClick={() => removeContact(index)}
                       className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 self-end sm:self-center"
                     >
@@ -337,7 +364,6 @@ const companyPayload = {
                   </div>
                 ))}
               </div>
-
               <div className="flex flex-col sm:flex-row gap-2 flex-wrap">
                 <input
                   type="text"
@@ -354,6 +380,7 @@ const companyPayload = {
                   className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white/90"
                 />
                 <button
+                  type="button"
                   onClick={addContact}
                   className="rounded-lg bg-blue-600 px-3 py-2 text-white hover:bg-blue-700 sm:w-auto w-full"
                 >
@@ -361,10 +388,10 @@ const companyPayload = {
                 </button>
               </div>
             </div>
-          </div>
+          </section>
 
           {/* What We Offer */}
-          <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
+          <section className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
             <h3 className="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">What We Offer</h3>
             <div className="space-y-3">
               <div className="flex flex-wrap gap-2">
@@ -375,6 +402,7 @@ const companyPayload = {
                   >
                     {offering}
                     <button
+                      type="button"
                       onClick={() => removeOffering(index)}
                       className="ml-1 text-white hover:text-blue-200"
                     >
@@ -383,7 +411,6 @@ const companyPayload = {
                   </span>
                 ))}
               </div>
-
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -394,6 +421,7 @@ const companyPayload = {
                   className="flex-1 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:border-blue-500 focus:outline-none dark:border-gray-700 dark:bg-gray-800 dark:text-white/90"
                 />
                 <button
+                  type="button"
                   onClick={addOffering}
                   className="rounded-lg bg-blue-600 px-3 py-2 text-white hover:bg-blue-700"
                 >
@@ -401,15 +429,21 @@ const companyPayload = {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
+          </section>
+        </form>
 
         {/* Actions */}
         <div className="flex justify-end gap-3">
-          <button className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
+          <button
+            type="button"
+            className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            onClick={fetchProfile}
+            disabled={loading}
+          >
             Cancel
           </button>
           <button
+            type="button"
             onClick={saveCompany}
             className={`rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 ${loading ? "opacity-60 cursor-not-allowed" : ""}`}
             disabled={loading}
