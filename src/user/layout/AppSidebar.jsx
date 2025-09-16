@@ -13,11 +13,7 @@ import { NotificationBell } from "../../pages/NotificationPage";
 // ...existing code...
 
 const navItems = [
-  {
-    icon: <FaThLarge />,
-    name: "User Dashboard",
-    path: "/user/profile",
-  },
+
   {
     icon: <FaUserCircle />,
     name: "User Profile",
@@ -25,7 +21,7 @@ const navItems = [
   },
   {
     icon: <MdMenuBook />,
-    name: "Hand-on experience",
+    name: "Available opportunities",
     path: "/user/internship",
   },
   
