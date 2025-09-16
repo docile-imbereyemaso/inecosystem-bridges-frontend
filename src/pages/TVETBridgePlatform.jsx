@@ -3,7 +3,7 @@ import { FiSearch, FiMapPin, FiExternalLink, FiBell } from 'react-icons/fi';
 import Navbar from '../common-components/Navbar';
 import FooterComponent from './FooterComponent';
 import { API_URL } from "../lib/API";
-
+import { NavLink } from "react-router";
 
 const TVETBridgePlatform = () => {
   const [activeTab, setActiveTab] = useState('jobs');  
@@ -12,8 +12,7 @@ const TVETBridgePlatform = () => {
   const fetchJobs = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}jobs/allJobs`, {
-        credentials: "include", // allow cookies to be sent
+      const res = await fetch(`${API_URL}jobs/getAllJobs`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -324,13 +323,14 @@ const TVETBridgePlatform = () => {
               </div>
             </div>
              <div className='mt-3'>
-              <a href="#" className="text-gray-100 bg-indigo-700 px-5 py-2 font-semibold rounded-md hover:bg-indigo-800 transform hover:scale-[1.09] transition duration-200 block w-fit  ease-in-out"> Visit them</a>
-
+              <NavLink to="/login" className="text-lg md:text-base font-bold text-gray-900 dark:text-white">
+              <a href="#" className="text-gray-100 bg-indigo-700 px-5 py-2 font-semibold rounded-md hover:bg-indigo-800 transform hover:scale-[1.09] transition duration-200 block w-fit  ease-in-out"> Connect</a>
+              </NavLink>
              </div>
           </div>
         ))}
       </div>
-    </div>
+    </div> 
   );
 
   const OtherOpportunitiesTab = () => (
