@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../common-components/Navbar';
+import Topnav from '../common-components/Topnav';
 import { FaUser, FaMapMarkerAlt, FaCalendarAlt, FaAward, FaEnvelope, FaPlay } from 'react-icons/fa';
 import civilEngineer from '/success/civil-engineer.jpeg';
 import plumber from '/success/plumber.jpeg';
@@ -22,6 +23,7 @@ import automobile from '/success/automobile.jpeg';
 import manufacturing from '/success/manufacturing.jpeg';
 import mining from '/success/mining.jpeg';
 import beauty from '/success/beaty.jpg';
+import FooterComponent from './FooterComponent';
 const SuccessStories = () => {
   const [activeTab, setActiveTab] = useState('CONSTRUCTION AND BUILDING SERVICES');
 
@@ -261,10 +263,33 @@ const SuccessStories = () => {
   };
 
   const currentSector = sectors[activeTab];
+  useEffect(() => {
+    const nav = document.getElementById("navigation");
 
+    const handleScroll = () => {
+      if (!nav) return;
+      const scroll = window.scrollY;
+      if (scroll < 100) {
+        nav.classList.add("hidden");
+      } else {
+        nav.classList.remove("hidden");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
   <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 py-1">
-      <div className='top-0 left-0 w-full z-50 sticky'>
+          <div id='navigation' className="hidden fixed mt-9 z-10 w-full">
+    
+    
+    
+            
+          <Topnav />
+          </div>
+      <div className='top-0 left-0 w-full z-50'>
              <Navbar />
       </div>
          <div className="text-center my-4">
@@ -347,6 +372,7 @@ const SuccessStories = () => {
 
      
       </div>
+      <FooterComponent/>
     </div>
   );
 };

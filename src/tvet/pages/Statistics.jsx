@@ -109,7 +109,6 @@ useEffect(() => {
           <select value={selectedReport} onChange={(e) => setSelectedReport(e.target.value)}
             className="w-48 bg-slate-700 border border-slate-600 text-white p-2 rounded">
             <option value="overview">Overview Report</option>
-            <option value="skills">Skills Analysis</option>
             <option value="companies">Company Report</option>
             
             <option value="opportunities">Opportunities Report</option>
@@ -139,10 +138,10 @@ useEffect(() => {
       {/* Tabs */}
       <div>
         <div className="flex bg-slate-800 border border-slate-700 rounded overflow-hidden">
-          {["skills", "companies", "opportunities"].map(tab => (
+          {["companies", "opportunities"].map(tab => (
             <button key={tab} onClick={() => setActiveTab(tab)}
               className={`flex-1 py-2 text-white ${activeTab === tab ? "bg-blue-600" : ""}`}>
-              {tab === "skills" && "Skills Analysis"}
+          
               {tab === "companies" && "Company Status"}
               
               {tab === "opportunities" && "Opportunities"}

@@ -270,7 +270,11 @@ export default function UserProfiles() {
               <FaFilePdf className="text-red-500" />
               Resume
             </h4>
-            <PDFViewer url={profile.resume} title="Resume PDF" />
+            {profile.resume ? (
+              <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View Resume</a>
+            ) : (
+              <span className="text-gray-400">No resume uploaded</span>
+            )}
           </div>
 
           <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800">
@@ -278,7 +282,11 @@ export default function UserProfiles() {
               <FaFilePdf className="text-blue-500" />
               Official Document
             </h4>
-            <PDFViewer url={profile.official_document} title="Official Document PDF" />
+            {profile.official_document ? (
+              <a href={profile.official_document} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">View Document</a>
+            ) : (
+              <span className="text-gray-400">No document uploaded</span>
+            )}
           </div>
         </div>
 

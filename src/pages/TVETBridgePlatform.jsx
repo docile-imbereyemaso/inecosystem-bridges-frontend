@@ -1,9 +1,10 @@
 import React, {  useState, useEffect } from 'react';
 import { FiSearch, FiMapPin, FiExternalLink, FiBell } from 'react-icons/fi';
 import Navbar from '../common-components/Navbar';
+import Topnav from '../common-components/Topnav';
 import FooterComponent from './FooterComponent';
 import { API_URL } from "../lib/API";
-
+import { NavLink } from "react-router";
 
 const TVETBridgePlatform = () => {
   const [activeTab, setActiveTab] = useState('jobs');  
@@ -12,8 +13,7 @@ const TVETBridgePlatform = () => {
   const fetchJobs = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_URL}jobs/allJobs`, {
-        credentials: "include", // allow cookies to be sent
+      const res = await fetch(`${API_URL}jobs/getAllJobs`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -34,42 +34,30 @@ const TVETBridgePlatform = () => {
   }, []);
 
   console.log(jobs);
-  const organizations = [
-    {
-      id: 1,
-      name: "Anthropic",
-      logo: "AI",
-      sector:"Technical sector",
-      location:"Kigali, Nyarugenge",
-      size:"50+ employees",
-      focus:"Regional focus",
-      description: "AI research and product company, with teams working on alignment, policy, and security",
-      openRoles: "what we offer (software development skills, networking skills , computer maintenance)"
-    },
-    {
-      id: 2,
-      name: "Rwanda Skills Initiative",
-      logo: "RSI",
-      sector:"Technical sector",
-      location:"Kigali, Nyarugenge",
-      size:"50+ employees",
-      focus:"Regional focus",
-      description: "Leading skills development organization focusing on youth empowerment and industry partnerships",
-      openRoles: "what we offer (software development skills, networking skills , computer maintenance)"
-    },
-    {
-      id: 3,
-      name: "East African Skills Hub",
-      logo: "EASH",
-      sector:"Technical sector",
-      location:"Kigali, Nyarugenge",
-      size:"50+ employees",
-      focus:"Regional focus",
-      description: "Regional hub for technical and vocational skills training across East Africa",
-      openRoles: "what we offer (software development skills, networking skills , computer maintenance)"
+  const [organizations, setOrganizations] = useState([]);
+const fetchCompanies = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}companies/all`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) throw new Error(`Fetch companies failed: ${res.status}`);
+      const data = await res.json();
+      setOrganizations(data.companies);
+    } catch (err) {
+      console.error("Fetch companies error:", err);
+      setOrganizations([]);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
+console.log("Organisations: ",organizations);
   const opportunities = [
     {
       id: 1,
@@ -324,13 +312,14 @@ const TVETBridgePlatform = () => {
               </div>
             </div>
              <div className='mt-3'>
-              <a href="#" className="text-gray-100 bg-indigo-700 px-5 py-2 font-semibold rounded-md hover:bg-indigo-800 transform hover:scale-[1.09] transition duration-200 block w-fit  ease-in-out"> Visit them</a>
-
+              <NavLink to="/login" className="text-lg md:text-base font-bold text-gray-900 dark:text-white">
+              <a href="#" className="text-gray-100 bg-indigo-700 px-5 py-2 font-semibold rounded-md hover:bg-indigo-800 transform hover:scale-[1.09] transition duration-200 block w-fit  ease-in-out"> Connect</a>
+              </NavLink>
              </div>
           </div>
         ))}
       </div>
-    </div>
+    </div> 
   );
 
   const OtherOpportunitiesTab = () => (
@@ -423,17 +412,40 @@ const TVETBridgePlatform = () => {
     </div>
   );
 
+  useEffect(() => {
+    const nav = document.getElementById("navigation");
 
+    const handleScroll = () => {
+      if (!nav) return;
+      const scroll = window.scrollY;
+      if (scroll < 100) {
+        nav.classList.add("hidden");
+      } else {
+        nav.classList.remove("hidden");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <div  className="sticky top-5 z-10">
+              <div id='navigation' className="hidden top-12 fixed z-10 w-full">
+        
+        
+        
+                
+              <Topnav />
+              </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div  className="mt-10 z-10">
            <Navbar />
       </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Hero Section */}
-        <div className="text-center mb-8">
+        <div className="text-center mt-12 mb-8">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             {activeTab === 'jobs' && 'Jobs'}
             {activeTab === 'private-sector' && 'Private Sector Partners'}
