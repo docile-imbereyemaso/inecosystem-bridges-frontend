@@ -17,49 +17,49 @@ const TvetSocialCTA = () => {
     {
       name: 'Facebook',
       icon: FiFacebook,
-      url: 'https://canary.discord.com/channels/1408465955511599154/1416067884169429102',
+      url: 'https://www.facebook.com/login/identify/?ctx=not_my_account',
       color: 'hover:bg-blue-600',
       description: 'Join our community discussions'
     },
     {
       name: 'Instagram',
       icon: FiInstagram,
-      url: '#instagram',
+      url: 'https://www.instagram.com/rtb_rwanda/?hl=en',
       color: 'hover:bg-pink-600',
       description: 'See student success stories'
     },
     {
       name: 'TikTok',
       icon: FiMessageCircle,
-      url: '#tiktok',
+      url: 'https://www.rtb.gov.rw/',
       color: 'hover:bg-gray-800',
       description: 'Quick tips & campus life'
     },
     {
       name: 'YouTube',
       icon: FiYoutube,
-      url: '#youtube',
+      url: 'https://www.youtube.com/@rwandatvetboard',
       color: 'hover:bg-red-600',
       description: 'Watch program overviews'
     },
     {
       name: 'LinkedIn',
       icon: FiLinkedin,
-      url: '#linkedin',
+      url: 'https://www.linkedin.com/posts/the-new-times-rwanda_rwanda-launches-eight-tvet-centers-of-excellence-activity-7358510332815831041-kI6I',
       color: 'hover:bg-blue-700',
       description: 'Connect with professionals'
     },
     {
       name: 'WhatsApp',
       icon: FiPhone,
-      url: '#whatsapp',
+      url: 'https://www.whatsapp.com/download/',
       color: 'hover:bg-green-600',
       description: 'Join TVET support groups'
     },
     {
       name: 'Community',
       icon: FiMessageCircle,
-      url: '#community',
+      url: 'https://www.rtb.gov.rw/updates/news-detail/rtb-and-partners-assess-tvet-progress-and-define-future-priorities-at-q3-sub-sector-working-group-meeting',
       color: 'hover:bg-purple-600',
       description: 'Connect with peers & mentors'
     }
