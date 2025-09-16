@@ -26,6 +26,7 @@ const MyCommunity = () => {
         }
         
         const data = await response.json();
+        console.log('Fetched connections data:', data); 
         
         if (data.success) {
           setConnections(data.data);

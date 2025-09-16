@@ -6,7 +6,6 @@ import AIChatbot from "./pages/aiChatbot/AIChatbot";
 import PrivateSectorForm from "./pages/PrivateSectorForm";
 import Login from "./pages/Login";
 import SignUpForm from "./pages/SignUpForm";
-import IndividualSignUp from "./pages/IndividualSignUp";
 import NotFound from "./pages/otherpages/NotFound";
 
 
@@ -60,7 +59,7 @@ export default function App() {
           <Route path="/ai-chatbot" element={<AskAi />} />
           <Route path="/login" element={<Login />} />
           <Route path="/jobBoard" element={<TVETBridgePlatform />} />
-          <Route path="/IndividualSignUp" element={<IndividualSignUp />} />
+         
           <Route path="/SignUpForm" element={<SignUpForm />} />
           <Route path="/privateSectorRegistration" element={<CompanyRegistration/>}/>
           <Route path="/privateSectorForm" element={<PrivateSectorForm />} />

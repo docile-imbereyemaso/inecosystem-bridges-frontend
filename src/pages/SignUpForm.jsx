@@ -2,6 +2,8 @@ import React, { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router';
 import logo from '../../public/images/logo.png';
 import { API_URL } from "../lib/API"
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const SignUpForm = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -12,6 +14,7 @@ const SignUpForm = () => {
     phoneNumber: '',
     resume: null,
     officialDocument: null,
+    user_type: 'individual',
     status: '',
     sectors: [],
     password: '',
@@ -113,6 +116,7 @@ const SignUpForm = () => {
         submitData.append('email', formData.email);
         submitData.append('phoneNumber', formData.phoneNumber);
         submitData.append('password', formData.password);
+        submitData.append('user_type', formData.user_type);
         submitData.append('status', formData.status);
         submitData.append('sectors', JSON.stringify(formData.sectors));
         
@@ -136,16 +140,42 @@ const SignUpForm = () => {
         const result = await response.json();
         
         if (response.ok) {
-          alert("User registered successfully. Please log in.");
-          navigate('/login');
+          toast.success('Individual account has been successfully created!', {
+            position: 'top-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+          setTimeout(() => {
+            navigate('/login');
+          }, 3200);
         } else {
           setErrors(result.errors || { general: result.message });
-          alert(`Registration failed: ${result.message}`);
+          toast.error(result.message || 'Registration failed: Account may already exist.', {
+            position: 'top-right',
+            autoClose: 4000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
         }
       } catch (error) {
         console.error("Registration error:", error);
         setErrors({ general: "Network error. Please try again." });
-        alert("Registration failed. Please try again.");
+        toast.error('Registration failed. Please try again.', {
+          position: 'top-right',
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
       } finally {
         setIsSubmitting(false);
       }
@@ -164,25 +194,27 @@ const SignUpForm = () => {
   ];
 
   return (
-    <div className="min-h-screen py-12 px-4 bg-gray-100 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header Section */}
-        <div className="text-center mb-12">
-         <Link to="/" className="text-center flex items-center justify-center gap-3">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-2 shadow-lg">
-                          <span className="text-white font-bold text-xl">
-                            <img src={logo} alt="inecosystem-bridge" />
-                          </span>
-                        </div>
-                        <h1 className="text-2xl font-bold text-indigo-600 dark:text-white mb-1">
-                          INECOSYSTEM-BRIDGE
-                        </h1>
-                      </Link>
-          
-          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
-            Create your individual account and become part of our thriving educational ecosystem
-          </p>
-        </div>
+    <>
+      <ToastContainer />
+      <div className="min-h-screen py-12 px-4 bg-gray-100 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Header Section */}
+          <div className="text-center mb-12">
+           <Link to="/" className="text-center flex items-center justify-center gap-3">
+                          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-2 shadow-lg">
+                            <span className="text-white font-bold text-xl">
+                              <img src={logo} alt="inecosystem-bridge" />
+                            </span>
+                          </div>
+                          <h1 className="text-2xl font-bold text-indigo-600 dark:text-white mb-1">
+                            INECOSYSTEM-BRIDGE
+                          </h1>
+                        </Link>
+            
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed">
+              Create your individual account and become part of our thriving educational ecosystem
+            </p>
+          </div>
 
         {/* Progress Steps */}
         <div className="flex justify-center mb-8">
@@ -580,6 +612,7 @@ const SignUpForm = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
