@@ -12,6 +12,7 @@ import NotFound from "./pages/otherpages/NotFound";
 
 import UserNotFound from "./user/pages/OtherPage/NotFound";
 import TVETBridgePlatform from "./pages/TVETBridgePlatform";
+import TVETPrivateSectorPitch from "./pages/TVETPrivateSectorPitch";
 
 
 import TvetNotFound from "./tvet/pages/OtherPage/NotFound";
@@ -58,6 +59,7 @@ export default function App() {
           <Route path="/tvetmatters" element={<Tvetmatters />} />
           <Route path="/success-stories" element={<SuccessStories />} />
           <Route path="/ai-chatbot" element={<AskAi />} />
+          <Route path="/tvetpitch" element={<TVETPrivateSectorPitch />} />
           <Route path="/login" element={<Login />} />
           <Route path="/jobBoard" element={<TVETBridgePlatform />} />
           <Route path="/IndividualSignUp" element={<IndividualSignUp />} />
@@ -96,6 +98,7 @@ export default function App() {
             <Route path="/tvet/statistics" element={<Statistics />} />
             <Route path="/tvet/opportunities" element={<Opportunities />} />
             <Route path="/tvet/*" element={<TvetNotFound />} />
+            <Route path="/tvet-pitch" element={<TVETPrivateSectorPitch />} />
             <Route path="/tvet-dashboard" element={<TvetDashboard />} />
           </Route>
           {/* Fallback Route */}
