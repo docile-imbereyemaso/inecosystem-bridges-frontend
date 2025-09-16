@@ -23,7 +23,7 @@ export default function TVETPrivateSectorPitch() {
               Discover skilled, job-ready technical graduates, build a talent pipeline, reduce hiring costs, and collaborate with training centers to create a skilled workforce.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <motion.a href="/privateSectorRegistration" whileHover={{ scale: 1.05 }} className="px-6 py-3 bg-green-500 text-white font-medium rounded-lg shadow-lg hover:bg-green-400">
+              <motion.a href="/privateSectorForm" whileHover={{ scale: 1.05 }} className="px-6 py-3 bg-green-500 text-white font-medium rounded-lg shadow-lg hover:bg-green-400">
                 Create Company Account
               </motion.a>
               <motion.a href="#video" whileHover={{ scale: 1.05 }} className="px-6 py-3 border border-white rounded-lg text-white hover:bg-white hover:text-indigo-600">
