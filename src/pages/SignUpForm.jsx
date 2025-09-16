@@ -16,7 +16,6 @@ const SignUpForm = () => {
     officialDocument: null,
     user_type: 'individual',
     status: '',
-    sectors: [],
     password: '',
     confirmPassword: ''
   });
@@ -196,10 +195,10 @@ const SignUpForm = () => {
   return (
     <>
       <ToastContainer />
-      <div className="min-h-screen py-12 px-4 bg-gray-100 sm:px-6 lg:px-8">
+      <div className="min-h-screen py-12 px-4 bg-gray-100 sm:px-6 lg:px-8 dark:bg-gray-900">
         <div className="max-w-4xl mx-auto">
           {/* Header Section */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-12 dark:bg-gray-900">
            <Link to="/" className="text-center flex items-center justify-center gap-3">
                           <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl mb-2 shadow-lg">
                             <span className="text-white font-bold text-xl">
@@ -398,7 +397,7 @@ const SignUpForm = () => {
                         name="status"
                         value={formData.status}
                         onChange={handleChange}
-                        className={`block w-full text-gray-900 min-w-0 max-w-full px-4 py-3 sm:py-2 sm:text-base text-lg border-2 rounded-xl focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 ${
+                        className={`block w-full text-gray-900 min-w-0 max-sm:max-w-55 px-4 py-3 sm:py-2 sm:text-base text-lg border-2 rounded-xl focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 ${
                           errors.status ? 'border-red-300 bg-red-50 dark:border-red-400 dark:bg-red-950 dark:text-white' : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-500 dark:bg-gray-900 dark:text-white'
                         }`}
                       >
@@ -410,28 +409,8 @@ const SignUpForm = () => {
                     </div>
                   </div>
 
-                  {/* Sectors Selection */}
-                  <div className="space-y-4">
-                    <label className="block text-lg font-semibold text-gray-700 dark:text-gray-200">
-                      Areas of Interest/Sectors *
-                    </label>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {sectorsOptions.map((sector) => (
-                        <label key={sector} className="flex items-center space-x-3 p-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-blue-400 dark:hover:border-blue-400 transition-all duration-200 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            name="sectors"
-                            value={sector}
-                            checked={formData.sectors.includes(sector)}
-                            onChange={handleChange}
-                            className="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
-                          />
-                          <span className="text-gray-700 dark:text-gray-200">{sector}</span>
-                        </label>
-                      ))}
-                    </div>
-                    {errors.sectors && <p className="text-red-500 dark:text-red-400 text-sm font-medium">{errors.sectors}</p>}
-                  </div>
+             
+               
 
                   {/* Next Button */}
                   <div className="pt-8">
