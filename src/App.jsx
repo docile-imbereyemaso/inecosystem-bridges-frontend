@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router";
 
 import Tvetmatters from "./pages/Tvetmatters";
 import AIChatbot from "./pages/aiChatbot/AIChatbot";
-import PrivateSectorForm from "./pages/PrivateSectorForm.jsx";
+import PrivateSectorForm from "./pages/PrivateSectorForm";
 import Login from "./pages/Login";
 import SignUpForm from "./pages/SignUpForm";
 import IndividualSignUp from "./pages/IndividualSignUp";
