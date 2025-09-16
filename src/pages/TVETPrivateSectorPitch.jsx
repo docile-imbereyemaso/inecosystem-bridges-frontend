@@ -13,7 +13,7 @@ export default function TVETPrivateSectorPitch() {
       {/* HERO */}
 
       
-      <header className="bg-gradient-to-r from-indigo-600 to-blue-500 text-white shadow relative overflow-hidden">
+      <header className="bg-gray-900 text-white shadow relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 py-20 lg:flex lg:items-center lg:justify-between relative z-10">
           <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 1 }} className="max-w-2xl">
             <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight mb-4">
