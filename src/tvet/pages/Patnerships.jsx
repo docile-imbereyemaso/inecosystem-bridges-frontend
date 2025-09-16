@@ -36,12 +36,14 @@ const Partnerships = () => {
 
       const list = data.users || [];
   const mapped = list.map((u) => ({
+         ...u,
         id: u.user_id,
         name: u.company_name || `${u.first_name} ${u.last_name}`,
         industry: u.industry || "N/A",
         registrationDate: new Date().toISOString().split("T")[0],
         status: u.is_approved ? "registered" : "pending",
         contact: u.email || "",
+
       }));
 
       setCompanies(mapped);
@@ -78,9 +80,6 @@ const Partnerships = () => {
     }
   };
 
-  const handleStatusChange = (companyId, newStatus) => {
-    
-  };
  const handleApprove = async(company)=>{
       try {
 
@@ -117,6 +116,8 @@ const Partnerships = () => {
     (c) => c.status === "pending"
   ).length;
 
+
+  console.log(companies)
   if (loading) {
     return <p className="text-center text-slate-400">Loading companies...</p>;
   }
@@ -220,8 +221,12 @@ const Partnerships = () => {
               <tr className="border-b border-slate-700">
                 <th className="text-slate-300 px-4 py-2">Company Name</th>
                 <th className="text-slate-300 px-4 py-2">Industry</th>
+                <th className="text-slate-300 px-4 py-2">phone</th>
+
+                <th className="text-slate-300 px-4 py-2">official document</th>
                 <th className="text-slate-300 px-4 py-2">Registration Date</th>
                 <th className="text-slate-300 px-4 py-2">Contact</th>
+      
                 <th className="text-slate-300 px-4 py-2">Status</th>
                 <th className="text-slate-300 px-4 py-2">Actions</th>
               </tr>
@@ -235,6 +240,13 @@ const Partnerships = () => {
                     </td>
                     <td className="text-slate-300 px-4 py-2">
                       {company.industry}
+                    </td>
+                    <td className="text-slate-300 px-4 py-2">
+                      {company.phone}
+                    </td>
+                    <td className="text-slate-300 px-4 py-2">
+                       <a href={company.official_document} target="_blank" 
+                       className="text-blue-400 underline">View Document</a>
                     </td>
                     <td className="text-slate-300 px-4 py-2">
                       {company.registrationDate}
