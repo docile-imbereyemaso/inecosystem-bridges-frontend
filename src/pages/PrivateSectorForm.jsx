@@ -272,7 +272,7 @@ const PrivateSectorForm = () => {
                         type={type}
                         value={formData[name]}
                         onChange={handleChange}
-                        className={`w-full px-5 py-3 text-base border rounded-xl focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 ${
+                        className={`w-full px-5 py-3 text-base border text-gray-900  rounded-xl focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 ${
                           errors[name]
                             ? "border-red-300 bg-red-50 dark:border-red-400 dark:bg-red-950"
                             : "border-gray-200 dark:border-gray-700 dark:bg-gray-900"
@@ -299,7 +299,7 @@ const PrivateSectorForm = () => {
                         type="text"
                         value={offering}
                         onChange={handleChange}
-                        className={`w-full px-5 py-3 text-base border rounded-xl focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 ${
+                        className={`w-full px-5 py-3 text-base border text-gray-900  rounded-xl focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 ${
                           errors.offerings && !offering.trim()
                             ? "border-red-300 bg-red-50 dark:border-red-400 dark:bg-red-950"
                             : "border-gray-200 dark:border-gray-700 dark:bg-gray-900"
@@ -345,7 +345,7 @@ const PrivateSectorForm = () => {
                     ref={legalDocInputRef}
                     onChange={handleChange}
                     accept=".pdf,.jpg,.jpeg,.png"
-                    className="w-full px-5 py-3 text-base border rounded-xl"
+                    className="w-full text-gray-900 px-5 py-3 text-base border rounded-xl"
                     style={{ display: "none" }}
                   />
                   <button
@@ -410,7 +410,7 @@ const PrivateSectorForm = () => {
                         type={type}
                         value={formData[name]}
                         onChange={handleChange}
-                        className={`w-full px-5 py-3 text-base border rounded-xl focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 ${
+                        className={`w-full px-5 py-3 text-base border text-gray-900  rounded-xl focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 ${
                           errors[name]
                             ? "border-red-300 bg-red-50 dark:border-red-400 dark:bg-red-950"
                             : "border-gray-200 dark:border-gray-700 dark:bg-gray-900"
@@ -430,7 +430,7 @@ const PrivateSectorForm = () => {
                       name="password"
                       value={credentials.password}
                       onChange={handleCredentialsChange}
-                      className={`w-full px-5 py-3 text-base border rounded-xl focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 ${
+                      className={`w-full px-5 py-3 text-base border text-gray-900  rounded-xl focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 ${
                         errors.password ? "border-red-300 bg-red-50 dark:border-red-400 dark:bg-red-950" : "border-gray-200 dark:border-gray-700 dark:bg-gray-900"
                       }`}
                       placeholder="Enter password"
@@ -445,7 +445,7 @@ const PrivateSectorForm = () => {
                       name="confirmPassword"
                       value={credentials.confirmPassword}
                       onChange={handleCredentialsChange}
-                      className={`w-full px-5 py-3 text-base border rounded-xl focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 ${
+                      className={`w-full px-5 py-3 text-base border text-gray-900  rounded-xl focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 ${
                         errors.confirmPassword ? "border-red-300 bg-red-50 dark:border-red-400 dark:bg-red-950" : "border-gray-200 dark:border-gray-700 dark:bg-gray-900"
                       }`}
                       placeholder="Confirm password"

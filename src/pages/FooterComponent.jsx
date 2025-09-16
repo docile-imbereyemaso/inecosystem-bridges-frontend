@@ -19,9 +19,9 @@ const FooterComponent = () => {
   return (
     <footer className="bg-gray-900 dark:bg-black text-white">
       <div className="max-w-6xl mx-auto px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:justify-between lg:flex gap-12">
           {/* Left Section - Brand */}
-          <div>
+          <div className='lg:w-120'>
             <h2 className="text-2xl font-bold mb-4">INECOSYSTEM</h2>
             <p className="text-gray-400 dark:text-gray-500 text-sm mb-8 leading-relaxed">
               INECOSYSTEM empowers future-ready talent by strengthening collaboration between 
@@ -31,7 +31,21 @@ const FooterComponent = () => {
             </p>
             
             {/* Social Links */}
-            <div className="flex space-x-3">
+           
+          </div>
+
+          {/* Center Section - Partners */}
+          <div>
+            <h3 className="text-white dark:text-gray-200 font-medium mb-6">Our partners</h3>
+            <div className="space-y-3">
+              {partners.map((partner, index) => (
+                <div key={index} className="text-gray-400 dark:text-gray-500 text-sm hover:text-gray-300 dark:hover:text-gray-400 cursor-pointer transition-colors">
+                  {partner}
+                </div>
+              ))}
+            </div>
+          </div>
+ <div className="flex space-x-3">
             
               <a 
                 href="#" 
@@ -52,22 +66,8 @@ const FooterComponent = () => {
                 <FiLinkedin size={18} />
               </a>
             </div>
-          </div>
-
-          {/* Center Section - Partners */}
-          <div>
-            <h3 className="text-white dark:text-gray-200 font-medium mb-6">Our partners</h3>
-            <div className="space-y-3">
-              {partners.map((partner, index) => (
-                <div key={index} className="text-gray-400 dark:text-gray-500 text-sm hover:text-gray-300 dark:hover:text-gray-400 cursor-pointer transition-colors">
-                  {partner}
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* Right Section - Newsletter */}
-          <div>
+          {/* <div>
             <h3 className="text-white dark:text-gray-200 font-medium mb-6">Get our updates</h3>
             <div className="space-y-4">
               <input
@@ -93,7 +93,7 @@ const FooterComponent = () => {
                 Subscribe now!
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
 
      

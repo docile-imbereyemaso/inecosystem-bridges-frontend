@@ -268,7 +268,7 @@ const SignUpForm = () => {
       type="text"
       value={formData.firstName}
       onChange={handleChange}
-      className={`w-full px-3 py-2 text-base border-2 rounded-lg focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 ${
+      className={`w-full px-3 py-2 text-base border-2 text-gray-900 rounded-lg focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 ${
         errors.firstName
           ? 'border-red-300 bg-red-50 dark:border-red-400 dark:bg-red-950 dark:text-white'
           : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-500 dark:bg-gray-900 dark:text-white'
@@ -292,7 +292,7 @@ const SignUpForm = () => {
       type="text"
       value={formData.secondName}
       onChange={handleChange}
-      className={`w-full px-3 py-2 text-base border-2 rounded-lg focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 ${
+      className={`w-full px-3 py-2 text-base border-2 text-gray-900 rounded-lg focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 ${
         errors.secondName
           ? 'border-red-300 bg-red-50 dark:border-red-400 dark:bg-red-950 dark:text-white'
           : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-500 dark:bg-gray-900 dark:text-white'
@@ -316,7 +316,7 @@ const SignUpForm = () => {
       type="email"
       value={formData.email}
       onChange={handleChange}
-      className={`w-full px-3 py-2 text-base border-2 rounded-lg focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 ${
+      className={`w-full px-3 py-2 text-base border-2 text-gray-900 rounded-lg focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 ${
         errors.email
           ? 'border-red-300 bg-red-50 dark:border-red-400 dark:bg-red-950 dark:text-white'
           : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-500 dark:bg-gray-900 dark:text-white'
@@ -340,7 +340,7 @@ const SignUpForm = () => {
       type="tel"
       value={formData.phoneNumber}
       onChange={handleChange}
-      className={`w-full px-3 py-2 text-base border-2 rounded-lg focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 ${
+      className={`w-full px-3 py-2 text-base border-2 text-gray-900 rounded-lg focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 ${
         errors.phoneNumber
           ? 'border-red-300 bg-red-50 dark:border-red-400 dark:bg-red-950 dark:text-white'
           : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-500 dark:bg-gray-900 dark:text-white'
@@ -366,7 +366,7 @@ const SignUpForm = () => {
                         name="status"
                         value={formData.status}
                         onChange={handleChange}
-                        className={`block w-full min-w-0 max-w-full px-4 py-3 sm:py-2 sm:text-base text-lg border-2 rounded-xl focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 ${
+                        className={`block w-full text-gray-900 min-w-0 max-w-full px-4 py-3 sm:py-2 sm:text-base text-lg border-2 rounded-xl focus:ring-4 focus:ring-blue-200 dark:focus:ring-blue-800 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 ${
                           errors.status ? 'border-red-300 bg-red-50 dark:border-red-400 dark:bg-red-950 dark:text-white' : 'border-gray-200 hover:border-gray-300 dark:border-gray-700 dark:hover:border-gray-500 dark:bg-gray-900 dark:text-white'
                         }`}
                       >
