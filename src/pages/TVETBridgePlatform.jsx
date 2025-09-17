@@ -4,6 +4,8 @@ import Navbar from '../common-components/Navbar';
 import Topnav from '../common-components/Topnav';
 import FooterComponent from './FooterComponent';
 import { API_URL } from "../lib/API";
+import {FaSpinner} from "react-icons/fa";
+import avatar from "../../public/images/avatar-best.jpeg";
 import { NavLink } from "react-router";
 
 const TVETBridgePlatform = () => {
@@ -27,7 +29,7 @@ const TVETBridgePlatform = () => {
       setUser(storedUser);
     }
   }, []);
-
+console.log("My token is this one",token)
 
 
   const fetchJobs = async () => {
@@ -121,13 +123,16 @@ console.log("Organisations: ",organizations);
       updated: "Updated 1 week ago"
     }
   ];
-  const [profileImage, setProfileImage] = useState(null);
+  const [profileImage, setProfileImage] = useState({});
 
 const fetchProfile = async () => {
     if (!user?.user_id || !token) return;
     try {
       const userRes = await fetch(`${API_URL}imagesNo/image`, {
-        headers: { Authorization: `Bearer ${token}` },
+              headers: {
+        Authorization: `Bearer ${token}`,   // add this line
+        "Content-Type": "application/json",
+      },
       });
       const rawUser = await userRes.json();
       const userInfo = rawUser?.user ?? rawUser ?? {};
@@ -226,8 +231,11 @@ console.log("Profile images: ",profileImage);
       
       <div className="space-y-4">
         {loading ? (
-                    <div>Loading jobs...</div>
-                  ) : jobs.length === 0 ? (
+            <div className="flex justify-center items-center py-12 space-x-3">
+               <FaSpinner className="animate-spin h-10 w-10 text-blue-600 dark:text-blue-100" />
+              <span className="text-gray-500">Loading jobs...</span>
+            </div>
+          ): jobs.length === 0 ? (
                     <div>No jobs found.</div>
                   ) : (
                     jobs.map((job) => (
@@ -283,7 +291,7 @@ console.log("Profile images: ",profileImage);
       </div>
     </div>
   );
-
+console.log("In profile we have: ",profileImage);
   const PrivateSectorTab = () => (
     <div className="space-y-6">
       
@@ -294,13 +302,20 @@ console.log("Profile images: ",profileImage);
         </div>
         
       </div>
-
+          {loading ? (
+            <div className="flex justify-center items-center py-12 space-x-3">
+               <FaSpinner className="animate-spin h-10 w-10 text-blue-600 dark:text-blue-100" />
+              <span className="text-gray-500">Loading organizations...</span>
+            </div>
+          ) : organizations.length === 0 ? (
+            <div>No organizations found.</div>
+          ) : (
       <div className="space-y-4">
         {organizations.map((org) => (
           <div key={org.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow">
             <div className="flex items-start gap-4">
               <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-                <img  src={profileImage[org.user_id] || '/default-avatar.png'}  alt="Profile" className="w-full h-full object-cover" />
+                <img  src={avatar}  alt="Profile" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1">
                 <div className="flex items-start justify-between">
@@ -337,6 +352,7 @@ console.log("Profile images: ",profileImage);
           </div>
         ))}
       </div>
+      )}
     </div> 
   );
 
