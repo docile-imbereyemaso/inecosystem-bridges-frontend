@@ -241,7 +241,7 @@ const MainSection = () => {
 
       {/* Twitter */}
       <a
-        href="https://x.com/home"
+        href="https://x.com/Inecosystem1"
         target="_blank"
         rel="noopener noreferrer"
         className="bg-blue-500 text-white p-6 rounded-full text-5xl hover:scale-125 transition-transform"
