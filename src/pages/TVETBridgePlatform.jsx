@@ -252,12 +252,6 @@ console.log("Profile images: ",profileImage);
                             </div>
                           </div>
                           <div className="flex gap-2">
-                            <button
-                              onClick={() => window.open(job.application_link, "_blank")}
-                              className="text-green-400 hover:text-green-300 hover:bg-green-400/10 p-2 rounded"
-                            >
-                              <FiExternalLink className="w-4 h-4" />
-                            </button>
                           </div>
                         </div>
         
@@ -298,7 +292,7 @@ console.log("In profile we have: ",profileImage);
 
       <div className="flex items-center justify-between">
         <div className="text-gray-700 dark:text-gray-300">
-          <span className="font-semibold">58</span> private sector Partnership
+          <span className="font-semibold">{organizations.length}</span> {organizations.length > 1 ?"private sectors Partnership":"private sector Partnership"}
         </div>
         
       </div>
@@ -338,9 +332,7 @@ console.log("In profile we have: ",profileImage);
                     <p className="text-gray-700 dark:text-gray-300 mb-2">{org.description}</p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">{org.openRoles}</p>
                   </div>
-                  <button className="text-gray-400 hover:text-gray-600">
-                      <FiExternalLink className="w-5 h-5" />
-                  </button>
+ 
                 </div>
               </div>
             </div>
@@ -408,9 +400,7 @@ console.log("In profile we have: ",profileImage);
                       <p className="text-sm text-gray-500 dark:text-gray-400">{opportunity.updated}</p>
                     </div>
                   </div>
-                  <button className="text-gray-400 hover:text-gray-600">
-                      <FiExternalLink className="w-5 h-5" />
-                  </button>
+ 
                 </div>
               </div>
               
