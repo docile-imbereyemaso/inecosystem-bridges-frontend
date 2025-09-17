@@ -80,7 +80,9 @@ function Navbar() {
         <div className="ml-4 flex-shrink-0">
           <ThemeToggle />
         </div>
-        
+         <div className="ml-auto md:hidden">
+          <ChangeLanguage/>
+         </div>
          
         {/* Mobile Hamburger */}
         <button
@@ -93,9 +95,7 @@ function Navbar() {
           </svg>
         </button>
 
-          <div className="ml-auto md:hidden">
-          <ChangeLanguage/>
-         </div>
+         
       </div>
 
       {/* Mobile Menu & Overlay */}
