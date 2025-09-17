@@ -2,7 +2,7 @@ import { FaRegCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
 import { useEffect, useState } from "react";
-
+import { FaYoutube, FaTiktok, FaInstagram, FaTwitter } from "react-icons/fa";
 const MainSection = () => {
     const [visibleSections, setVisibleSections] = useState(new Set());
 
@@ -200,36 +200,55 @@ const MainSection = () => {
                 className={getSectionClasses("cta")}
             >
                 <div className="mx-auto max-w-2xl">
+                    <h2 className="text-3xl font-bold mb-8 text-center">
+        Get more on our platform
+      </h2>
                     <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-blue-50 to-indigo-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 border border-gray-200/60 dark:border-gray-600/60 rounded-2xl p-8 sm:p-10 shadow-xl hover:shadow-2xl transition-all duration-500">
                         {/* Background decoration */}
                         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-200/30 to-purple-200/30 rounded-full -translate-y-16 translate-x-16 animate-pulse"></div>
                         <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-emerald-200/30 to-teal-200/30 rounded-full translate-y-12 -translate-x-12 animate-pulse delay-1000"></div>
                         
-                        <div className="relative text-center space-y-6">
-                            <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 text-transparent bg-clip-text animate-pulse">
-                                Get into INECOSYSTEM
-                            </h2>
-                            
-                            <p className="text-gray-600 dark:text-gray-300 text-base sm:text-lg font-medium">
-                                The space for empowering youth, engaging the private sectors and industries, 
-                                and driving the future through greater TVET awareness.
-                            </p>
+                        <div className="flex justify-center items-center gap-20 mt-10">
+      {/* YouTube */}
+      <a
+        href="https://www.youtube.com/@INECOSYSTEMBRIDGE"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-red-600 text-white p-6 rounded-full text-5xl hover:scale-125 transition-transform"
+      >
+        <FaYoutube />
+      </a>
 
-                            <p className="text-gray-700 dark:text-gray-200 text-lg sm:text-xl leading-relaxed">
-                                Sign up on INECOSYSTEM and unlock opportunities! Students, TVET graduates, 
-                                and companies can connect, discover, and grow together.
-                            </p>
+      {/* TikTok */}
+      <a
+        href="https://www.tiktok.com/@inecosystembridge1?lang=en-GB"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-black text-white p-6 rounded-full text-5xl hover:scale-125 transition-transform"
+      >
+        <FaTiktok />
+      </a>
 
-                            <div className="pt-4">
-                                <Link 
-                                    to="/login" 
-                                    className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold rounded-xl transition-all duration-300 transform hover:scale-105 hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-600"
-                                >
-                                    Let's Get Started
-                                    <FaArrowRight className="ml-3 text-lg transition-transform duration-300 group-hover:translate-x-1" />
-                                </Link>
-                            </div>
-                        </div>
+      {/* Instagram */}
+      <a
+        href="https://www.instagram.com/inecosystembridge1/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white p-6 rounded-full text-5xl hover:scale-125 transition-transform"
+      >
+        <FaInstagram />
+      </a>
+
+      {/* Twitter */}
+      <a
+        href="https://x.com/home"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-blue-500 text-white p-6 rounded-full text-5xl hover:scale-125 transition-transform"
+      >
+        <FaTwitter />
+      </a>
+    </div>
                     </div>
                 </div>
             </section>
