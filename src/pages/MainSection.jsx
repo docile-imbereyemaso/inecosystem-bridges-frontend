@@ -211,7 +211,7 @@ const MainSection = () => {
                         <div className="flex justify-center items-center gap-20 mt-10">
       {/* YouTube */}
       <a
-        href="https://www.youtube.com/yourchannel"
+        href="https://www.youtube.com/@INECOSYSTEMBRIDGE"
         target="_blank"
         rel="noopener noreferrer"
         className="bg-red-600 text-white p-6 rounded-full text-5xl hover:scale-125 transition-transform"
