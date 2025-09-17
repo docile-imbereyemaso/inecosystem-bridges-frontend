@@ -555,5 +555,4 @@ const PrivateSectorRegistration = () => {
     </div>
   );
 };
-
 export default PrivateSectorRegistration;
