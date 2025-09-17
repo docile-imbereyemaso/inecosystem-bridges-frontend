@@ -10,6 +10,26 @@ const TVETBridgePlatform = () => {
   const [activeTab, setActiveTab] = useState('jobs');  
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null);
+
+  // Get token from localStorage
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    const storedUser = JSON.parse(localStorage.getItem('user'));
+    
+    if (storedToken) {
+      setToken(storedToken);
+    }
+    
+    if (storedUser) {
+      setUser(storedUser);
+    }
+  }, []);
+
+
+
   const fetchJobs = async () => {
     setLoading(true);
     try {
@@ -101,7 +121,72 @@ console.log("Organisations: ",organizations);
       updated: "Updated 1 week ago"
     }
   ];
+  const [profileImage, setProfileImage] = useState(null);
 
+const fetchProfile = async () => {
+    if (!user?.user_id || !token) return;
+    try {
+      const userRes = await fetch(`${API_URL}imagesNo/image`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const rawUser = await userRes.json();
+      const userInfo = rawUser?.user ?? rawUser ?? {};
+      const companyInfo = userInfo.companies && userInfo.companies[0] ? userInfo.companies[0] : {};
+
+      setCompanyData({
+        ...userInfo,
+        contacts: companyInfo.contacts || [],
+        name: companyInfo.name,
+        description: companyInfo.description,
+        locations: companyInfo.locations || [],
+        offerings: companyInfo.offerings || [],
+      });
+
+      if (userInfo.profile_image) setProfileImage(userInfo.profile_image);
+    } catch (err) {
+      console.error("Fetch error:", err);
+    }
+  };
+
+   // Helper function to get user image
+const getUserImage = async (userId) => {
+  try {
+    const response = await fetch(`${API_URL}users/${userId}/image`);
+    const data = await response.json();
+    
+    if (data.success) {
+      return data.imageUrl;
+    } else {
+      // Return a default avatar if image not found
+      return '/default-avatar.png';
+    }
+  } catch (error) {
+    console.error('Error fetching user image:', error);
+    return '/default-avatar.png';
+  }
+};
+
+// In your component, use this function to fetch images
+useEffect(() => {
+  const fetchImages = async () => {
+    if (organizations.length > 0) {
+      const images = {};
+      
+      for (const org of organizations) {
+        // Assuming org has a user_id field
+        if (org.user_id) {
+          const imageUrl = await getUserImage(org.user_id);
+          images[org.user_id] = imageUrl;
+        }
+      }
+      
+      setProfileImage(images);
+    }
+  };
+  
+  fetchImages();
+}, [organizations]);
+console.log("Profile images: ",profileImage);
   function TabButton({ id, label, isActive, onClick }) {
     return (
       <button
@@ -282,7 +367,7 @@ console.log("Organisations: ",organizations);
           <div key={org.id} className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md transition-shadow">
             <div className="flex items-start gap-4">
               <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-                {org.logo}
+                <img  src={profileImage[org.user_id] || '/default-avatar.png'}  alt="Profile" className="w-full h-full object-cover" />
               </div>
               <div className="flex-1">
                 <div className="flex items-start justify-between">
@@ -290,16 +375,16 @@ console.log("Organisations: ",organizations);
                     <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">{org.name}</h3>
                       <div className="flex gap-2 mb-3 flex-wrap">
                         <span className="px-3 py-1 rounded-full text-sm bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
-                          {org.sector}
+                          ICT
                         </span>
                         <span className="px-3 py-1 rounded-full text-sm bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200">
-                          {org.location}
+                          Kigali Rwanda
                         </span>
                         <span className="px-3 py-1 rounded-full text-sm bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
-                          {org.size}
+                          Large
                         </span>
                         <span className="px-3 py-1 rounded-full text-sm bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200">
-                          {org.focus}
+                          Technical Skills
                         </span>
                       </div>
                     <p className="text-gray-700 dark:text-gray-300 mb-2">{org.description}</p>

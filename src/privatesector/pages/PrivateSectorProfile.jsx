@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { FiPlus, FiTrash2 } from "react-icons/fi";
 import PageBreadcrumb from "../components/common/PageBreadCrumb";
 import PageMeta from "../components/common/PageMeta";
+import {FaSpinner} from "react-icons/fa";
 import { useAuth } from "../../lib/useAuth";
 import { API_URL } from "../../lib/API";
 
@@ -59,6 +60,7 @@ export default function PrivateSectorProfiles() {
   const fetchProfile = async () => {
     if (!user?.user_id || !token) return;
     try {
+      setLoading(true);
       const userRes = await fetch(`${API_URL}users/profile/${user.user_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -78,6 +80,8 @@ export default function PrivateSectorProfiles() {
       if (userInfo.profile_image) setProfileImage(userInfo.profile_image);
     } catch (err) {
       console.error("Fetch error:", err);
+    }finally {
+      setLoading(false);
     }
   };
 
@@ -230,6 +234,15 @@ export default function PrivateSectorProfiles() {
         </header>
 
         {/* Profile Picture Upload */}
+        {
+          loading ? (
+            <div className="min-h-screen justify-center mt-[220px]">
+              <FaSpinner className="animate-spin h-20 w-20 text-blue-600 mx-auto dark:text-gray-100" />
+              <br />
+              <p className="text-center text-gray-600 dark:text-gray-400">Loading profile...</p>
+            </div>
+          ) : null
+        }
         <section className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] mb-4 flex items-center gap-6">
           <div>
             <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-blue-500 bg-gray-100 dark:bg-gray-900 flex items-center justify-center">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../lib/useAuth';
 import { API_URL } from '../../lib/API';
-
+import {FaSpinner} from "react-icons/fa";
 // ...existing code...
 
 function Analytics() {
@@ -255,8 +255,11 @@ function Analytics() {
         {/* Insights Cards */}
         <div className="grid gap-4">
           {loading ? (
-            <div className="text-white">Loading Insights...</div>
-          ) : insights.length === 0 ? (
+                  <div className="flex justify-center items-center py-12 space-x-3">
+                    <FaSpinner className="animate-spin h-10 w-10 text-blue-600 dark:text-blue-100" />
+                    <span className="text-gray-500">Loading insights...</span>
+                  </div>
+                )  : insights.length === 0 ? (
             <div className="bg-slate-800 border border-slate-700 rounded-lg p-12 text-center">
               <svg className="w-12 h-12 text-slate-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
