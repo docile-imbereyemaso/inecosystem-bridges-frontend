@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router";
+import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router";
 
 import SuccessStories from "./pages/SuccessStories";
 import AIChatbot from "./pages/aiChatbot/AIChatbot";
@@ -45,6 +45,10 @@ import { NotificationPage } from "./pages/NotificationPage.jsx";
 import MyCommunity from "./privatesector/pages/MyCommunity.jsx";
 import AskAi from "./pages/AskAi.jsx";
 import Forbidden from "./Forbidden";
+import PrivateSectorHome from "./privatesector/pages/PrivateSectorHome.jsx";
+import BlogListPage from "./blog/BlogListPage .jsx";
+import BlogDetailPage from "./blog/BlogDetailPage.jsx";
+import CreateBlogPage from "./blog/CreateBlogPage.jsx";
 
 export default function App() {
   return (
@@ -64,6 +68,11 @@ export default function App() {
           <Route path="/SignUpForm" element={<SignUpForm />} />
           <Route path="/privateSectorRegistration" element={<CompanyRegistration/>}/>
           <Route path="/privateSectorForm" element={<PrivateSectorForm />} />
+          <Route path="/blog" element={<Outlet/>}>
+              <Route index element={<BlogListPage/>}/>
+              <Route path=":id" element={<BlogDetailPage/>}/>
+              <Route path="create" element={<CreateBlogPage/>}/>
+          </Route>
           
           {/* Forbidden route */}
           <Route path="/forbidden" element={<Forbidden />} />
@@ -78,15 +87,17 @@ export default function App() {
             <Route path="/user/*" element={<UserNotFound />} />
           </Route>
           {/* Private sector Dashboard layout */}
-          <Route element={   <ProtectedRoute roles={['private_sector']}><PrivateLayout /></ProtectedRoute>}>
-            <Route path="/privateSector/profile" element={<PrivateSectorProfiles />} />
-            <Route path="/privateSector/jobBoard" element={<JobBoard />} />
-            <Route path="/privateSector/internships" element={<Internerships />} />
-            <Route path="/privateSector/analytics" element={<Analytics />} />
-            <Route path="/privateSector/contributions" element={<Contributions />} />
-            <Route path="/privateSector/notifications" element={<NotificationPage/>} />
-            <Route path="/privateSector/community" element={<MyCommunity/>} />
-            <Route path="/privateSector/*" element={<PrivateNotFound />} />
+          <Route path="privateSector" element={   <ProtectedRoute roles={['private_sector']}><PrivateLayout /></ProtectedRoute>}>
+            <Route index element={<PrivateSectorHome />} />
+            <Route path="profile" element={<PrivateSectorProfiles />} />
+            <Route path="jobBoard" element={<JobBoard />} />
+            <Route path="internships" element={<Internerships />} />
+            <Route path="analytics" element={<Analytics />} />
+            <Route path="contributions" element={<Contributions />} />
+            <Route path="notifications" element={<NotificationPage/>} />
+            <Route path="community" element={<MyCommunity/>} />
+
+            <Route path="*" element={<PrivateNotFound />} />
           </Route>
           {/* Tvet Dasboard layout */}
           <Route element={ <ProtectedRoute roles={['tvet']}><TvetLayout /></ProtectedRoute> }>

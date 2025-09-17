@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NavLink } from "react-router";
 import ThemeToggle from "./ThemeToggle";
 import logo from '/images/logo.png';
+import ChangeLanguage from "../ChangeLanguage";
 
 
 
@@ -55,20 +56,24 @@ export default function Topnav(){
           </li>
           <li className="text-gray-700 dark:text-gray-200 relative group">
             <NavLink to="/ai-chatbot" className="group-hover:text-black dark:group-hover:text-gray-300 transition duration-300 ease-in-out">
-                 career path AI assistant
+                 career path AI assistant4
               <div className="absolute w-0 bg-green-400  left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
             </NavLink>
           </li>
          
-          <li className="ml-auto bg-green-400 px-4 md:px-5 lg:px-6 py-2 md:py-1.5 lg:py-2 rounded-full font-semibold hover:bg-green-400/80 transition duration-300 ease-in-out transform hover:scale-105 text-base md:text-sm lg:text-base">
+          {/* <li className="ml-auto bg-green-400 px-4 md:px-5 lg:px-6 py-2 md:py-1.5 lg:py-2 rounded-full font-semibold hover:bg-green-400/80 transition duration-300 ease-in-out transform hover:scale-105 text-base md:text-sm lg:text-base">
             <NavLink to="/login" className="text-gray-600 dark:text-gray-900">Get In</NavLink>
-          </li>
+          </li> */}
         </ul>
 
         {/* Theme Toggle always visible */}
         <div className="ml-4 flex-shrink-0">
           <ThemeToggle />
         </div>
+
+        <li className="flex justify-center mt-2">
+              <ChangeLanguage/>
+            </li>
 
         {/* Mobile Hamburger */}
         <button
@@ -108,7 +113,7 @@ export default function Topnav(){
           </li>
             <li className="text-gray-700 dark:text-gray-200 relative group">
               <NavLink to="/ai-chatbot" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out" onClick={() => setMenuOpen(false)}>
-                     career path AI assistant
+                     career path AI assistant3
                 <div className="absolute w-0 bg-gray-400 dark:bg-gray-700 left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
               </NavLink>
             </li>
@@ -118,6 +123,11 @@ export default function Topnav(){
             <li className="flex justify-center mt-2">
               <ThemeToggle />
             </li>
+
+            <li className="flex justify-center mt-2">
+              <ChangeLanguage/>
+            </li>
+
           </ul>
         </div>
         

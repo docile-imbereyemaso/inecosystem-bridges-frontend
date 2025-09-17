@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaWhatsapp, FaPhone, FaUsers, FaSearch, FaUserCircle, FaEnvelope, FaEye, FaTimes, FaDownload, FaFileAlt, FaGraduationCap } from 'react-icons/fa';
 import { API_URL } from '../../lib/API';
 import { useAuth } from '../../lib/useAuth';
+import ConnectedUserCard from '../../common-components/ConnectedUserCard';
 
 const MyCommunity = () => {
   const [connections, setConnections] = useState([]);
@@ -83,7 +84,7 @@ Looking forward to hearing from you!`
   };
 
   const handleViewDetails = (connection) => {
-    setSelectedUser(connection.connected_user);
+    setSelectedUser(connection);
     setShowModal(true);
   };
 
@@ -111,6 +112,8 @@ Looking forward to hearing from you!`
     });
   };
 
+
+  console.log(filteredConnections)
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -197,7 +200,9 @@ Looking forward to hearing from you!`
                   {/* User Avatar and Name */}
                   <div className="flex items-center mb-4">
                     <div className="flex-shrink-0">
-                      <FaUserCircle className="h-12 w-12 text-gray-400" />
+                      <img src={connection.connected_user.profile_image || `https://ui-avatars.com/api/?name=${connection.connected_user.first_name} ${connection.connected_user.last_name}&background=0D8ABC&color=fff`} 
+                      alt={`${connection.connected_user.first_name} ${connection.connected_user.last_name}`} className="w-16 h-16 rounded-full object-cover border-2 border-gray-300" />
+
                     </div>
                     <div className="ml-4">
                       <h2 className="text-lg font-semibold text-gray-900">
@@ -209,19 +214,7 @@ Looking forward to hearing from you!`
                     </div>
                   </div>
 
-                  {/* Contact Information */}
-                  <div className="space-y-2 mb-6">
-                    <div className="flex items-center text-sm text-gray-600">
-                      <FaEnvelope className="mr-2 text-gray-400" />
-                      <a href={`mailto:${connection.connected_user.email}`} className="hover:text-blue-600 truncate">
-                        {connection.connected_user.email}
-                      </a>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-600">
-                      <FaPhone className="mr-2 text-gray-400" />
-                      <span>{connection.connected_user.phone}</span>
-                    </div>
-                  </div>
+                
 
                   {/* Connection Date */}
                   <div className="text-xs text-gray-500 mb-4">
@@ -285,102 +278,10 @@ Looking forward to hearing from you!`
                   </div>
 
                   {/* Personal Information */}
-                  <div className="mb-6">
-                    <h4 className="text-md font-semibold text-gray-800 mb-3">Personal Information</h4>
-                    <div className="flex items-center mb-4">
-                      <div className="flex-shrink-0 mr-4">
-                        {selectedUser.profile_image ? (
-                          <img 
-                            src={selectedUser.profile_image} 
-                            alt={`${selectedUser.first_name} ${selectedUser.last_name}`}
-                            className="h-16 w-16 rounded-full object-cover"
-                          />
-                        ) : (
-                          <FaUserCircle className="h-16 w-16 text-gray-400" />
-                        )}
-                      </div>
-                      <div>
-                        <p className="text-lg font-semibold text-gray-900">
-                          {selectedUser.first_name} {selectedUser.last_name}
-                        </p>
-                        {selectedUser.company_name && (
-                          <p className="text-sm text-gray-600">{selectedUser.company_name}</p>
-                        )}
-                        {selectedUser.status && (
-                          <span className={`inline-block px-2 py-1 text-xs rounded-full mt-2 ${
-                            selectedUser.status === 'active' 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-gray-100 text-gray-800'
-                          }`}>
-                            {selectedUser.status}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
+                 <ConnectedUserCard connection={selectedUser} />
 
-                  {/* Contact Information */}
-                  <div className="mb-6">
-                    <h4 className="text-md font-semibold text-gray-800 mb-3">Contact Information</h4>
-                    <div className="space-y-3">
-                      <div className="flex items-center">
-                        <FaEnvelope className="mr-3 text-gray-400" />
-                        <span className="text-gray-700">{selectedUser.email}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <FaPhone className="mr-3 text-gray-400" />
-                        <span className="text-gray-700">{selectedUser.phone}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Attached Documents */}
-                  <div className="mb-6">
-                    <h4 className="text-md font-semibold text-gray-800 mb-3">Attached Documents</h4>
-                    <div className="space-y-3">
-                      {/* Resume/CV */}
-                      {selectedUser.resume_url ? (
-                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
-                          <div className="flex items-center">
-                            <FaFileAlt className="mr-3 text-blue-500" />
-                            <span className="text-gray-700">Resume/CV</span>
-                          </div>
-                          <button
-                            onClick={() => handleDownload(selectedUser.resume_url, `${selectedUser.first_name}_${selectedUser.last_name}_CV.pdf`)}
-                            className="text-blue-600 hover:text-blue-800"
-                          >
-                            <FaDownload />
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="flex items-center p-3 bg-gray-50 rounded-md opacity-50">
-                          <FaFileAlt className="mr-3 text-gray-400" />
-                          <span className="text-gray-500">No resume uploaded</span>
-                        </div>
-                      )}
-
-                      {/* Academic Records */}
-                      {selectedUser.diploma_url ? (
-                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
-                          <div className="flex items-center">
-                            <FaGraduationCap className="mr-3 text-purple-500" />
-                            <span className="text-gray-700">Academic Records</span>
-                          </div>
-                          <button
-                            onClick={() => handleDownload(selectedUser.diploma_url, `${selectedUser.first_name}_${selectedUser.last_name}_Diploma.pdf`)}
-                            className="text-blue-600 hover:text-blue-800"
-                          >
-                            <FaDownload />
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="flex items-center p-3 bg-gray-50 rounded-md opacity-50">
-                          <FaGraduationCap className="mr-3 text-gray-400" />
-                          <span className="text-gray-500">No academic records uploaded</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+            
+                  
                 </div>
 
                 {/* Modal footer */}

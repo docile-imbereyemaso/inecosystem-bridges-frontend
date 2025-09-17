@@ -10,12 +10,13 @@ import { NotificationBell } from "../../pages/NotificationPage";
 const navItems= [
   {
     icon: <FaThLarge />,
-    name: "Private sector Dashboard",
-    path: "/privateSector/profile",
+    name: "Dashboard",
+    path: "/privateSector/",
+    // path: "/privateSector/profile",
   },
   {
     icon: <FaUserCircle />,
-    name: "Private sector Profile",
+    name: "Profile",
     path: "/privateSector/profile",
   },
   {

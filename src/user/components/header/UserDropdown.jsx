@@ -63,7 +63,7 @@ export default function UserDropdown() {
           {
             isAuthenticated && <span className="mr-auto bg-red-400 px-4 md:px-5 lg:px-6 py-2 md:py-1.5 lg:py-2 
             rounded-full font-semibold hover:bg-red-400/80 transition duration-300 ease-in-out transform hover:scale-105 text-base md:text-sm lg:text-base">
-            <button onClick={logout} className="text-gray-600 dark:text-gray-900 cursor-pointer">Logout</button>
+            <button onClick={logout} className="text-gray-600 dark:text-gray-900 cursor-pointer">Logout </button>
          </span>
           }
       </Dropdown>
