@@ -141,7 +141,7 @@ const MainSection = () => {
                         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-xl p-6 shadow-lg hover:shadow-xl hover:bg-white/90 dark:hover:bg-gray-800/90 transition-all duration-300">
                             <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">
                                 Explore our space where both TVET graduates and students connect with industries, 
-                                discover job opportunities, internships, and career pathways that match their skills.
+                                discover job opportunities and internships that match their skills.
                             </p>
                             <Link 
                                 to="/jobBoard" 
@@ -166,7 +166,7 @@ const MainSection = () => {
                         <div className="flex items-center space-x-4">
                             <div className="text-center lg:text-right">
                                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-                                    Ask INECOSYSTEM AI
+                                    Find your career journey
                                 </h2>
                                 <div className="w-24 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto lg:ml-auto lg:mr-0 rounded-full"></div>
                             </div>
@@ -180,8 +180,7 @@ const MainSection = () => {
                     <div className="w-full lg:w-1/2">
                         <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-xl p-6 shadow-lg hover:shadow-xl hover:bg-white/90 dark:hover:bg-gray-800/90 transition-all duration-300">
                             <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">
-                                Not sure where to start? ASKINECO AI helps you explore career options, find 
-                                opportunities, and connect your skills to real jobs—all in one place.
+                                Not sure where to start? FIND YOUR CAREER JOURNEY guides you in exploring career options and shows you the specific schools where you can gain the right skills.
                             </p>
                             <Link 
                                 to="/ai-chatbot" 
