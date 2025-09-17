@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaWhatsapp, FaPhone, FaUsers, FaSearch, FaUserCircle, FaEnvelope } from 'react-icons/fa';
+import { FaWhatsapp, FaPhone, FaUsers, FaSearch, FaUserCircle, FaEnvelope, FaEye, FaTimes, FaDownload, FaFileAlt, FaGraduationCap } from 'react-icons/fa';
 import { API_URL } from '../../lib/API';
 import { useAuth } from '../../lib/useAuth';
 
@@ -9,7 +9,10 @@ const MyCommunity = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const {user} = useAuth();
+
   useEffect(() => {
     const fetchConnections = async () => {
       try {
@@ -26,6 +29,7 @@ const MyCommunity = () => {
         }
         
         const data = await response.json();
+        console.log('Fetched connections data:', data); 
         
         if (data.success) {
           setConnections(data.data);
@@ -40,10 +44,10 @@ const MyCommunity = () => {
         setLoading(false);
       }
     };
-if(user){
-    
-    fetchConnections();
-}
+
+    if(user){
+      fetchConnections();
+    }
   }, [user]);
 
   useEffect(() => {
@@ -59,17 +63,16 @@ if(user){
     setFilteredConnections(results);
   }, [searchTerm, connections]);
 
-const handleWhatsApp = (phone) => {
-  const cleanedPhone = phone.replace(/\D/g, ''); // keep only digits
-  const message = encodeURIComponent(
-    `Hello! I found you through my community on Ineco's platform. I'd like to connect and explore potential opportunities together. 
+  const handleWhatsApp = (phone) => {
+    const cleanedPhone = phone.replace(/\D/g, ''); // keep only digits
+    const message = encodeURIComponent(
+      `Hello! I found you through my community on Ineco's platform. I'd like to connect and explore potential opportunities together. 
 Looking forward to hearing from you!`
-  );
+    );
 
-  // Use ?text= and include the country code without +
-  window.open(`https://wa.me/25${cleanedPhone}?text=${message}`, '_blank');
-};
-
+    // Use ?text= and include the country code without +
+    window.open(`https://wa.me/25${cleanedPhone}?text=${message}`, '_blank');
+  };
 
   const handleCall = (phone) => {
     window.open(`tel:${phone}`, '_self');
@@ -77,6 +80,26 @@ Looking forward to hearing from you!`
 
   const handleEmail = (email) => {
     window.open(`mailto:${email}`, '_self');
+  };
+
+  const handleViewDetails = (connection) => {
+    setSelectedUser(connection.connected_user);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedUser(null);
+  };
+
+  const handleDownload = (fileUrl, fileName) => {
+    // Create a temporary anchor element to trigger download
+    const link = document.createElement('a');
+    link.href = fileUrl;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const formatDate = (dateString) => {
@@ -206,25 +229,172 @@ Looking forward to hearing from you!`
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex space-x-2 flex-wrap gap-2">
+                  <div className="space-y-2">
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleWhatsApp(connection.connected_user.phone)}
+                        className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md text-sm transition-colors"
+                      >
+                        <FaWhatsapp className="mr-2" />
+                        WhatsApp
+                      </button>
+                      <button
+                        onClick={() => handleCall(connection.connected_user.phone)}
+                        className="flex-1 flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md text-sm transition-colors"
+                      >
+                        <FaPhone className="mr-2" />
+                        Call
+                      </button>
+                    </div>
                     <button
-                      onClick={() => handleWhatsApp(connection.connected_user.phone)}
-                      className="flex-1 flex items-center justify-center bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-md text-sm transition-colors"
+                      onClick={() => handleViewDetails(connection)}
+                      className="w-full flex items-center justify-center bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded-md text-sm transition-colors"
                     >
-                      <FaWhatsapp className="mr-2" />
-                      WhatsApp
-                    </button>
-                    <button
-                      onClick={() => handleCall(connection.connected_user.phone)}
-                      className="flex-1 flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md text-sm transition-colors"
-                    >
-                      <FaPhone className="mr-2" />
-                      Call
+                      <FaEye className="mr-2" />
+                      View Details
                     </button>
                   </div>
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* User Details Modal */}
+        {showModal && selectedUser && (
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+              {/* Background overlay */}
+              <div 
+                className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                onClick={closeModal}
+              ></div>
+
+              {/* Modal content */}
+              <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                {/* Modal header */}
+                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-medium text-gray-900">User Details</h3>
+                    <button
+                      onClick={closeModal}
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      <FaTimes className="h-6 w-6" />
+                    </button>
+                  </div>
+
+                  {/* Personal Information */}
+                  <div className="mb-6">
+                    <h4 className="text-md font-semibold text-gray-800 mb-3">Personal Information</h4>
+                    <div className="flex items-center mb-4">
+                      <div className="flex-shrink-0 mr-4">
+                        {selectedUser.profile_image ? (
+                          <img 
+                            src={selectedUser.profile_image} 
+                            alt={`${selectedUser.first_name} ${selectedUser.last_name}`}
+                            className="h-16 w-16 rounded-full object-cover"
+                          />
+                        ) : (
+                          <FaUserCircle className="h-16 w-16 text-gray-400" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="text-lg font-semibold text-gray-900">
+                          {selectedUser.first_name} {selectedUser.last_name}
+                        </p>
+                        {selectedUser.company_name && (
+                          <p className="text-sm text-gray-600">{selectedUser.company_name}</p>
+                        )}
+                        {selectedUser.status && (
+                          <span className={`inline-block px-2 py-1 text-xs rounded-full mt-2 ${
+                            selectedUser.status === 'active' 
+                              ? 'bg-green-100 text-green-800' 
+                              : 'bg-gray-100 text-gray-800'
+                          }`}>
+                            {selectedUser.status}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Contact Information */}
+                  <div className="mb-6">
+                    <h4 className="text-md font-semibold text-gray-800 mb-3">Contact Information</h4>
+                    <div className="space-y-3">
+                      <div className="flex items-center">
+                        <FaEnvelope className="mr-3 text-gray-400" />
+                        <span className="text-gray-700">{selectedUser.email}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <FaPhone className="mr-3 text-gray-400" />
+                        <span className="text-gray-700">{selectedUser.phone}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Attached Documents */}
+                  <div className="mb-6">
+                    <h4 className="text-md font-semibold text-gray-800 mb-3">Attached Documents</h4>
+                    <div className="space-y-3">
+                      {/* Resume/CV */}
+                      {selectedUser.resume_url ? (
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
+                          <div className="flex items-center">
+                            <FaFileAlt className="mr-3 text-blue-500" />
+                            <span className="text-gray-700">Resume/CV</span>
+                          </div>
+                          <button
+                            onClick={() => handleDownload(selectedUser.resume_url, `${selectedUser.first_name}_${selectedUser.last_name}_CV.pdf`)}
+                            className="text-blue-600 hover:text-blue-800"
+                          >
+                            <FaDownload />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center p-3 bg-gray-50 rounded-md opacity-50">
+                          <FaFileAlt className="mr-3 text-gray-400" />
+                          <span className="text-gray-500">No resume uploaded</span>
+                        </div>
+                      )}
+
+                      {/* Academic Records */}
+                      {selectedUser.diploma_url ? (
+                        <div className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
+                          <div className="flex items-center">
+                            <FaGraduationCap className="mr-3 text-purple-500" />
+                            <span className="text-gray-700">Academic Records</span>
+                          </div>
+                          <button
+                            onClick={() => handleDownload(selectedUser.diploma_url, `${selectedUser.first_name}_${selectedUser.last_name}_Diploma.pdf`)}
+                            className="text-blue-600 hover:text-blue-800"
+                          >
+                            <FaDownload />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex items-center p-3 bg-gray-50 rounded-md opacity-50">
+                          <FaGraduationCap className="mr-3 text-gray-400" />
+                          <span className="text-gray-500">No academic records uploaded</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Modal footer */}
+                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                  <button
+                    type="button"
+                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                    onClick={closeModal}
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

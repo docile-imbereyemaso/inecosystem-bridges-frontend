@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-
-import {API_URL} from '../../lib/API.js'
+import { FaWhatsapp } from "react-icons/fa";
+import { API_URL } from '../../lib/API.js';
 
 const Opportunities = () => {
   const token = localStorage.getItem("token_ineco");
@@ -27,42 +27,29 @@ const Opportunities = () => {
   useEffect(() => {
     const fetchOpportunities = async () => {
       try {
-        const response = await fetch(
-          `${API_URL}admin/getopportunities`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await fetch(`${API_URL}admin/getopportunities`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         const data = await response.json();
-        if (data.success) {
-          setOpportunities(data.opportunities);
-        }
+        if (data.success) setOpportunities(data.opportunities);
       } catch (error) {
         console.error("Error fetching opportunities:", error);
       }
     };
-
     fetchOpportunities();
   }, []);
 
-  // Handle form submission
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(
-        `${API_URL}admin/addopportunity`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-
+      const response = await fetch(`${API_URL}admin/addopportunity`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(formData),
+      });
       const data = await response.json();
       if (data.success) {
         alert("Opportunity added successfully!");
@@ -89,6 +76,20 @@ const Opportunities = () => {
     } catch (error) {
       console.error("Error adding opportunity:", error);
     }
+  };
+
+  // WhatsApp functionality
+  const handleWhatsAppApply = (linkOrText) => {
+    // linkOrText could be a phone number or message text
+    // If link starts with "http" we just open it
+    if (linkOrText.startsWith("http")) {
+      window.open(linkOrText, "_blank");
+      return;
+    }
+    // Otherwise send message via WhatsApp
+    const phone = "250788123456"; // example phone, replace with real contact if available
+    const message = encodeURIComponent(linkOrText);
+    window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
   };
 
   return (
@@ -125,14 +126,16 @@ const Opportunities = () => {
               <td className="p-2">{opp.location}</td>
               <td className="p-2">
                 {opp.application_link ? (
-                  <a
-                    href={opp.application_link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded"
+                  <button
+                    onClick={() =>
+                      handleWhatsAppApply(
+                        `Hello! I want to apply for the opportunity: ${opp.title}`
+                      )
+                    }
+                    className="bg-green-600 hover:bg-green-700 px-3 py-1 rounded flex items-center gap-2"
                   >
-                    Apply
-                  </a>
+                    <FaWhatsapp /> Apply
+                  </button>
                 ) : (
                   <span className="text-slate-400">N/A</span>
                 )}
