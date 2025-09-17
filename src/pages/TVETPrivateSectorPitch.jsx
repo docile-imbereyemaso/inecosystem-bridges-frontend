@@ -167,9 +167,9 @@ export default function TVETPrivateSectorPitch() {
           className="grid lg:grid-cols-3 gap-10 items-start"
         >
           <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow">
-            <h3 className="text-xl font-semibold mb-2 text-blue-600">See How It Works</h3>
+            <h3 className="text-xl font-semibold mb-2 text-blue-600">Building Stronger Future, Together.</h3>
             <p className="text-gray-600 mb-4">
-              Learn how to post jobs, review portfolios, and build internships.
+              Private sector engagement with RTB creates opportunities for students, strengthens industries, and drives national growth.
             </p>
             <div className="aspect-video overflow-hidden rounded-xl shadow">
               <iframe
@@ -213,10 +213,10 @@ export default function TVETPrivateSectorPitch() {
           className="bg-gradient-to-r from-green-50 to-green-100 p-10 rounded-3xl shadow text-center"
         >
           <h3 className="text-2xl font-bold mb-2 text-blue-600">
-            Join Rwanda’s Future-Focused Employers
+            Building Stronger Future, Together.
           </h3>
           <p className="text-gray-700 mb-6">
-            Start hiring, training, and investing in tomorrow’s workforce today.
+            Private sectors, join us to collaborate in nurturing a skilled workforce that meets today’s challenges and tomorrow’s opportunities 👍.
           </p>
           <motion.a
             whileHover={{ scale: 1.05 }}

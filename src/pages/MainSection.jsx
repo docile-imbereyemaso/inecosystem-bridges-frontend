@@ -200,8 +200,8 @@ const MainSection = () => {
                 className={getSectionClasses("cta")}
             >
                 <div className="mx-auto max-w-2xl">
-                    <h2 className="text-3xl font-bold mb-8 text-center">
-        Get more on our platform
+                    <h2 className="text-3xl dark:text-gray-100 text-gray-900 font-bold mb-8 text-center">
+        Get more on our platforms
       </h2>
                     <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-blue-50 to-indigo-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 border border-gray-200/60 dark:border-gray-600/60 rounded-2xl p-8 sm:p-10 shadow-xl hover:shadow-2xl transition-all duration-500">
                         {/* Background decoration */}
