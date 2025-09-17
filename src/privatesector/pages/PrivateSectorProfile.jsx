@@ -222,8 +222,16 @@ export default function PrivateSectorProfiles() {
     <>
       <PageMeta title="INECOSYSTEM BRIDGES" description="" />
       <PageBreadcrumb pageTitle="Profile" />
-
-      <div className="space-y-6">
+        {
+          loading ? (
+            <div className="justify-center mt-[220px]">
+              <FaSpinner className="animate-spin h-20 w-20 text-blue-600 mx-auto dark:text-gray-100" />
+              <br />
+              <p className="text-center text-gray-600 dark:text-gray-400">Loading profile...</p>
+            </div>
+          ) : null
+        }
+      <div className={loading ? 'p-6 space-y-6 pointer-events-none hidden' : 'p-6 space-y-6'}>
         <header>
           <h1 className="text-2xl font-semibold text-gray-800 dark:text-white/90 mb-2">
             Company Profile
@@ -234,16 +242,10 @@ export default function PrivateSectorProfiles() {
         </header>
 
         {/* Profile Picture Upload */}
-        {
-          loading ? (
-            <div className="min-h-screen justify-center mt-[220px]">
-              <FaSpinner className="animate-spin h-20 w-20 text-blue-600 mx-auto dark:text-gray-100" />
-              <br />
-              <p className="text-center text-gray-600 dark:text-gray-400">Loading profile...</p>
-            </div>
-          ) : null
-        }
-        <section className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] mb-4 flex items-center gap-6">
+        <div className={loading ? 'fixed bg-black/40 pointer-events-none overflow-x-hidden' : 'block'}>
+
+        
+        <section className='rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] mb-4 flex items-center gap-6'>
           <div>
             <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-blue-500 bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
               {profileImage ? (
@@ -315,7 +317,7 @@ export default function PrivateSectorProfiles() {
             <h3 className="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">Locations</h3>
             <div className="space-y-4">
               <div className="space-y-2">
-                {companyData.locations.map((location, index) => (
+                {(companyData.locations = ["Kigali Rwanda"]).map((location, index) => (
                   <div
                     key={`${location}-${index}`}
                     className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
@@ -356,7 +358,7 @@ export default function PrivateSectorProfiles() {
             <h3 className="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">Contact Information</h3>
             <div className="space-y-3">
               <div className="space-y-2">
-                {companyData.contacts.map((contact, index) => (
+                {(companyData.contacts = [{ type: "Email", value: companyData.email }, { type: "Phone", value: companyData.phone }]).map((contact, index) => (
                   <div
                     key={`${contact.type}-${contact.value}-${index}`}
                     className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
@@ -408,7 +410,7 @@ export default function PrivateSectorProfiles() {
             <h3 className="mb-3 text-lg font-semibold text-gray-800 dark:text-white/90">What We Offer</h3>
             <div className="space-y-3">
               <div className="flex flex-wrap gap-2">
-                {companyData.offerings.map((offering, index) => (
+                {companyData.sectors.map((offering, index) => (
                   <span
                     key={`${offering}-${index}`}
                     className="inline-flex items-center gap-1 rounded-full bg-blue-600 px-3 py-1 text-sm text-white"
@@ -452,7 +454,7 @@ export default function PrivateSectorProfiles() {
             className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
             onClick={fetchProfile}
             disabled={loading}
-          >
+            >
             Cancel
           </button>
           <button
@@ -460,9 +462,10 @@ export default function PrivateSectorProfiles() {
             onClick={saveCompany}
             className={`rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 ${loading ? "opacity-60 cursor-not-allowed" : ""}`}
             disabled={loading}
-          >
+            >
             {loading ? 'Saving...' : 'Save Changes'}
           </button>
+            </div>
         </div>
       </div>
     </>
