@@ -1,7 +1,8 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { motion } from "framer-motion";
 import { Link, animateScroll as scroll } from "react-scroll";
 import Navbar from "../common-components/Navbar";
+import Topnav from '../common-components/Topnav';
 import FooterComponent from "./FooterComponent";
 
 const fadeUp = {
@@ -14,9 +15,30 @@ const fadeUp = {
 };
 
 export default function TVETPrivateSectorPitch() {
+  useEffect(() => {
+      const nav = document.getElementById("navigation");
+  
+      const handleScroll = () => {
+        if (!nav) return;
+        const scroll = window.scrollY;
+        if (scroll < 100) {
+          nav.classList.add("hidden");
+        } else {
+          nav.classList.remove("hidden");
+        }
+      };
+  
+      window.addEventListener("scroll", handleScroll);
+  
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+  
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       {/* NAVBAR */}
+                    <div id='navigation' className="hidden top-12 fixed z-90 w-full"> 
+                      <Topnav />
+                    </div>
       <div className="absolute top-0 left-0 w-full z-40 bg-transparent">
         <div className="px-4 sm:px-6 lg:px-8 py-4">
           <Navbar />
