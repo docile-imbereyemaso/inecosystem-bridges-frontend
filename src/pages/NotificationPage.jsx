@@ -250,8 +250,8 @@ const NotificationPage = () => {
       </div>
 
       {loading ? (
-        <div className="flex justify-center items-center py-12">
-          <FaSpinner className="animate-spin text-blue-500 text-2xl mr-2" />
+        <div className="flex justify-center items-center py-12 space-x-3">
+          <FaSpinner className="animate-spin text-blue-500 text-[50px] mr-2" />
           <span className="text-gray-500">Loading notifications...</span>
         </div>
       ) : (

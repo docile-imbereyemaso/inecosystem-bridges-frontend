@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { FiPlus, FiTrash2, FiExternalLink } from "react-icons/fi";
+import { FiPlus, FiTrash2, FiExternalLink} from "react-icons/fi";
+import {FaSpinner} from "react-icons/fa";
 import PageBreadcrumb from "../components/common/PageBreadCrumb";
 import PageMeta from "../components/common/PageMeta";
 import { useAuth } from "../../lib/useAuth";
@@ -220,7 +221,14 @@ const saveJob = async (e) => {
         </div>
 
         <div className="grid gap-4">
-          {loading ? <div>Loading jobs...</div> : jobs.length === 0 ? <div>No jobs found.</div> : (
+          {loading ? (
+            <div className="flex justify-center items-center py-12 space-x-3">
+               <FaSpinner className="animate-spin h-10 w-10 text-blue-600 dark:text-blue-100" />
+              <span className="text-gray-500">Loading jobs...</span>
+            </div>
+          ) : jobs.length === 0 ? (
+            <div>No jobs found.</div>
+          ) : (
             jobs.map(job => (
               <div key={job.job_id} className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03]">
                 <div className="flex justify-between items-start mb-4">

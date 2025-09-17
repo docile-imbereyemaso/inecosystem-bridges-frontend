@@ -9,7 +9,7 @@ import {
   FiCalendar,
   FiUser,
 } from "react-icons/fi";
-
+import {FaSpinner} from "react-icons/fa";
 
 const Contributions = () => {
   const [contributions, setContributions] = useState([]);
@@ -261,9 +261,12 @@ const Contributions = () => {
 
         {/* Contributions List */}
         <div className="grid gap-4">
-          {loading ? (
-            <div className="text-white text-center py-8">Loading contributions...</div>
-          ) : contributions.length === 0 ? (
+          {loading ?  (
+                  <div className="flex justify-center items-center py-12 space-x-3">
+                    <FaSpinner className="animate-spin h-10 w-10 text-blue-600 dark:text-blue-100" />
+                    <span className="text-gray-500">Loading contributions...</span>
+                  </div>
+                )  : contributions.length === 0 ? (
             <div className="bg-slate-800 border border-slate-700 rounded-lg p-12 text-center">
               <FiFileText className="w-12 h-12 text-slate-500 mx-auto mb-4" />
               <h3 className="text-slate-400 text-lg mb-2">No contributions yet</h3>
