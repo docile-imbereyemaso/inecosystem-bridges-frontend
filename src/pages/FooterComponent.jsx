@@ -25,14 +25,15 @@ const FooterComponent = () => {
           {/* Center Section - Partners */}
           <div>
             <h3 className="text-white dark:text-gray-200 font-medium mb-6">Our partners</h3>
-            <div className="space-y-3">
-              <a href="https://www.rtb.gov.rw/" className="text-gray-400 dark:text-gray-500 text-sm hover:text-gray-300 dark:hover:text-gray-400 cursor-pointer transition-colors" target='_blank'>
+            <div className="space-y-3 ">
+              <a href="https://www.rtb.gov.rw/" className="block text-gray-400 dark:text-gray-500 text-sm hover:text-gray-300 dark:hover:text-gray-400 cursor-pointer transition-colors" target='_blank'>
                 Rwanda TVET Board
+              </a>
+              <a href="https://www.the-gym.rw/" className="block text-gray-400 dark:text-gray-500 text-sm hover:text-gray-300 dark:hover:text-gray-400 cursor-pointer transition-colors" target='_blank'>
+                The Gym Rwanda
               </a>
        
-                  <a href="https://www.rtb.gov.rw/" className="text-gray-400 dark:text-gray-500 text-sm hover:text-gray-300 dark:hover:text-gray-400 cursor-pointer transition-colors" target='_blank'>
-                Rwanda TVET Board
-              </a>
+   
             </div>
           </div>
 
@@ -40,7 +41,7 @@ const FooterComponent = () => {
         </div>
              <hr />
 
-              <div className="flex space-x-3 justify-center">
+              <div className="flex space-x-3 justify-center max-md:text-base">
             
            <p className='text-xl dark:text-gray-300'> &copy;2025 Bravos team</p>
            <p className='text-gray-400 text-xl'>The Gym Rwanda</p>
