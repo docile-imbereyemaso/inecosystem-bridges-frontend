@@ -162,7 +162,7 @@ export default function TVETPrivateSectorPitch() {
           </div>
 
           <aside className="bg-white p-6 rounded-2xl shadow">
-            <h4 className="font-semibold mb-4 text-blue-500">Sample Graduate Portfolios</h4>
+            <h4 className="font-semibold mb-4 text-blue-500">Let's empower the skills together</h4>
             <div className="space-y-4">
               {[
                 "https://tse1.mm.bing.net/th/id/OIP.z7vdFvsoYe4Nmr_ia-lRyAHaE8?pid=Api",

@@ -30,7 +30,9 @@ const FooterComponent = () => {
                 Rwanda TVET Board
               </a>
        
-                 
+                  <a href="https://www.rtb.gov.rw/" className="text-gray-400 dark:text-gray-500 text-sm hover:text-gray-300 dark:hover:text-gray-400 cursor-pointer transition-colors" target='_blank'>
+                Rwanda TVET Board
+              </a>
             </div>
           </div>
  <div className="flex space-x-3">

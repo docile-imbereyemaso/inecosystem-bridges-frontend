@@ -55,8 +55,9 @@ function Navbar() {
               <div className="absolute w-0 bg-green-400  left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
             </NavLink>
           </li>
-          <li className="text-gray-700 dark:text-gray-200 relative group">career journey
+          <li className="text-gray-700 dark:text-gray-200 relative group">
             <NavLink to="/ai-chatbot" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out">
+            career path AI assistant
               <div className="absolute w-0 bg-green-400  left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
             </NavLink>
           </li>
@@ -114,7 +115,7 @@ function Navbar() {
           </li>
             <li className="text-gray-700 dark:text-gray-200 relative group">
               <NavLink to="/ai-chatbot" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out" onClick={() => setMenuOpen(false)}>
-                career journey
+                    career path AI assistant
                 <div className="absolute w-0 bg-gray-400 dark:bg-gray-700 left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
               </NavLink>
             </li>
