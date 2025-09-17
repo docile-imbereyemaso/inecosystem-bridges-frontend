@@ -223,43 +223,7 @@ console.log("Profile images: ",profileImage);
 
             
       </div>
-      <div className="flex items-center justify-between">
       
-
-         <div className="dark:bg-gray-900 rounded-lg shadow-sm p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Find your dream job in your sector </label>
-             <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:focus:ring-cyan-700 focus:border-cyan-500 dark:focus:border-cyan-700 bg-gray-400 dark:bg-gray-800">
-              <option>Select sector</option>
-              <option>Agriculture and Food Technology</option>
-              <option>Automotive Technology</option>
-              <option>Business and Commerce</option>
-              <option>Construction and Building Technology</option>
-              <option>Electrical and Electronics</option>
-              <option>Engineering Technology</option>
-              <option>Healthcare and Medical Technology</option>
-              <option>Hospitality and Tourism</option>
-              <option>Information and Communication Technology (ICT)</option>
-              <option>Manufacturing and Production</option>
-              <option>Maritime and Fisheries</option>
-              <option>Mechanical Technology</option>
-              <option>Renewable Energy and Environmental Technology</option>
-              <option>Textile and Garment Technology</option>
-              <option>Transportation and Logistics</option>
-              <option>Beauty and Cosmetology</option>
-              <option>Culinary Arts and Food Services</option>
-              <option>Home Economics and Family Studies</option>
-              <option>Media and Creative Arts</option>
-              <option>Mining and Metallurgy</option>
-            </select>
-          </div>
-          
-       
-        </div>
-      </div>
-        
-      </div>
       <div className="space-y-4">
         {loading ? (
                     <div>Loading jobs...</div>
@@ -322,38 +286,7 @@ console.log("Profile images: ",profileImage);
 
   const PrivateSectorTab = () => (
     <div className="space-y-6">
-      <div className="dark:bg-gray-900 rounded-lg shadow-sm p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Sectors that we operate in</label>
-             <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:focus:ring-cyan-700 focus:border-cyan-500 dark:focus:border-cyan-700 bg-gray-400 dark:bg-gray-800">
-              <option>Select sector</option>
-              <option>Agriculture and Food Technology</option>
-              <option>Automotive Technology</option>
-              <option>Business and Commerce</option>
-              <option>Construction and Building Technology</option>
-              <option>Electrical and Electronics</option>
-              <option>Engineering Technology</option>
-              <option>Healthcare and Medical Technology</option>
-              <option>Hospitality and Tourism</option>
-              <option>Information and Communication Technology (ICT)</option>
-              <option>Manufacturing and Production</option>
-              <option>Maritime and Fisheries</option>
-              <option>Mechanical Technology</option>
-              <option>Renewable Energy and Environmental Technology</option>
-              <option>Textile and Garment Technology</option>
-              <option>Transportation and Logistics</option>
-              <option>Beauty and Cosmetology</option>
-              <option>Culinary Arts and Food Services</option>
-              <option>Home Economics and Family Studies</option>
-              <option>Media and Creative Arts</option>
-              <option>Mining and Metallurgy</option>
-            </select>
-          </div>
-          
-       
-        </div>
-      </div>
+      
 
       <div className="flex items-center justify-between">
         <div className="text-gray-700 dark:text-gray-300">
@@ -409,52 +342,26 @@ console.log("Profile images: ",profileImage);
 
   const OtherOpportunitiesTab = () => (
     <div className="space-y-6">
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-        <p className="text-gray-700 dark:text-gray-300 mb-4">
-          In this section we've collected 300+ opportunities that aren't quite a fit our main board – including lists of courses, organisations, internships and other resources. These primarily focus on skill-building and career development, though also contain opportunities to help solve pressing global problems.
-        </p>
-        <p className="text-gray-700 dark:text-gray-300">
-          We keep these lists up to date and appreciate any suggestions for additions and feedback. If you have any,{' '}
-          <a 
-            href="mailto:feedback@yourcompany.com?subject=Feedback&body=Hi,%0A%0AI would like to provide feedback about:%0A%0A"
-            className="text-cyan-500 dark:text-cyan-400 hover:text-cyan-600 dark:hover:text-cyan-300 underline"
-          >
-            let us know!
-          </a>
-        </p>
-      </div>
-           <div className="dark:bg-gray-900 rounded-lg shadow-sm p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Sectors that you are interested in </label>
-             <select className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:focus:ring-cyan-700 focus:border-cyan-500 dark:focus:border-cyan-700 bg-gray-400 dark:bg-gray-800">
-              <option>Select sector</option>
-              <option>Agriculture and Food Technology</option>
-              <option>Automotive Technology</option>
-              <option>Business and Commerce</option>
-              <option>Construction and Building Technology</option>
-              <option>Electrical and Electronics</option>
-              <option>Engineering Technology</option>
-              <option>Healthcare and Medical Technology</option>
-              <option>Hospitality and Tourism</option>
-              <option>Information and Communication Technology (ICT)</option>
-              <option>Manufacturing and Production</option>
-              <option>Maritime and Fisheries</option>
-              <option>Mechanical Technology</option>
-              <option>Renewable Energy and Environmental Technology</option>
-              <option>Textile and Garment Technology</option>
-              <option>Transportation and Logistics</option>
-              <option>Beauty and Cosmetology</option>
-              <option>Culinary Arts and Food Services</option>
-              <option>Home Economics and Family Studies</option>
-              <option>Media and Creative Arts</option>
-              <option>Mining and Metallurgy</option>
-            </select>
+       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+        <div className="flex flex-col lg:flex-row gap-4 mb-6">
+          <div className="flex-1 relative">
+            <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 w-5 h-5" />
+            <input
+              type="text"
+              placeholder="Keywords"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-cyan-500 dark:focus:ring-cyan-700 focus:border-cyan-500 dark:focus:border-cyan-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+            />
           </div>
-          
-       
+          <button className="flex items-center gap-2 bg-cyan-500 dark:bg-cyan-700 text-white px-4 py-2 rounded-lg hover:bg-cyan-600 dark:hover:bg-cyan-800 transition-colors">
+            <FiBell className="w-4 h-4" />
+            Search your opportunities
+          </button>
         </div>
+      
+
+            
       </div>
+        
 
      
 
@@ -490,8 +397,11 @@ console.log("Profile images: ",profileImage);
                   </button>
                 </div>
               </div>
+              
             </div>
+            <a href="#" className='block text-white hover:underline mt-4 bg-indigo-700/50 rounded-md px-3 py-5 w-fit font-semibold hover:bg-indigo-600 transition-all duration-300 ease-in-out'>View more</a>
           </div>
+      
         ))}
       </div>
     </div>
@@ -526,7 +436,7 @@ console.log("Profile images: ",profileImage);
               <Topnav />
               </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div  className="mt-10 z-10">
+      <div  className="mt-0 z-10">
            <Navbar />
       </div>
         {/* Hero Section */}
