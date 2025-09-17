@@ -80,7 +80,7 @@ function Navbar() {
         <div className="ml-4 flex-shrink-0">
           <ThemeToggle />
         </div>
-
+         
         {/* Mobile Hamburger */}
         <button
           className={`md:hidden flex items-center px-3 py-2 border rounded border-gray-400 transition-colors duration-300 ${menuOpen ? 'bg-gray-100 dark:bg-gray-900' : 'bg-transparent'} text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-300`}
@@ -91,6 +91,10 @@ function Navbar() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
+
+         <li className="ml-auto">
+           <ChangeLanguage/>
+          </li>
       </div>
 
       {/* Mobile Menu & Overlay */}
