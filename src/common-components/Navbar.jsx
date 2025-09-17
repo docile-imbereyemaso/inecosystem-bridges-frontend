@@ -28,7 +28,7 @@ function Navbar() {
         {/* Logo */}
   <NavLink to="/" className="text-lg md:text-base font-bold text-gray-900 dark:text-white">
   <div className="relative group flex items-center gap-x-2">
-      <img src={logo} alt="inecosyste-logo" className="size-12 group-hover:scale-75 transform transition-transform duration-700 ease-in-out"/>
+      <img src={logo} alt="inecosyste-logo" className="size-12 group-hover:scale-75 transform transition-transform duration-700 ease-in-out max-md:size-6"/>
       
   </div>
    
