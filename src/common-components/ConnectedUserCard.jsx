@@ -53,7 +53,6 @@ const ConnectedUserCard = ({ connection }) => {
               <a
                 href={connected_user.resume}
                 target="_blank"
-                rel="noopener noreferrer"
                 className="text-sm bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition"
               >
                 View Resume 
