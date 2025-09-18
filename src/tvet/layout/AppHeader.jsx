@@ -118,7 +118,7 @@ const AppHeader= () => {
             {/* <!-- Dark Mode Toggler --> */}
             <ThemeToggleButton />
             {/* <!-- Dark Mode Toggler --> */}
-            <NotificationDropdown />
+          
             {/* <!-- Notification Menu Area --> */}
           </div>
           {/* <!-- User Area --> */}
