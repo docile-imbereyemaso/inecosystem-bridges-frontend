@@ -75,7 +75,6 @@ const SignUpForm = () => {
       else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email is invalid';
       if (!formData.phoneNumber) newErrors.phoneNumber = 'Phone number is required';
       if (!formData.status) newErrors.status = 'Status is required';
-      if (formData.sectors.length === 0) newErrors.sectors = 'At least one sector must be selected';
     } else if (step === 2) {
       if (!formData.password) newErrors.password = 'Password is required';
       else if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters';
