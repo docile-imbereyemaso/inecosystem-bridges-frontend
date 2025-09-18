@@ -91,7 +91,7 @@ const MainSection = () => {
                             </div>
                             <div className="text-center lg:text-left">
                                 <h2 className="text-3xl lg:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-                                    Chase Your Dreams Here
+                                    Find Your Dreams Here
                                 </h2>
                                 <div className="w-24 h-1 bg-gradient-to-r from-pink-500 to-rose-500 mx-auto lg:mx-0 rounded-full"></div>
                             </div>
