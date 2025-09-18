@@ -109,31 +109,31 @@ function Navbar() {
               <NavLink to="/" className="text-lg  md:text-base font-bold text-gray-900 dark:text-white">
   <div className="relative group  flex items-center w-full p-10 gap-x-2">
       <img src={logo} alt="inecosyste-logo" className="size-12 group-hover:scale-75 transform transition-transform duration-700 ease-in-out"/>
-      <h1 class="text-2xl md:block lg:block xl:block font-bold text-center text-gray-900 dark:text-gray-200">INECOSYSTEM-BRIGDE</h1>
+      <h1 class="text-2xl md:block lg:block xl:block font-bold text-center text-gray-200 dark:text-gray-200">INECOSYSTEM-BRIGDE</h1>
   </div>
    
   </NavLink>
 
-          <ul className="m-auto mt-[200px] w-11/12 max-w-sm flex flex-col gap-y-4 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg px-4 py-6 transition-all duration-300 transform scale-95 opacity-0 animate-navbarIn">
+          <ul className="m-auto w-11/12 max-w-sm flex flex-col gap-y-4 bg-gray-100 dark:bg-gray-900 rounded-lg shadow-lg px-4 py-6 transition-all duration-300 transform scale-95 opacity-0 animate-navbarIn">
             <li className="text-gray-700 dark:text-gray-200 relative group">
               <NavLink to="/jobBoard" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out" onClick={() => setMenuOpen(false)}>
-                 jobs
+                 job board
                 <div className="absolute w-0 bg-gray-400 dark:bg-gray-700 left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
               </NavLink>
             </li>
             <li className="text-gray-700 dark:text-gray-200 relative group">
-            <NavLink to="/tvetpitch" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out whitespace-nowrap">Join Us
+            <NavLink to="/tvetpitch" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out whitespace-nowrap">work with us
               <div className="absolute w-0 bg-green-400  left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
             </NavLink>
           </li>
               <li className="text-gray-700 dark:text-gray-200 relative group">
-            <NavLink to="/success-stories" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out">Impact
+            <NavLink to="/success-stories" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out">success stories
               <div className="absolute w-0 bg-green-400  left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
             </NavLink>
           </li>
             <li className="text-gray-700 dark:text-gray-200 relative group">
               <NavLink to="/ai-chatbot" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out" onClick={() => setMenuOpen(false)}>
-                    AI Career Guide
+                    career path AI assistant
                 <div className="absolute w-0 bg-gray-400 dark:bg-gray-700 left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
               </NavLink>
             </li>

@@ -171,16 +171,16 @@ export default function TVETPrivateSectorPitch() {
             <p className="text-gray-600 mb-4">
               Private sector engagement with RTB creates opportunities for students, strengthens industries, and drives national growth.
             </p>
-            <div className="aspect-video overflow-hidden rounded-xl shadow">
-              <iframe
-                src="https://www.youtube.com/embed/Ky7urFA1Fwg?autoplay=1&mute=1&loop=1&playlist=Ky7urFA1Fwg"
-                title="Platform demo"
-                className="w-full h-full"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
+<div className="aspect-video overflow-hidden rounded-xl shadow">
+  <iframe
+    src="https://www.youtube.com/embed/M45Nyw8y6xU"
+    title="Platform demo"
+    className="w-full h-full"
+    frameBorder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowFullScreen
+  ></iframe>
+</div>
           </div>
 
           <aside className="bg-white p-6 rounded-2xl shadow">
