@@ -37,14 +37,14 @@ function Navbar() {
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-x-4 items-center flex-1 justify-center text-sm md:text-base lg:text-lg">
           <li className="text-gray-700 dark:text-gray-200 relative group">
-            <NavLink to="/jobBoard" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out">jobs
+            <NavLink to="/jobBoard" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out">job board
               <div className="absolute w-0 bg-green-400  left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
             </NavLink>
           </li>
 
 
            <li className="text-gray-700 dark:text-gray-200 relative group">
-            <NavLink to="/tvetpitch" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out whitespace-nowrap">Join Us
+            <NavLink to="/tvetpitch" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out whitespace-nowrap">work with us
               <div className="absolute w-0 bg-green-400  left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
             </NavLink>
           </li>
@@ -52,13 +52,13 @@ function Navbar() {
 
 
           <li className="text-gray-700 dark:text-gray-200 relative group">
-            <NavLink to="/success-stories" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out">Impact
+            <NavLink to="/success-stories" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out">success stories
               <div className="absolute w-0 bg-green-400  left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
             </NavLink>
           </li>
           <li className="text-gray-700 dark:text-gray-200 relative group">
             <NavLink to="/ai-chatbot" className="group-hover:text-gray-500 dark:group-hover:text-gray-300 transition duration-300 ease-in-out">
-            AI Career Guide
+            career path AI assistant
               <div className="absolute w-0 bg-green-400  left-0 -bottom-2 h-1.5 group-hover:w-full transition-all duration-300 ease-in-out"></div>
             </NavLink>
           </li>
