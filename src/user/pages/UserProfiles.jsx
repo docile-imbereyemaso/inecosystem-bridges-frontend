@@ -271,7 +271,7 @@ export default function UserProfiles() {
               Resume(CV)
             </h4>
             {profile.resume ? (
-              <a href={profile.official_document} target="_blank" 
+              <a href={profile.resume} target="_blank" 
                        className="text-blue-400 underline">View Document</a>
             ) : (
               <span className="text-gray-400">No resume uploaded</span>
