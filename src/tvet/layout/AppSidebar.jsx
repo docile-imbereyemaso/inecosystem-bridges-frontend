@@ -16,12 +16,12 @@ import { useSidebar } from "../context/SidebarContext";
 const navItems = [
   {
     icon: <FaThLarge />,
-    name: "Tvet user Dashboard",
+    name: "RTB user Dashboard",
     path: "/tvet-dashboard",
   },
   {
     icon: <FaUserCircle />,
-    name: "Tvet User profile",
+    name: "RTB User profile",
     path: "/tvet/profile",
   },
   {

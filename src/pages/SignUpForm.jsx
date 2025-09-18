@@ -468,7 +468,7 @@ const SignUpForm = () => {
     ref={resumeInputRef}
     className="sr-only"
     onChange={handleChange}
-    accept=".pdf,.doc,.docx"
+    accept=".pdf,.jpg,.jpeg,.png"
   />
   <div 
     onClick={() => resumeInputRef.current.click()}

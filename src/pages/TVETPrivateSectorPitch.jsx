@@ -230,9 +230,7 @@ export default function TVETPrivateSectorPitch() {
 
       <footer className="text-sm text-gray-600 py-8 text-center">
         <FooterComponent />
-        <p>
-          © {new Date().getFullYear()} TVET-Connect — Empowering Rwanda’s future workforce
-        </p>
+       
       </footer>
     </div>
   );

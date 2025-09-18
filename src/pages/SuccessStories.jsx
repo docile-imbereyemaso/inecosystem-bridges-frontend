@@ -29,7 +29,7 @@ const SuccessStories = () => {
 
   const sectors = {
     'CONSTRUCTION AND BUILDING SERVICES': {
-      name: 'Construction and Building Services',
+      name: 'Construction and building services',
       color: 'bg-blue-500',
       stories: [
         {
@@ -66,8 +66,8 @@ const SuccessStories = () => {
         }
       ]
     },
-    'Technical Services': {
-      name: 'Technical Services',
+    'Technical services': {
+      name: 'Technical services',
       color: 'bg-orange-500',
        stories: [
         {
@@ -113,7 +113,7 @@ const SuccessStories = () => {
       ]
     },
     'hospitality': {
-      name: 'Hospitality & Tourism',
+      name: 'Hospital and tourism',
       color: 'bg-purple-500',
          stories: [
         {
@@ -135,8 +135,8 @@ const SuccessStories = () => {
          
       ]
     },
-    'ICT AND MULTIMEDIA': {
-      name: 'ICT AND MULTIMEDIA',
+    'Ict and multimedia': {
+      name: 'Ict and multimedia',
       color: 'bg-red-500',
            stories: [
         {
@@ -158,8 +158,8 @@ const SuccessStories = () => {
          
       ]
     },
-    'ARTS AND CRAFTS': {
-      name: 'Arts and Crafts',
+    'Arts and crafts': {
+      name: 'Arts and crafts',
       color: 'bg-emerald-500',
             stories: [
         {
@@ -182,7 +182,7 @@ const SuccessStories = () => {
       ]
     },
     'electrical': {
-      name: 'AGRICULTURE AND FOOD PROCESSING',
+      name: 'Agriculture and processing',
       color: 'bg-yellow-500',
               stories: [
         {
@@ -205,7 +205,7 @@ const SuccessStories = () => {
       ]
     },
     'TRANSPORT AND LOGISTICS': {
-      name: 'TRANSPORT AND LOGISTICS',
+      name: 'Transport and logistics',
       color: 'bg-indigo-500',
                   stories: [
         {
@@ -221,7 +221,7 @@ const SuccessStories = () => {
       ]
     },
     'MANUFACTURING AND MINING': {
-      name: 'MANUFACTURING AND MINING',
+      name: 'Manufacturing and mining',
       color: 'bg-pink-500',
                   stories: [
         {
@@ -245,7 +245,7 @@ const SuccessStories = () => {
       ]
     },
     'BEAUTY AND AESTHETICS': {
-      name: 'BEAUTY AND AESTHETICS',
+      name: 'Beauty and aesthetics',
       color: 'bg-zinc-500',
                   stories: [
         {
