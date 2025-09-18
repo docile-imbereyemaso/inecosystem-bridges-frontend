@@ -7,11 +7,19 @@ const ConnectedUserCard = ({ connection }) => {
     <div className="">
       <div className="flex items-center p-6">
         {/* Profile Image */}
-        <img
-          src={connected_user.profile_image || "https://via.placeholder.com/80"}
-          alt={`${connected_user.first_name} ${connected_user.last_name}`}
-          className="w-20 h-20 rounded-full object-cover border-2 border-gray-300"
-        />
+       {connected_user.profile_image ? (
+  <img
+    src={connected_user.profile_image}
+    alt={`${connected_user.first_name} ${connected_user.last_name}`}
+    className="w-20 h-20 rounded-full object-cover border-2 border-gray-300"
+  />
+) : (
+  <div className="w-20 h-20 flex items-center justify-center rounded-full border-2 border-gray-300 bg-gray-200 text-gray-700 text-xl font-bold">
+    {connected_user.first_name?.[0]}
+    {connected_user.last_name?.[0]}
+  </div>
+)}
+
 
         {/* User Info */}
         <div className="ml-6 flex-1">
@@ -48,7 +56,7 @@ const ConnectedUserCard = ({ connection }) => {
                 rel="noopener noreferrer"
                 className="text-sm bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition"
               >
-                View Resume
+                View Resume 
               </a>
             )}
             {connected_user.official_document && (
