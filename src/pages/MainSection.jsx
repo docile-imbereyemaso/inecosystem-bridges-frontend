@@ -203,12 +203,12 @@ const MainSection = () => {
                     <h2 className="text-3xl dark:text-gray-100 text-gray-900 font-bold mb-8 text-center">
                   Reach out to us
       </h2>
-                    <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-blue-50 to-indigo-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 border border-gray-200/60 dark:border-gray-600/60 rounded-2xl p-8 sm:p-10 shadow-xl hover:shadow-2xl transition-all duration-500">
+                    <div className="relative  overflow-hidden bg-gradient-to-br from-emerald-50 via-blue-50 to-indigo-50 dark:from-gray-800 dark:via-gray-700 dark:to-gray-800 border border-gray-200/60 dark:border-gray-600/60 rounded-2xl p-8 sm:p-10 shadow-xl hover:shadow-2xl transition-all duration-500">
                         {/* Background decoration */}
                         <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-200/30 to-purple-200/30 rounded-full -translate-y-16 translate-x-16 animate-pulse"></div>
                         <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-emerald-200/30 to-teal-200/30 rounded-full translate-y-12 -translate-x-12 animate-pulse delay-1000"></div>
                         
-                        <div className="flex justify-center items-center gap-20 mt-10">
+                        <div className="lg:flex grid grid-cols-2 justify-center items-center gap-20 mt-10">
       {/* YouTube */}
       <a
         href="https://www.youtube.com/@INECOSYSTEMBRIDGE"
@@ -216,7 +216,7 @@ const MainSection = () => {
         rel="noopener noreferrer"
         className="bg-red-600 text-white p-6 rounded-full text-5xl hover:scale-125 transition-transform"
       >
-        <FaYoutube />
+        <FaYoutube /> <span className="sr-only">YouTube</span>
       </a>
 
       {/* TikTok */}

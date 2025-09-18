@@ -4,7 +4,7 @@ import ThemeToggle from "./ThemeToggle";
 import logo from '/images/logo.png';
 import ChangeLanguage from "../ChangeLanguage";
 
-
+import { FaArrowUp, FaChevronUp, FaAngleUp } from "react-icons/fa";
 
 export default function Topnav(){
   const [menuOpen, setMenuOpen] = useState(false);
@@ -15,7 +15,9 @@ export default function Topnav(){
       setMenuOpen(false);
     }
   };  
-
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
     return (
 
@@ -77,13 +79,11 @@ export default function Topnav(){
 
         {/* Mobile Hamburger */}
         <button
-          className={`md:hidden flex items-center px-3 py-2 border rounded border-gray-400 transition-colors duration-300 ${menuOpen ? 'bg-gray-100 dark:bg-gray-900' : 'bg-transparent'} text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-300`}
-          onClick={() => setMenuOpen(!menuOpen)}
+          className={`md:hidden flex items-center h-12 w-12 mt-2 px-3 py-2 border rounded border-gray-400 transition-colors duration-300 ${menuOpen ? 'bg-gray-100 dark:bg-gray-900' : 'bg-transparent'} text-gray-700 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-300`}
+          onClick={scrollToTop}
           aria-label="Toggle menu"
         >
-          <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+        <FaArrowUp className="mx-auto"/>
         </button>
       </div>
 
@@ -124,9 +124,7 @@ export default function Topnav(){
               <ThemeToggle />
             </li>
 
-            <li className="flex justify-center mt-2">
-              <ChangeLanguage/>
-            </li>
+         
 
           </ul>
         </div>
