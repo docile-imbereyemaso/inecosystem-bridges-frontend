@@ -75,45 +75,7 @@ const MainSection = () => {
                 </div>
             </section>
 
-            {/* Why TVET Matters Section */}
-            <section 
-                data-section="tvet" 
-                className={getSectionClasses("tvet")}
-            >
-                <div className="flex flex-col lg:flex-row-reverse gap-8 lg:gap-12 items-center">
-                    {/* TVET Header */}
-                    <div className="w-full lg:w-1/2 flex flex-col items-center lg:items-end space-y-4">
-                        <div className="flex items-center space-x-4">
-                            <div className="text-center lg:text-right">
-                                <h2 className="text-3xl lg:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-2">
-                                    Why TVET Matters?
-                                </h2>
-                                <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-indigo-500 mx-auto lg:ml-auto lg:mr-0 rounded-full"></div>
-                            </div>
-                            <div className="hidden lg:block">
-                                <FaRegCircle className="text-blue-500 text-5xl opacity-80 hover:opacity-100 transition-opacity duration-300" />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* TVET Content */}
-                    <div className="w-full lg:w-1/2">
-                        <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-xl p-6 shadow-lg hover:shadow-xl hover:bg-white/90 dark:hover:bg-gray-800/90 transition-all duration-300">
-                            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-6">
-                                With TVET, you gain skills that industries need, opportunities that change lives, 
-                                and a future you can build with your own hands.
-                            </p>
-                            <Link 
-                                to="/tvetmatters" 
-                                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300"
-                            >
-                                Explore more about TVET
-                                <FaArrowRight className="ml-2 text-sm transition-transform duration-300 group-hover:translate-x-1" />
-                            </Link>
-                        </div>
-                    </div>
-                </div>
-            </section>
+          
 
             {/* Chase Dreams Section */}
             <section 
