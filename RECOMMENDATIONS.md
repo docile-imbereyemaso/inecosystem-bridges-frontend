@@ -2,7 +2,6 @@
 
 ### 1. Architecture & Code Organization
 * **Suggestion:** create reusable components:
-    - AnimatedSlideshow and AnimatedBarChart are duplicated across many sector pages. Extract them into shared components, e.g. src/components/AnimatedSlideshow.jsx and src/components/AnimatedBarChart.jsx.
 * **Benefits:**  smaller files, easier testing, clearer boundaries, and re-use across pages.
 
 * **Suggestion:** Centralized routes: With React Router 7, consider a single place to define routes and use lazy loading (React.lazy + Suspense) for sector pages to reduce initial bundle size.
